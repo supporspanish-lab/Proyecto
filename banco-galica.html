@@ -1,0 +1,2176 @@
+
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>Banco Galica</title>
+                    <link rel="icon" href="https://iili.io/KGaTONe.jpg" type="image/jpeg">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+                    
+                    <!-- PWA Enhancements -->
+                    <meta name="theme-color" content="#003366"/>
+                    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQmFuY28gR2FsaWNhIiwic2hvcnRfbmFtZSI6IkdhbGljYSIsImRlc2NyaXB0aW9uIjoiQXBsaWNhY2nDs24gZGUgSG9tZSBCYW5raW5nIGRlIEJhbmNvIEdhbGljYS4iLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9paWxpLmlvL0tHYVRPTmUuanBnIiwidHlwZSI6ImltYWdlL2pwZWciLCJzaXplcyI6IjUxMng1MTIiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI2Y4ZjlmYSIsInRoZW1lX2NvbG9yIjoiIzAwMzM2NiJ9">
+                    <link rel="apple-touch-icon" href="https://iili.io/KGaTONe.jpg">
+                    <meta name="apple-mobile-web-app-capable" content="yes">
+                    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+                    
+                    <style>
+                        
+:root {
+  --primary-blue: #003366;
+  --light-blue-bg: #e6f3ff;
+  --text-dark: #212529;
+  --text-gray: #6c757d;
+  --text-light: #f8f9fa;
+  --background-gray: #f8f9fa;
+  --card-bg: #ffffff;
+  --border-color: #dee2e6;
+  --pink-bg: #fdeeee;
+  --notification-red: #dc3545;
+  --active-blue: #0057b8;
+  --orange-accent: #f39c12;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #343a40; /* Darker background to highlight the app */
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  max-width: 414px; /* Common mobile width */
+  max-height: 896px; /* Common mobile height */
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.mobile-screen {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-gray);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- Login Page Styles --- */
+.login-container {
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-gray);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    padding-top: 50px; /* Safe area */
+    text-align: center;
+}
+
+.login-top-nav {
+    width: 100%;
+    text-align: left;
+}
+
+.login-link-button {
+    background: none;
+    border: none;
+    color: var(--active-blue);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.login-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 60px; /* Pushes content up a bit */
+}
+
+.login-greeting {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 48px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #adb5bd;
+    background-color: transparent;
+    font-size: 18px;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.login-input::placeholder {
+    color: #adb5bd;
+    font-weight: 400;
+}
+
+.login-input:focus {
+    outline: none;
+    border-bottom-color: var(--active-blue);
+    box-shadow: none;
+}
+
+.recover-password {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.login-actions-group {
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.face-id-button, .download-app-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dark);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.download-app-button {
+    color: var(--active-blue);
+}
+
+.login-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 24px;
+}
+
+.generate-token-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.login-help-text {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+.login-help-link {
+    color: var(--active-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-error {
+    color: var(--notification-red);
+    margin-top: -8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* --- Loading Styles --- */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--orange-accent);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+/* --- Wait Modal Styles --- */
+.wait-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.wait-modal-content {
+    background-color: white;
+    padding: 24px 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    color: var(--text-dark);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* --- Loading Sequence Styles --- */
+.loading-sequence-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e0e0e0; /* Solid gray as requested */
+    z-index: 10001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: slide-up 0.3s ease-out forwards;
+}
+
+@keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.loading-sequence-content {
+    background-color: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    animation: fade-in 0.3s ease-in 2.2s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 80%;
+    max-width: 280px;
+}
+
+.loading-sequence-content p {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 16px;
+    text-align: center;
+}
+
+.validation-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.validation-container .validating-icon {
+    position: absolute;
+}
+
+.validation-container .loader {
+    width: 80px;
+    height: 80px;
+    border: 6px solid transparent;
+    border-top-color: var(--orange-accent);
+    position: absolute;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.skeleton {
+    background-color: #e0e0e0;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-account-card { height: 188px; }
+.skeleton-upcoming-payments { height: 55px; }
+.skeleton-insurance { height: 90px; }
+.skeleton-shortcuts { height: 125px; }
+.skeleton-cards { height: 130px; }
+
+
+/* --- Main App Styles --- */
+
+.app-header {
+  background-color: #003478;
+  color: var(--text-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  padding-top: 40px; /* Safe area for status bar */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo {
+  height: 28px;
+  width: auto;
+}
+
+.app-header-tarjetas {
+    justify-content: center;
+    position: relative;
+    background-color: #003478;
+}
+.app-header-tarjetas .header-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+.app-header-tarjetas .header-actions {
+    position: absolute;
+    right: 16px;
+}
+
+/* Account Detail Header */
+.app-header-detail {
+    background-color: var(--background-gray);
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+.app-header-detail .icon-button {
+    color: var(--text-dark);
+}
+.header-detail-title {
+    text-align: center;
+    flex-grow: 1;
+}
+.header-detail-title p:first-child {
+    font-size: 16px;
+    font-weight: 500;
+}
+.header-detail-title p:last-child {
+    font-size: 13px;
+    color: var(--text-gray);
+}
+.back-button {
+    position: absolute;
+    left: 8px;
+}
+.more-button {
+    position: absolute;
+    right: 8px;
+}
+
+
+.icon-button {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.app-main {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0 16px; /* Horizontal padding for the page */
+}
+.app-main > * {
+  margin-top: 16px;
+}
+.app-main > .accounts-section {
+  margin-top: 16px;
+}
+
+.app-main.tarjetas-page, .app-main.account-detail-page {
+    background-color: #f0f2f5;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.accounts-section {
+    margin-bottom: 16px;
+}
+
+.account-carousel-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 -16px; 
+    padding: 4px 16px; /* Add padding for shadow visibility and spacing */
+}
+
+.account-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.account-slide {
+    flex: 0 0 90%; 
+    scroll-snap-align: start;
+    cursor: pointer;
+}
+.account-slide:not(:last-child) {
+    margin-right: 16px;
+}
+
+.account-slide-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.account-type {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-bottom: 4px;
+}
+
+.account-balance {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.account-balance sup {
+  font-size: 18px;
+  font-weight: 500;
+  top: -0.6em;
+}
+
+.account-number {
+  font-size: 14px;
+  color: var(--text-gray);
+}
+
+.account-actions {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--active-blue);
+  font-weight: 500;
+  width: 75px; /* ensure items have enough space */
+}
+
+.action-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: #edf6ff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.usd-icon {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0057b8;
+}
+
+.upcoming-payments {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  color: var(--text-gray);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.payment-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-badge {
+  background-color: var(--notification-red);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.insurance-ad {
+  background-color: var(--pink-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.insurance-text h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  max-width: 200px;
+}
+
+.insurance-text p {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.insurance-image {
+  width: 60px;
+  height: auto;
+}
+
+.shortcuts-section h2, .cards-section h2 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: var(--text-dark);
+}
+
+.shortcuts-grid {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.shortcut-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-gray);
+  width: 75px;
+  cursor: pointer;
+}
+
+.shortcut-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.fima-label {
+    position: absolute;
+    top: 6px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #0057b8;
+}
+
+.usd-shortcut {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0057b8;
+}
+
+.cards-section {
+    margin-top: 16px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+.visa-card {
+    background-color: #e9ecef;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.visa-card h4 {
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+.visa-card .card-type {
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-bottom: 12px;
+}
+.visa-card .card-info {
+    font-size: 14px;
+}
+
+.go-to-cards-card {
+    background-color: #e9ecef;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dark);
+}
+
+.go-to-cards-card .icon-button {
+    color: #0057b8;
+}
+
+
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--card-bg);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  padding: 8px 0;
+  position: relative;
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--text-gray);
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.nav-item.active {
+  color: var(--active-blue);
+}
+
+.nav-item-central {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #40e0d0, #1e90ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -32px;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.central-button {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #000;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.5s ease-in-out, transform 0.8s ease-in-out;
+}
+
+.central-button.qr-mode {
+  background-color: var(--orange-accent);
+  transform: rotate(360deg);
+}
+
+.central-button span {
+  font-size: 30px;
+  font-weight: 500;
+  font-family: serif;
+}
+
+
+/* --- Tarjetas Page Styles --- */
+.tarjetas-carousel-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 -16px;
+    padding: 4px 16px 16px 16px;
+}
+
+.tarjetas-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.tarjeta-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+}
+
+.tarjeta-slide:not(:last-child) {
+    padding-right: 12px;
+}
+
+.tarjeta-card {
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
+    height: 100%;
+}
+.visa-debit-card {
+    background: linear-gradient(135deg, #102951, #9f4c28);
+}
+.visa-credit-card-gray {
+    background: #e9ecef;
+    color: var(--text-dark);
+}
+.visa-credit-card-gray .tarjeta-brand .visa-logo-text {
+    color: var(--text-dark);
+    font-style: normal;
+}
+.visa-credit-card-gray .tarjeta-brand .tarjeta-debit-text {
+    color: var(--text-dark);
+}
+.visa-credit-card-gray .mostrar-datos-btn {
+    color: var(--text-dark);
+}
+.visa-credit-card-gray .tarjeta-label {
+    color: var(--text-gray);
+}
+
+.tarjeta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.tarjeta-brand .visa-logo-text {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: -1px;
+}
+.tarjeta-brand .tarjeta-debit-text {
+    font-size: 14px;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+}
+.mostrar-datos-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0;
+}
+.mostrar-datos-btn svg {
+    width: 20px;
+    height: 20px;
+}
+.tarjeta-number {
+    font-family: 'monospace';
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-top: auto;
+    padding: 16px 0;
+}
+.tarjeta-details {
+    display: flex;
+    justify-content: flex-start;
+    gap: 48px;
+    font-size: 12px;
+    align-items: flex-end;
+}
+.tarjeta-details > div {
+    display: flex;
+    flex-direction: column;
+}
+.tarjeta-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+.tarjeta-value {
+    font-family: 'monospace';
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+.tarjeta-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 20px 12px;
+}
+.tarjeta-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-dark);
+    text-align: center;
+    font-weight: 500;
+}
+.tarjeta-action-item .action-button {
+    width: 100%;
+    max-width: 60px;
+    height: 60px;
+}
+
+.resumen-card {
+    padding: 16px;
+}
+.resumen-info {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+.resumen-total {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 4px 0 12px 0;
+}
+.resumen-action {
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+}
+.resumen-action span {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--active-blue);
+}
+.resumen-action svg {
+    stroke: var(--active-blue);
+}
+
+.movimientos-card {
+     padding: 16px;
+}
+
+.actividad-card {
+    padding: 16px;
+    text-align: center;
+    color: var(--text-gray);
+}
+.actividad-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+    text-align: left;
+}
+.actividad-card svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 12px;
+    stroke: var(--text-gray);
+}
+.actividad-card p {
+    font-size: 14px;
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+.card-info-table h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:first-of-type {
+    padding-top: 0;
+}
+.info-row:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.info-row span:last-child {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* --- Account Detail Page Styles --- */
+.segmented-control {
+    display: flex;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 16px;
+}
+
+.segmented-control button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-gray);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.segmented-control button.active {
+    background-color: white;
+    color: var(--text-dark);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 0 16px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+.detail-row.no-border {
+    border-bottom: none;
+}
+.detail-row > div:first-child {
+    display: flex;
+    flex-direction: column;
+}
+.detail-label {
+    font-size: 13px;
+    color: var(--text-gray);
+    margin-bottom: 2px;
+}
+.detail-value {
+    font-size: 16px;
+    color: var(--text-dark);
+}
+.detail-value.bold {
+    font-weight: 500;
+}
+.detail-value.gray {
+    color: var(--text-gray);
+}
+.detail-actions {
+    display: flex;
+    gap: 16px;
+}
+.icon-action-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.share-data-button {
+    background: none;
+    border: none;
+    color: var(--active-blue);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 12px 0;
+    text-align: left;
+}
+.info-section-header {
+    font-size: 13px;
+    color: var(--text-gray);
+    font-weight: 500;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+.no-movements {
+    text-align: center;
+    color: var(--text-gray);
+    padding: 32px;
+}
+
+/* --- Movements List Styles --- */
+.movements-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 12px 0;
+    font-size: 13px;
+    color: var(--text-gray);
+    font-weight: 500;
+    margin: 0;
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    color: var(--active-blue);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.movement-list {
+    background-color: white;
+    border-radius: 12px;
+    padding: 0 16px;
+}
+
+.movement-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.movement-item:last-child {
+    border-bottom: none;
+}
+
+.movement-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.movement-description {
+    font-size: 15px;
+    color: var(--text-dark);
+    max-width: 200px;
+}
+
+.movement-date {
+    font-size: 13px;
+    color: var(--text-gray);
+    margin-top: 2px;
+}
+
+.movement-amount {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+
+/* --- Token Page Styles --- */
+.token-page-container {
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-gray);
+    display: flex;
+    flex-direction: column;
+}
+
+.token-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    padding-top: 40px; /* Safe area */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.token-header .icon-button {
+    color: var(--text-dark);
+}
+
+.token-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.token-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+}
+
+.token-warning {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #fef5e7;
+    border: 1px solid #fdebd0;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    color: #856404;
+    margin-bottom: 48px;
+}
+
+.token-warning p {
+    text-align: left;
+}
+
+.token-display {
+    margin-bottom: 32px;
+}
+
+.token-label {
+    font-size: 16px;
+    color: var(--text-gray);
+}
+
+.token-code {
+    font-size: 52px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: var(--text-dark);
+    margin-top: 8px;
+}
+
+.token-timer {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 48px;
+}
+
+.token-timer p {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-bottom: 12px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background-color: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--active-blue);
+    border-radius: 2px;
+    transition: width 1s linear;
+}
+
+.token-unlock {
+    margin-top: auto;
+    padding-bottom: 32px;
+}
+
+.token-unlock p {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-bottom: 8px;
+}
+
+.unlock-button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+                    </style>
+                </head>
+                <body>
+                    <div id="root"></div>
+                    <script>
+                        
+                // --- VANILLA JS REIMPLEMENTATION OF THE APP ---
+                
+                // --- DATA ---
+                const accountsData = [
+  {
+    "type": "Caja de ahorro en pesos",
+    "balance": "5.049",
+    "cents": "90",
+    "currency": "$",
+    "number": "Nº 4121779-8 999-7",
+    "alias": "TRAMO.MIRADA.BANCO",
+    "cbu": "00709990-30004121779879",
+    "cuil": "20-04439188-1",
+    "titular": "GUILLERMO ANTONIO DELFINO",
+    "actions": [
+      {
+        "label": "Transferir dinero",
+        "icon": "transfer"
+      },
+      {
+        "label": "Ingresar dinero",
+        "icon": "deposit"
+      },
+      {
+        "label": "Copiar CBU",
+        "icon": "copy"
+      }
+    ],
+    "movements": [
+      {
+        "description": "Interes capitalizado",
+        "amount": 4.17,
+        "originalDate": "22/09/25"
+      },
+      {
+        "description": "Transf. ctas propias",
+        "amount": -25000,
+        "originalDate": "03/09/25"
+      },
+      {
+        "description": "Venta de titulos / valores",
+        "amount": 26512.08,
+        "originalDate": "03/09/25"
+      },
+      {
+        "description": "Comision y derechos de mercado compra/",
+        "amount": -64.14,
+        "originalDate": "03/09/25"
+      },
+      {
+        "description": "Transferencia a terceros",
+        "amount": -38000,
+        "originalDate": "28/08/25"
+      },
+      {
+        "description": "Venta de titulos / valores",
+        "amount": 40042.81,
+        "originalDate": "28/08/25"
+      },
+      {
+        "description": "Comision y derechos de mercado compra/",
+        "amount": -99.14,
+        "originalDate": "28/08/25"
+      },
+      {
+        "description": "Transf. ctas propias",
+        "amount": -1995000,
+        "originalDate": "27/08/25"
+      },
+      {
+        "description": "Venta de titulos / valores",
+        "amount": 1342915.29,
+        "originalDate": "25/08/25"
+      },
+      {
+        "description": "Comision y derechos de mercado",
+        "amount": -3433.88,
+        "originalDate": "25/08/25"
+      },
+      {
+        "description": "Interes capitalizado",
+        "amount": 3.87,
+        "originalDate": "22/08/25"
+      }
+    ]
+  },
+  {
+    "type": "Caja de ahorro en dólares",
+    "balance": "115.737",
+    "cents": "76",
+    "currency": "U$D",
+    "number": "Nº 4058643-9 999-9",
+    "alias": "TRAMO.MIRADA.YUYO",
+    "cbu": "00709990-31004058643996",
+    "cuil": "20-04439188-1",
+    "titular": "GUILLERMO ANTONIO DELFINO",
+    "actions": [
+      {
+        "label": "Transferir dinero",
+        "icon": "transfer"
+      },
+      {
+        "label": "Comprar / Vender",
+        "icon": "usd"
+      },
+      {
+        "label": "Copiar CBU",
+        "icon": "copy"
+      }
+    ],
+    "movements": [
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "29/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "29/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "29/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "26/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "25/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "24/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "23/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "22/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "22/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "22/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "19/09/25"
+      }
+    ]
+  }
+];
+                const cardsData = [
+  {
+    "brand": "VISA",
+    "type": "Crédito",
+    "number": "**** **** **** 4068",
+    "fullNumber": "4517 6990 1122 4068",
+    "validFrom": "01/24",
+    "expiry": "12/29",
+    "cvv": "123",
+    "className": "visa-credit-card-gray"
+  },
+  {
+    "brand": "VISA",
+    "type": "Débito",
+    "number": "**** **** **** 4368",
+    "fullNumber": "4517 6990 2663 4368",
+    "validFrom": "08/25",
+    "expiry": "09/31",
+    "cvv": "484",
+    "className": "visa-debit-card"
+  }
+];
+
+                // --- STATE ---
+                let state = {
+                    isLoggedIn: false,
+                    isAppLoading: true,
+                    currentPage: 'home', // login, home, tarjetas, accountDetail, token
+                    selectedAccount: null,
+                    initialTab: 'Información',
+                    isQrMode: false,
+                    timers: {
+                        qr: null,
+                        token: null
+                    },
+                    tarjetasLoadingState: 'idle', // idle, wait, load
+                    tarjetasShowData: false,
+                };
+
+                // --- ICON HELPERS (Return SVG strings) ---
+                const ICONS = {
+                    EyeIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"><\/path><circle cx="12" cy="12" r="3"><\/circle><\/svg>',
+                    QuestionIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"><\/circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"><\/path><line x1="12" y1="17" x2="12.01" y2="17"><\/line><\/svg>',
+                    BellIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"><\/path><path d="M13.73 21a2 2 0 0 1-3.46 0"><\/path><\/svg>',
+                    TransferIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10H4l3-3"/><path d="M8 14h12l-3 3"/></svg>',
+                    DepositIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5c2-2 5-2 7 0s5 2 7 0" /><path d="M3 17.5c2 2 5 2 7 0s5-2 7 0" /><path d="M3 6.5v11" /><path d="M21 6.5v11" /><path d="M12 14.5v-3M13 10A1.5 1.5 0 0 0 12 8.5a1.5 1.5 0 0 0-1 1.5" /><path d="M14 12a1.5 1.5 0 0 0-1-1.5 1.5 1.5 0 0 0-1 1.5" /></svg>',
+                    CopyIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"><\/rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"><\/path><\/svg>',
+                    UsdIcon: () => '<span class="usd-icon">U$D</span>',
+                    StarIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"><\/polygon><\/svg>',
+                    ChevronRightIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"><\/polyline><\/svg>',
+                    ChevronLeftIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"><\/polyline><\/svg>',
+                    MoreHorizontalIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"><\/circle><circle cx="19" cy="12" r="1"><\/circle><circle cx="5" cy="12" r="1"><\/circle><\/svg>',
+                    PencilIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"><\/path><\/svg>',
+                    CopyIconSmall: () => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"><\/rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"><\/path><\/svg>',
+                    FimaIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="M7 14l4-4 4 4 5-5" /></svg>',
+                    TokenIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="8" rx="2" ry="2"><\/rect><circle cx="8" cy="11" r="0.5" fill="#0057b8" stroke="none"><\/circle><circle cx="12" cy="11" r="0.5" fill="#0057b8" stroke="none"><\/circle><circle cx="16" cy="11" r="0.5" fill="#0057b8" stroke="none"><\/circle><rect x="14" y="13" width="6" height="5" rx="1" fill="white"><\/rect><rect x="14" y="13" width="6" height="5" rx="1"><\/rect><path d="M18 13v-1.5a2 2 0 0 0-4 0v1.5"><\/path><circle cx="17" cy="15.5" r="0.5" fill="#0057b8" stroke="none"><\/circle><\/svg>',
+                    PlusIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"><\/line><line x1="5" y1="12" x2="19" y2="12"><\/line><\/svg>',
+                    ArrowRightCircleIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#0057b8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"><\/circle><polyline points="12 16 16 12 12 8"><\/polyline><line x1="8" y1="12" x2="16" y2="12"><\/line><\/svg>',
+                    HomeIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"><\/path><polyline points="9 22 9 12 15 12 15 22"><\/polyline><\/svg>',
+                    CardIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"><\/rect><line x1="1" y1="10" x2="23" y2="10"><\/line><\/svg>',
+                    TransfersIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"><\/polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"><\/path><polyline points="7 23 3 19 7 15"><\/polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"><\/path><\/svg>',
+                    MoreIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"><\/line><line x1="3" y1="6" x2="21" y2="6"><\/line><line x1="3" y1="18" x2="21" y2="18"><\/line><\/svg>',
+                    FaceIdIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2-2v-2"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M10 14a3.5 3.5 0 0 0 4 0"/></svg>',
+                    DownloadIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"><\/path><polyline points="7 10 12 15 17 10"><\/polyline><line x1="12" y1="15" x2="12" y2="3"><\/line><\/svg>',
+                    GenerateTokenIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.5a2.5 2.5 0 0 1-2.5 2.5H8.5L4 22V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11z"/><rect x="9" y="10" width="6" height="4" rx="1"><\/rect><path d="M10.5 10V9a1.5 1.5 0 0 1 3 0v1"><\/path><\/svg>',
+                    QrCodeIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"><\/rect><rect x="14" y="3" width="7" height="7"><\/rect><rect x="3" y="14" width="7" height="7"><\/rect><path d="M14 14h1v1h-1z" stroke-width="1"><\/path><path d="M17 14h1v1h-1z" stroke-width="1"><\/path><path d="M14 17h3v1h-3z" stroke-width="1"><\/path><path d="M19 17h1v1h-1z" stroke-width="1"><\/path><path d="M14 20h1v1h-1z" stroke-width="1"><\/path><path d="M17 20h3v1h-3z" stroke-width="1"><\/path><\/svg>',
+                    CloseIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"><\/line><line x1="6" y1="6" x2="18" y2="18"><\/line><\/svg>',
+                    InfoIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"><\/circle><line x1="12" y1="16" x2="12" y2="12"><\/line><line x1="12" y1="8" x2="12.01" y2="8"><\/line><\/svg>',
+                    WarningIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"><\/path><line x1="12" y1="9" x2="12" y2="13"><\/line><line x1="12" y1="17" x2="12.01" y2="17"><\/line><\/svg>',
+                    PayCardIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5C3.5 7 5 5.5 6.5 5.5h11C19 5.5 20.5 7 20.5 8.5v8c0 1.5-1.5 3-3 3H10c-3.5 0-4.5-2-4.5-4 0-1 .5-2.5 2-3"/><path d="M12 12.5a2 2 0 0 0-2-2" /><path d="M12 15.5a2 2 0 0 1 2-2" /><path d="M12 10v1.5" /><path d="M12 16.5v1.5" /></svg>',
+                    PinResetIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M6 13h.01M10 13h.01M14 13h.01M6 17h.01M10 17h.01M14 17h.01" /><path d="M2 11h20" /></svg>',
+                    PauseCardIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"><\/rect><path d="M7 11V7a5 5 0 0 1 10 0v4"><\/path><\/svg>',
+                    ReportCardIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><path d="M9 9h6v6H9z" /><path d="M9 1v3" /><path d="M15 1v3" /><path d="M9 20v3" /><path d="M15 20v3" /></svg>',
+                    MoreGesturesIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#0057b8"><circle cx="6" cy="12" r="1.5"><\/circle><circle cx="12" cy="12" r="1.5"><\/circle><circle cx="18" cy="12" r="1.5"><\/circle><\/svg>',
+                    NoUsageIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"><\/path><\/svg>',
+                    ValidatingIcon: () => '<svg class="validating-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#212529" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="8" rx="2" ry="2"><\/rect><circle cx="8" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><circle cx="12" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><circle cx="16" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><rect x="14" y="13" width="6" height="5" rx="1" fill="white"><\/rect><rect x="14" y="13" width="6" height="5" rx="1"><\/rect><path d="M18 13v-1.5a2 2 0 0 0-4 0v1.5"><\/path><circle cx="17" cy="15.5" r="0.5" fill="#212529" stroke="none"><\/circle><\/svg>',
+                };
+                
+                const iconMap = {
+                    transfer: ICONS.TransferIcon(),
+                    deposit: ICONS.DepositIcon(),
+                    copy: ICONS.CopyIcon(),
+                    usd: ICONS.UsdIcon(),
+                    fima: ICONS.FimaIcon(),
+                    plus: ICONS.PlusIcon(),
+                };
+
+                // --- HELPERS ---
+                const formatCurrency = (amount, currency) => {
+                    const formattedAmount = new Intl.NumberFormat('es-AR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }).format(Math.abs(amount));
+                    return amount < 0 ? `-${currency}${formattedAmount}` : `${currency}${formattedAmount}`;
+                };
+
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = String(date.getFullYear()).slice(-2);
+                    return `${day}/${month}/${year}`;
+                };
+                
+                const getDynamicDates = (movements) => {
+                    if (!movements) return [];
+                    const dateCache = new Map();
+                    let dayOffset = 0;
+                    let lastOriginalDate = null;
+                    return movements.map(m => {
+                        if (m.originalDate !== lastOriginalDate) {
+                            if (lastOriginalDate !== null) dayOffset += (Math.floor(Math.random() * 2) + 1);
+                            lastOriginalDate = m.originalDate;
+                        }
+                        if (dateCache.has(m.originalDate)) return dateCache.get(m.originalDate);
+                        const newDate = new Date();
+                        newDate.setDate(newDate.getDate() - dayOffset);
+                        const formattedDate = formatDate(newDate);
+                        dateCache.set(m.originalDate, formattedDate);
+                        return formattedDate;
+                    });
+                };
+
+
+                // --- RENDER FUNCTIONS (Return HTML strings) ---
+                
+                function renderLoginPage() {
+                    return `
+                        <div class="login-container">
+                            <header class="login-top-nav">
+                                <button class="login-link-button">Cambiar usuario</button>
+                            </header>
+                            <main class="login-main">
+                                <h1 class="login-greeting">¡Hola, Guillermo! <span role="img" aria-label="smiling face">😄</span></h1>
+                                <form id="login-form" class="login-form">
+                                    <input
+                                        id="password-input"
+                                        type="password"
+                                        placeholder="Clave Galica"
+                                        class="login-input"
+                                        maxlength="4"
+                                        pattern="\\d*"
+                                        inputmode="numeric"
+                                        autofocus
+                                    />
+                                    <p id="login-error" class="login-error" style="display: none;"></p>
+                                </form>
+                                <button class="login-link-button recover-password">Recuperar Clave Galica</button>
+                                <div class="login-actions-group">
+                                    <button class="face-id-button">
+                                        ${ICONS.FaceIdIcon()}
+                                        <span>Ingresar con Face ID</span>
+                                    </button>
+                                </div>
+                            </main>
+                            <footer class="login-footer">
+                                <button class="generate-token-button">
+                                    ${ICONS.GenerateTokenIcon()}
+                                    <span>Generar Token Galica</span>
+                                </button>
+                                <p class="login-help-text">
+                                    ¿Necesitás ayuda para ingresar? <a href="#" class="login-help-link">Ir a Ayuda</a>
+                                </p>
+                            </footer>
+                        </div>
+                    `;
+                }
+
+                function renderHeader() {
+                    let headerHTML = '';
+                    if (state.currentPage === 'tarjetas') {
+                        headerHTML = `
+                            <header class="app-header app-header-tarjetas">
+                                <h1 class="header-title">Tarjetas</h1>
+                                <div class="header-actions">
+                                    <button class="icon-button">${ICONS.QuestionIcon()}</button>
+                                </div>
+                            </header>
+                        `;
+                    } else if (state.currentPage === 'accountDetail' && state.selectedAccount) {
+                        const account = state.selectedAccount;
+                        headerHTML = `
+                             <header class="app-header app-header-detail">
+                                <button class="icon-button back-button" data-action="go-back" aria-label="Volver">${ICONS.ChevronLeftIcon()}</button>
+                                <div class="header-detail-title">
+                                    <p>CA ${account.currency}${account.balance},${account.cents}</p>
+                                    <p>${account.number}</p>
+                                </div>
+                                <button class="icon-button more-button" aria-label="Más opciones">${ICONS.MoreHorizontalIcon()}</button>
+                            </header>
+                        `;
+                    } else {
+                         headerHTML = `
+                            <header class="app-header">
+                                <img src="https://iili.io/KGzjc92.png" alt="Galica Logo" class="header-logo" />
+                                <div class="header-actions">
+                                    <button class="icon-button">${ICONS.EyeIcon()}</button>
+                                    <button class="icon-button">${ICONS.QuestionIcon()}</button>
+                                    <button class="icon-button">${ICONS.BellIcon()}</button>
+                                </div>
+                            </header>
+                        `;
+                    }
+                    return headerHTML;
+                }
+                
+                function renderBottomNav() {
+                     return `
+                        <footer class="bottom-nav">
+                            <button class="nav-item ${state.currentPage === 'home' || state.currentPage === 'accountDetail' ? 'active' : ''}" data-navigate="home">
+                                ${ICONS.HomeIcon()}
+                                <span>Inicio</span>
+                            </button>
+                            <button class="nav-item ${state.currentPage === 'tarjetas' ? 'active' : ''}" data-navigate="tarjetas">
+                                ${ICONS.CardIcon()}
+                                <span>Tarjetas</span>
+                            </button>
+                            <div class="nav-item-central">
+                                 <button id="central-button" class="central-button ${state.isQrMode ? 'qr-mode' : ''}" aria-label="Acción principal">
+                                    ${state.isQrMode ? ICONS.QrCodeIcon() : '<span>M</span>'}
+                                </button>
+                            </div>
+                            <button class="nav-item">
+                                ${ICONS.TransfersIcon()}
+                                <span>Transferencias</span>
+                            </button>
+                            <button class="nav-item" data-action="fullscreen">
+                                ${ICONS.MoreIcon()}
+                                <span>Más</span>
+                            </button>
+                        </footer>
+                    `;
+                }
+
+                function renderHomePage() {
+                    const accountCardsHTML = accountsData.map((account, index) => `
+                        <div class="account-slide" data-action="select-account" data-account-index="${index}">
+                            <div class="account-slide-card">
+                                <div class="account-header">
+                                    <div>
+                                        <p class="account-type">${account.type}</p>
+                                        <p class="account-balance">${account.currency} ${account.balance}<sup>${account.cents}</sup></p>
+                                        <p class="account-number">${account.number}</p>
+                                    </div>
+                                    ${ICONS.StarIcon()}
+                                </div>
+                                <div class="account-actions">
+                                    ${account.actions.map(action => `
+                                        <div class="action-item">
+                                            <button class="action-button" aria-label="${action.label}">${iconMap[action.icon]}</button>
+                                            <span>${action.label}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    const shortcutsHTML = `
+                        <div class="shortcuts-section">
+                            <h2>Accesos directos</h2>
+                            <div class="shortcuts-grid">
+                                <div class="shortcut-item"><button class="shortcut-button"><span class="fima-label">FIMA</span>${ICONS.FimaIcon()}</button><span>Agregar / Retirar</span></div>
+                                <div class="shortcut-item"><button class="shortcut-button"><span class="usd-shortcut">U$D</span></button><span>Comprar / Vender</span></div>
+                                <div class="shortcut-item" data-navigate="token"><button class="shortcut-button" aria-label="Ver Token Galica">${ICONS.TokenIcon()}</button><span>Ver Token Galica</span></div>
+                                <div class="shortcut-item"><button class="shortcut-button">${ICONS.PlusIcon()}</button><span>Más accesos</span></div>
+                            </div>
+                        </div>
+                    `;
+
+                    return `
+                        <main class="app-main">
+                            <div class="accounts-section"><div class="account-carousel-wrapper">${accountCardsHTML}</div></div>
+                            <div class="card upcoming-payments"><span>PRÓXIMOS VENCIMIENTOS</span><div class="payment-details"><span class="notification-badge">1</span>${ICONS.ChevronRightIcon()}</div></div>
+                            <div class="card insurance-ad"><div class="insurance-text"><h3>Tenemos un seguro para todo lo que necesitás.</h3><p>Ver seguros</p></div>${ICONS.ChevronRightIcon()}</div>
+                            ${shortcutsHTML}
+                            <div class="cards-section">
+                                <h2>Tarjetas</h2>
+                                <div class="cards-container">
+                                    <div class="card visa-card"><h4>VISA</h4><p class="card-type">Crédito</p><p class="card-info">Tu resumen está listo.</p><p class="card-info">Vence el 06/10</p></div>
+                                    <div class="card go-to-cards-card"><button class="icon-button" aria-label="Ir a Tarjetas">${ICONS.ArrowRightCircleIcon()}</button><span>Ir a Tarjetas</span></div>
+                                </div>
+                            </div>
+                        </main>
+                    `;
+                }
+
+                function renderTarjetasPage() {
+                    const showData = state.tarjetasShowData;
+                    const cardsHTML = cardsData.map(card => `
+                        <div class="tarjeta-slide">
+                            <div class="tarjeta-card ${card.className}">
+                                <div class="tarjeta-header">
+                                    <div class="tarjeta-brand">
+                                        <span class="visa-logo-text">${card.brand}</span>
+                                        <span class="tarjeta-debit-text">${card.type}</span>
+                                    </div>
+                                    <button class="mostrar-datos-btn" data-action="toggle-card-data">
+                                        ${showData ? 'Ocultar datos' : 'Mostrar datos'} ${ICONS.EyeIcon()}
+                                    </button>
+                                </div>
+                                <div class="tarjeta-number">
+                                    <span>${showData ? card.fullNumber : card.number}</span>
+                                </div>
+                                <div class="tarjeta-details">
+                                    <div>
+                                        <span class="tarjeta-label">Fecha de vencimiento</span>
+                                        <span class="tarjeta-value">${showData ? card.expiry : '••/••'}</span>
+                                    </div>
+                                    <div>
+                                        <span class="tarjeta-label">Código de seguridad</span>
+                                        <span class="tarjeta-value">${showData ? card.cvv : '•••'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    return `
+                    <main class="app-main tarjetas-page">
+                        <div class="tarjetas-carousel-wrapper">
+                            ${cardsHTML}
+                        </div>
+                        <div class="card tarjeta-actions-grid">
+                            <div class="tarjeta-action-item"><button class="action-button">${ICONS.PayCardIcon()}</button><span>Pagar tarjeta</span></div>
+                            <div class="tarjeta-action-item"><button class="action-button">${ICONS.PauseCardIcon()}</button><span>Pausar tarjeta</span></div>
+                            <div class="tarjeta-action-item"><button class="action-button">${ICONS.ReportCardIcon()}</button><span>Denunciar tarjeta</span></div>
+                            <div class="tarjeta-action-item"><button class="action-button">${ICONS.MoreGesturesIcon()}</button><span>Más gestiones</span></div>
+                        </div>
+                        <div class="card resumen-card">
+                            <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
+                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
+                            <button class="resumen-action">
+                                <span>Mostrar resumen</span>
+                                ${ICONS.ChevronRightIcon()}
+                            </button>
+                        </div>
+                        <div class="card movimientos-card">
+                            <button class="resumen-action">
+                                <span>Mostrar movimientos</span>
+                                ${ICONS.ChevronRightIcon()}
+                            </button>
+                        </div>
+                        <div class="card actividad-card">
+                            <h3>Actividad</h3>
+                            ${ICONS.NoUsageIcon()}
+                            <p>Todavía no tenés movimientos pendientes de ingresar a tu tarjeta.</p>
+                        </div>
+                    </main>
+                    `;
+                }
+
+                function renderAccountDetailPage() {
+                    const account = state.selectedAccount;
+                    if (!account) return '<p>Error: No hay una cuenta seleccionada.</p>';
+                    const movementDates = getDynamicDates(account.movements);
+                    const infoTabHTML = `
+                    <div class="info-container">
+                        <div class="info-card"><div class="detail-row"><div><span class="detail-label">Alias de CBU</span><span class="detail-value">${account.alias}</span></div><div class="detail-actions"><button class="icon-action-button">${ICONS.PencilIcon()}</button><button class="icon-action-button">${ICONS.CopyIconSmall()}</button></div></div><div class="detail-row"><div><span class="detail-label">Número de Cuenta</span><span class="detail-value">${account.number.replace('Nº ', '')}</span></div></div><div class="detail-row"><div><span class="detail-label">CBU</span><span class="detail-value">${account.cbu}</span></div><div class="detail-actions"><button class="icon-action-button">${ICONS.CopyIconSmall()}</button></div></div><div class="detail-row no-border"><div><span class="detail-label">CUIL</span><span class="detail-value">${account.cuil}</span></div></div></div>
+                        <button class="share-data-button">Compartir Datos</button>
+                        <div class="info-card"><p class="info-section-header">MÁS INFORMACIÓN</p><div class="detail-row"><span class="detail-value gray">${account.titular}</span></div><div class="detail-row no-border"><span class="detail-value bold">Titular Impositivo</span></div></div>
+                        <div class="info-card"><div class="detail-row"><span class="detail-label">Valores a acreditar</span><span class="detail-value bold">${account.currency}0,00</span></div><div class="detail-row no-border"><span class="detail-label">Adelanto CAS</span><span class="detail-value bold">${account.currency}0,00</span></div></div>
+                    </div>`;
+                    const movementsTabHTML = `
+                    <div class="info-container">
+                        ${account.movements && account.movements.length > 0 ? `
+                            <div class="movements-header"><span>ÚLTIMOS MOVIMIENTOS</span><button class="filter-button">FILTRAR</button></div>
+                            <div class="movement-list">
+                                ${account.movements.map((movement, index) => `
+                                    <div class="movement-item">
+                                        <div class="movement-details"><span class="movement-description">${movement.description}</span><span class="movement-date">${movementDates[index]}</span></div>
+                                        <span class="movement-amount">${formatCurrency(movement.amount, account.currency)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p class="no-movements">No hay movimientos para mostrar.</p>'}
+                    </div>`;
+                    return `
+                    <main class="app-main account-detail-page">
+                        <div class="segmented-control">
+                            <button class="${state.initialTab === 'Información' ? 'active' : ''}" data-action="switch-tab" data-tab="Información">Información</button>
+                            <button class="${state.initialTab === 'Movimientos' ? 'active' : ''}" data-action="switch-tab" data-tab="Movimientos">Movimientos</button>
+                        </div>
+                        <div id="tab-content">${state.initialTab === 'Información' ? infoTabHTML : movementsTabHTML}</div>
+                    </main>`;
+                }
+                
+                function renderHomePageSkeleton() {
+                    return `
+                        <main class="app-main">
+                            <div class="skeleton skeleton-account-card"></div>
+                            <div class="skeleton skeleton-upcoming-payments"></div>
+                            <div class="skeleton skeleton-insurance"></div>
+                            <div class="skeleton skeleton-shortcuts"></div>
+                            <div class="skeleton skeleton-cards"></div>
+                        </main>
+                    `;
+                }
+
+                function renderTokenPage() {
+                    return `
+                        <div class="token-page-container">
+                             <header class="token-header">
+                                <button class="icon-button" data-action="go-back" aria-label="Cerrar">${ICONS.CloseIcon()}</button>
+                                <h1 class="token-title">Token Galica</h1>
+                                <button class="icon-button" aria-label="Información">${ICONS.InfoIcon()}</button>
+                            </header>
+                            <main class="token-main">
+                                <div class="token-warning">
+                                    ${ICONS.WarningIcon()}
+                                    <p>Nunca compartas tu Token con nadie. Ni siquiera con nosotros.</p>
+                                </div>
+                                <div class="token-display">
+                                    <span class="token-label">Código Token:</span>
+                                    <h2 id="token-code" class="token-code">...</h2>
+                                </div>
+                                <div class="token-timer">
+                                    <p id="token-countdown">Este código se renovará en 39 segundos</p>
+                                    <div class="progress-bar-container">
+                                        <div id="token-progress-bar" class="progress-bar" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                                <div class="token-unlock">
+                                    <p>¿Lo tenés bloqueado?</p>
+                                    <button class="unlock-button">Desbloquear Token</button>
+                                </div>
+                            </main>
+                        </div>
+                    `;
+                }
+
+                // --- APP LOGIC ---
+                
+                function clearTimers() {
+                    if (state.timers.qr) clearInterval(state.timers.qr);
+                    if (state.timers.token) clearInterval(state.timers.token);
+                    state.timers.qr = null;
+                    state.timers.token = null;
+                }
+
+                function handleNavigation(page) {
+                    clearTimers();
+                    if (page !== 'token' && page !== 'accountDetail') {
+                         state.selectedAccount = null;
+                    }
+                    if (page !== 'tarjetas') {
+                        state.tarjetasLoadingState = 'idle';
+                        state.tarjetasShowData = false;
+                    }
+                    state.currentPage = page;
+                    render();
+                }
+                
+                function handleLoginSuccess() {
+                    const overlay = document.querySelector('.loading-overlay');
+                    if (overlay) {
+                        overlay.remove();
+                    }
+                    state.isLoggedIn = true;
+                    // Simulate data fetch
+                    setTimeout(() => {
+                        state.isAppLoading = false;
+                        render();
+                    }, 2500);
+                    render();
+                }
+
+                function render() {
+                    const root = document.getElementById('root');
+                    if (!root) return;
+
+                    clearTimers();
+                    
+                    document.querySelectorAll('.wait-modal-overlay, .loading-sequence-overlay, .loading-overlay').forEach(el => el.remove());
+
+                    if (!state.isLoggedIn) {
+                        root.innerHTML = renderLoginPage();
+                        return;
+                    }
+                    
+                    if (state.currentPage === 'token') {
+                        root.innerHTML = renderTokenPage();
+                        startTokenTimer();
+                        return;
+                    }
+
+                    let pageContent = '';
+                    if (state.isAppLoading && state.currentPage === 'home') {
+                        pageContent = renderHomePageSkeleton();
+                    } else if (state.currentPage === 'home') {
+                        pageContent = renderHomePage();
+                    } else if (state.currentPage === 'tarjetas') {
+                        pageContent = renderTarjetasPage();
+                    } else if (state.currentPage === 'accountDetail') {
+                        pageContent = renderAccountDetailPage();
+                    }
+                    
+                    root.innerHTML = `
+                        <div class="mobile-screen">
+                            ${renderHeader()}
+                            ${pageContent}
+                            ${renderBottomNav()}
+                        </div>
+                    `;
+                    
+                    startQrTimer();
+
+                    if (state.currentPage === 'tarjetas') {
+                        if (state.tarjetasLoadingState === 'wait') {
+                             document.body.insertAdjacentHTML('beforeend', '<div class="wait-modal-overlay"><div class="wait-modal-content"><p>Espera un Instante.</p></div></div>');
+                        } else if (state.tarjetasLoadingState === 'load') {
+                            const loadingSequenceHTML = `
+                                <div class="loading-sequence-overlay">
+                                    <div class="loading-sequence-content">
+                                        <div class="validation-container">
+                                            ${ICONS.ValidatingIcon()}
+                                            <div class="loader"></div>
+                                        </div>
+                                        <p>Estamos Validando Este Dispositivo</p>
+                                    </div>
+                                </div>`;
+                             document.body.insertAdjacentHTML('beforeend', loadingSequenceHTML);
+                        }
+                    }
+                }
+                
+                function startQrTimer() {
+                    state.timers.qr = setInterval(() => {
+                        state.isQrMode = !state.isQrMode;
+                        const btn = document.getElementById('central-button');
+                        if (btn) {
+                            btn.innerHTML = state.isQrMode ? ICONS.QrCodeIcon() : '<span>M</span>';
+                            btn.classList.toggle('qr-mode', state.isQrMode);
+                        }
+                    }, 8000);
+                }
+
+                function startTokenTimer() {
+                    let countdown = 39;
+                    const totalDuration = 39;
+
+                    const generateToken = () => {
+                        const newToken = Math.floor(100000 + Math.random() * 900000).toString();
+                        return `${newToken.substring(0, 3)} ${newToken.substring(3, 6)}`;
+                    };
+
+                    const updateUI = () => {
+                         const codeEl = document.getElementById('token-code');
+                         const countdownEl = document.getElementById('token-countdown');
+                         const progressEl = document.getElementById('token-progress-bar');
+                         if (!codeEl || !countdownEl || !progressEl) {
+                             clearInterval(state.timers.token);
+                             return;
+                         }
+                         codeEl.textContent = codeEl.textContent === '...' ? generateToken() : codeEl.textContent;
+                         countdownEl.textContent = `Este código se renovará en ${countdown} segundos`;
+                         progressEl.style.width = `${(countdown / totalDuration) * 100}%`;
+                    };
+                    
+                    updateUI();
+
+                    state.timers.token = setInterval(() => {
+                        countdown--;
+                        if (countdown < 1) {
+                            countdown = totalDuration;
+                            document.getElementById('token-code').textContent = generateToken();
+                        }
+                        updateUI();
+                    }, 1000);
+                }
+
+                // --- EVENT HANDLING ---
+                
+                function setupEventListeners() {
+                    const root = document.getElementById('root');
+                    if (!root) return;
+
+                    function attemptLogin() {
+                        const passwordInput = document.getElementById('password-input');
+                        const errorEl = document.getElementById('login-error');
+                        if (!passwordInput || !errorEl) return;
+                        
+                        if (document.querySelector('.loading-overlay')) return;
+
+                        // Add length check for robustness, especially for form submission
+                        if (passwordInput.value.length < 4) return;
+
+                        if (passwordInput.value === '4661') {
+                            errorEl.style.display = 'none';
+                            passwordInput.blur();
+                            document.body.insertAdjacentHTML('beforeend', '<div class="loading-overlay"><div class="loader"></div></div>');
+                            setTimeout(() => {
+                                handleLoginSuccess();
+                            }, 3000);
+                        } else {
+                            errorEl.textContent = 'Clave incorrecta.';
+                            errorEl.style.display = 'block';
+                            setTimeout(() => { passwordInput.value = ''; }, 800);
+                        }
+                    }
+
+                    root.addEventListener('submit', event => {
+                        if (event.target.id === 'login-form') {
+                            event.preventDefault();
+                            attemptLogin();
+                        }
+                    });
+                    
+                    root.addEventListener('input', event => {
+                        if (event.target.id === 'password-input') {
+                            const passwordInput = event.target;
+                            const errorEl = document.getElementById('login-error');
+
+                            if (errorEl && errorEl.style.display !== 'none') {
+                                errorEl.style.display = 'none';
+                            }
+
+                            if (passwordInput.value.length === 4) {
+                                attemptLogin();
+                            }
+                        }
+                    });
+
+                    root.addEventListener('click', event => {
+                        const target = event.target.closest('[data-navigate], [data-action]');
+                        if (!target) return;
+
+                        const navigateTo = target.dataset.navigate;
+                        const action = target.dataset.action;
+
+                        if (navigateTo) {
+                            handleNavigation(navigateTo);
+                        }
+
+                        if (action === 'go-back') {
+                           handleNavigation('home');
+                        } else if (action === 'select-account') {
+                            const accountIndex = parseInt(target.dataset.accountIndex, 10);
+                            state.selectedAccount = accountsData[accountIndex];
+                            state.initialTab = 'Información';
+                            handleNavigation('accountDetail');
+                        } else if (action === 'fullscreen') {
+                            const elem = document.documentElement;
+                            if (!document.fullscreenElement) {
+                                if (elem.requestFullscreen) elem.requestFullscreen().catch(err => console.error(err));
+                                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                            } else {
+                                if (document.exitFullscreen) document.exitFullscreen();
+                            }
+                        } else if (action === 'toggle-card-data') {
+                            if (state.tarjetasShowData) {
+                                state.tarjetasShowData = false;
+                                render();
+                            } else {
+                                state.tarjetasLoadingState = 'wait';
+                                render();
+                                setTimeout(() => {
+                                    state.tarjetasLoadingState = 'load';
+                                    render();
+                                    setTimeout(() => {
+                                        state.tarjetasLoadingState = 'idle';
+                                        state.tarjetasShowData = true;
+                                        render();
+                                    }, 5200);
+                                }, 1500);
+                            }
+                        } else if (action === 'switch-tab') {
+                            const tab = target.dataset.tab;
+                            if (state.initialTab !== tab) {
+                                state.initialTab = tab;
+                                render();
+                            }
+                        }
+                    });
+                }
+
+
+                // --- INITIALIZATION ---
+                document.addEventListener('DOMContentLoaded', () => {
+                    render();
+                    setupEventListeners();
+                });
+            
+                    </script>
+                </body>
+                </html>
+            
