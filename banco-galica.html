@@ -1773,6 +1773,40 @@ body {
                     `;
                 }
 
+                function renderCardInfoSectionHTML() {
+                    const activeIndex = state.tarjetasActiveIndex;
+                    const infoSectionHTML = activeIndex === 0 ? `
+                        <div class="card resumen-card">
+                            <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
+                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
+                            <button class="resumen-action">
+                                <span>Mostrar resumen</span>
+                                ${ICONS.ChevronRightIcon()}
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="card card-info-table">
+                            <h3>Información de tu tarjeta</h3>
+                            <div class="debit-card-info-row">
+                                <span>Límite de compra</span>
+                                <span>$ 1.500.000</span>
+                            </div>
+                            <div class="debit-card-info-row">
+                                <span>Límite de extracción</span>
+                                <span>$ 400.000</span>
+                            </div>
+                        </div>
+                    `;
+                    return infoSectionHTML;
+                }
+
+                function renderCardInfoSection() {
+                    const container = document.getElementById('card-info-section');
+                    if (container) {
+                        container.innerHTML = renderCardInfoSectionHTML();
+                    }
+                }
+
                 function renderTarjetasPage() {
                     const showData = state.tarjetasShowData;
                     const cardsHTML = cardsData.map(card => `
@@ -1804,30 +1838,6 @@ body {
                         </div>
                     `).join('');
 
-                    const activeIndex = state.tarjetasActiveIndex;
-                    const infoSectionHTML = activeIndex === 0 ? `
-                        <div class="card resumen-card">
-                            <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
-                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
-                            <button class="resumen-action">
-                                <span>Mostrar resumen</span>
-                                ${ICONS.ChevronRightIcon()}
-                            </button>
-                        </div>
-                    ` : `
-                        <div class="card card-info-table">
-                            <h3>Información de tu tarjeta</h3>
-                            <div class="debit-card-info-row">
-                                <span>Límite de compra</span>
-                                <span>$ 1.500.000</span>
-                            </div>
-                            <div class="debit-card-info-row">
-                                <span>Límite de extracción</span>
-                                <span>$ 400.000</span>
-                            </div>
-                        </div>
-                    `;
-
                     return `
                     <main class="app-main tarjetas-page">
                         <div class="tarjetas-carousel-wrapper">
@@ -1839,7 +1849,7 @@ body {
                             <div class="tarjeta-action-item"><button class="action-button">${ICONS.ReportCardIcon()}</button><span>Denunciar tarjeta</span></div>
                             <div class="tarjeta-action-item"><button class="action-button">${ICONS.MoreGesturesIcon()}</button><span>Más gestiones</span></div>
                         </div>
-                        ${infoSectionHTML}
+                        <div id="card-info-section">${renderCardInfoSectionHTML()}</div>
                         <div class="card movimientos-card">
                             <button class="resumen-action">
                                 <span>Mostrar movimientos</span>
@@ -2139,7 +2149,7 @@ body {
 
                                 if (newIndex !== state.tarjetasActiveIndex && newIndex < cardsData.length) {
                                     state.tarjetasActiveIndex = newIndex;
-                                    render();
+                                    renderCardInfoSection();
                                 }
                             }, 100);
                         }
