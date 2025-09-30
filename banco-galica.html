@@ -19,6 +19,7 @@
                     
                     <style>
                         
+
 :root {
   --primary-blue: #003366;
   --light-blue-bg: #e6f3ff;
@@ -1005,30 +1006,26 @@ body {
 }
 
 .card-info-table h3 {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.info-row {
+.debit-card-info-row {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0;
-    font-size: 14px;
-    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    padding: 16px 0;
+    font-size: 16px;
+    border-top: 1px solid #e9ecef;
 }
 
-.info-row:first-of-type {
-    padding-top: 0;
-}
-.info-row:last-of-type {
-    border-bottom: none;
+.debit-card-info-row:last-child {
     padding-bottom: 0;
 }
 
-.info-row span:last-child {
+.debit-card-info-row span:last-child {
     font-weight: 500;
-    color: var(--text-dark);
 }
 
 /* --- Account Detail Page Styles --- */
@@ -1313,6 +1310,7 @@ body {
     font-weight: 500;
     cursor: pointer;
 }
+
                     </style>
                 </head>
                 <body>
@@ -1525,6 +1523,7 @@ body {
                     },
                     tarjetasLoadingState: 'idle', // idle, wait, load
                     tarjetasShowData: false,
+                    tarjetasActiveIndex: 0,
                 };
 
                 // --- ICON HELPERS (Return SVG strings) ---
@@ -1805,6 +1804,30 @@ body {
                         </div>
                     `).join('');
 
+                    const activeIndex = state.tarjetasActiveIndex;
+                    const infoSectionHTML = activeIndex === 0 ? `
+                        <div class="card resumen-card">
+                            <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
+                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
+                            <button class="resumen-action">
+                                <span>Mostrar resumen</span>
+                                ${ICONS.ChevronRightIcon()}
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="card card-info-table">
+                            <h3>Información de tu tarjeta</h3>
+                            <div class="debit-card-info-row">
+                                <span>Límite de compra</span>
+                                <span>$ 1.500.000</span>
+                            </div>
+                            <div class="debit-card-info-row">
+                                <span>Límite de extracción</span>
+                                <span>$ 400.000</span>
+                            </div>
+                        </div>
+                    `;
+
                     return `
                     <main class="app-main tarjetas-page">
                         <div class="tarjetas-carousel-wrapper">
@@ -1816,14 +1839,7 @@ body {
                             <div class="tarjeta-action-item"><button class="action-button">${ICONS.ReportCardIcon()}</button><span>Denunciar tarjeta</span></div>
                             <div class="tarjeta-action-item"><button class="action-button">${ICONS.MoreGesturesIcon()}</button><span>Más gestiones</span></div>
                         </div>
-                        <div class="card resumen-card">
-                            <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
-                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
-                            <button class="resumen-action">
-                                <span>Mostrar resumen</span>
-                                ${ICONS.ChevronRightIcon()}
-                            </button>
-                        </div>
+                        ${infoSectionHTML}
                         <div class="card movimientos-card">
                             <button class="resumen-action">
                                 <span>Mostrar movimientos</span>
@@ -1935,6 +1951,7 @@ body {
                     if (page !== 'tarjetas') {
                         state.tarjetasLoadingState = 'idle';
                         state.tarjetasShowData = false;
+                        state.tarjetasActiveIndex = 0;
                     }
                     state.currentPage = page;
                     render();
@@ -2109,6 +2126,24 @@ body {
                             }
                         }
                     });
+
+                    let scrollTimeout;
+                    root.addEventListener('scroll', event => {
+                        if (event.target.classList.contains('tarjetas-carousel-wrapper')) {
+                            clearTimeout(scrollTimeout);
+                            scrollTimeout = setTimeout(() => {
+                                const carousel = event.target;
+                                const cardWidth = carousel.offsetWidth;
+                                const scrollLeft = carousel.scrollLeft;
+                                const newIndex = Math.round(scrollLeft / cardWidth);
+
+                                if (newIndex !== state.tarjetasActiveIndex && newIndex < cardsData.length) {
+                                    state.tarjetasActiveIndex = newIndex;
+                                    render();
+                                }
+                            }, 100);
+                        }
+                    }, true);
 
                     root.addEventListener('click', event => {
                         const target = event.target.closest('[data-navigate], [data-action]');
