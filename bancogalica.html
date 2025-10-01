@@ -1406,7 +1406,7 @@ body {
   {
     "type": "Caja de ahorro en dólares",
     "balance": "115.738",
-    "cents": "76",
+    "cents": "86",
     "currency": "U$D",
     "number": "Nº 4058643-9 999-9",
     "alias": "TRAMO.MIRADA.YUYO",
@@ -1428,6 +1428,16 @@ body {
       }
     ],
     "movements": [
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "01/10/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "30/09/25"
+      },
       {
         "description": "Rendimiento usd",
         "amount": 0.55,
@@ -1472,16 +1482,6 @@ body {
         "description": "Rendimiento usd",
         "amount": 0.55,
         "originalDate": "22/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "22/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "19/09/25"
       }
     ]
   }
@@ -1522,7 +1522,8 @@ body {
                         token: null
                     },
                     tarjetasLoadingState: 'idle', // idle, wait, load
-                    tarjetasShowData: false,
+                    tarjetasVisibleCardIndex: null,
+                    tarjetasTargetCardIndex: null,
                     tarjetasActiveIndex: 0,
                 };
 
@@ -1582,33 +1583,6 @@ body {
                     }).format(Math.abs(amount));
                     return amount < 0 ? `-${currency}${formattedAmount}` : `${currency}${formattedAmount}`;
                 };
-
-                const formatDate = (date) => {
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const year = String(date.getFullYear()).slice(-2);
-                    return `${day}/${month}/${year}`;
-                };
-                
-                const getDynamicDates = (movements) => {
-                    if (!movements) return [];
-                    const dateCache = new Map();
-                    let dayOffset = 0;
-                    let lastOriginalDate = null;
-                    return movements.map(m => {
-                        if (m.originalDate !== lastOriginalDate) {
-                            if (lastOriginalDate !== null) dayOffset += (Math.floor(Math.random() * 2) + 1);
-                            lastOriginalDate = m.originalDate;
-                        }
-                        if (dateCache.has(m.originalDate)) return dateCache.get(m.originalDate);
-                        const newDate = new Date();
-                        newDate.setDate(newDate.getDate() - dayOffset);
-                        const formattedDate = formatDate(newDate);
-                        dateCache.set(m.originalDate, formattedDate);
-                        return formattedDate;
-                    });
-                };
-
 
                 // --- RENDER FUNCTIONS (Return HTML strings) ---
                 
@@ -1808,8 +1782,7 @@ body {
                 }
 
                 function renderTarjetasPage() {
-                    const showData = state.tarjetasShowData;
-                    const cardsHTML = cardsData.map(card => `
+                    const cardsHTML = cardsData.map((card, index) => `
                         <div class="tarjeta-slide">
                             <div class="tarjeta-card ${card.className}">
                                 <div class="tarjeta-header">
@@ -1817,21 +1790,21 @@ body {
                                         <span class="visa-logo-text">${card.brand}</span>
                                         <span class="tarjeta-debit-text">${card.type}</span>
                                     </div>
-                                    <button class="mostrar-datos-btn" data-action="toggle-card-data">
-                                        ${showData ? 'Ocultar datos' : 'Mostrar datos'} ${ICONS.EyeIcon()}
+                                    <button class="mostrar-datos-btn" data-action="toggle-card-data" data-card-index="${index}">
+                                        ${state.tarjetasVisibleCardIndex === index ? 'Ocultar datos' : 'Mostrar datos'} ${ICONS.EyeIcon()}
                                     </button>
                                 </div>
                                 <div class="tarjeta-number">
-                                    <span>${showData ? card.fullNumber : card.number}</span>
+                                    <span>${state.tarjetasVisibleCardIndex === index ? card.fullNumber : card.number}</span>
                                 </div>
                                 <div class="tarjeta-details">
                                     <div>
                                         <span class="tarjeta-label">Fecha de vencimiento</span>
-                                        <span class="tarjeta-value">${showData ? card.expiry : '••/••'}</span>
+                                        <span class="tarjeta-value">${state.tarjetasVisibleCardIndex === index ? card.expiry : '••/••'}</span>
                                     </div>
                                     <div>
                                         <span class="tarjeta-label">Código de seguridad</span>
-                                        <span class="tarjeta-value">${showData ? card.cvv : '•••'}</span>
+                                        <span class="tarjeta-value">${state.tarjetasVisibleCardIndex === index ? card.cvv : '•••'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1868,7 +1841,7 @@ body {
                 function renderAccountDetailPage() {
                     const account = state.selectedAccount;
                     if (!account) return '<p>Error: No hay una cuenta seleccionada.</p>';
-                    const movementDates = getDynamicDates(account.movements);
+
                     const infoTabHTML = `
                     <div class="info-container">
                         <div class="info-card"><div class="detail-row"><div><span class="detail-label">Alias de CBU</span><span class="detail-value">${account.alias}</span></div><div class="detail-actions"><button class="icon-action-button">${ICONS.PencilIcon()}</button><button class="icon-action-button">${ICONS.CopyIconSmall()}</button></div></div><div class="detail-row"><div><span class="detail-label">Número de Cuenta</span><span class="detail-value">${account.number.replace('Nº ', '')}</span></div></div><div class="detail-row"><div><span class="detail-label">CBU</span><span class="detail-value">${account.cbu}</span></div><div class="detail-actions"><button class="icon-action-button">${ICONS.CopyIconSmall()}</button></div></div><div class="detail-row no-border"><div><span class="detail-label">CUIL</span><span class="detail-value">${account.cuil}</span></div></div></div>
@@ -1883,7 +1856,7 @@ body {
                             <div class="movement-list">
                                 ${account.movements.map((movement, index) => `
                                     <div class="movement-item">
-                                        <div class="movement-details"><span class="movement-description">${movement.description}</span><span class="movement-date">${movementDates[index]}</span></div>
+                                        <div class="movement-details"><span class="movement-description">${movement.description}</span><span class="movement-date">${movement.originalDate}</span></div>
                                         <span class="movement-amount">${formatCurrency(movement.amount, account.currency)}</span>
                                     </div>
                                 `).join('')}
@@ -1960,7 +1933,8 @@ body {
                     }
                     if (page !== 'tarjetas') {
                         state.tarjetasLoadingState = 'idle';
-                        state.tarjetasShowData = false;
+                        state.tarjetasVisibleCardIndex = null;
+                        state.tarjetasTargetCardIndex = null;
                         state.tarjetasActiveIndex = 0;
                     }
                     state.currentPage = page;
@@ -2182,10 +2156,12 @@ body {
                                 if (document.exitFullscreen) document.exitFullscreen();
                             }
                         } else if (action === 'toggle-card-data') {
-                            if (state.tarjetasShowData) {
-                                state.tarjetasShowData = false;
+                            const cardIndex = parseInt(target.dataset.cardIndex, 10);
+                            if (state.tarjetasVisibleCardIndex === cardIndex) {
+                                state.tarjetasVisibleCardIndex = null;
                                 render();
                             } else {
+                                state.tarjetasTargetCardIndex = cardIndex;
                                 state.tarjetasLoadingState = 'wait';
                                 render();
                                 setTimeout(() => {
@@ -2193,7 +2169,8 @@ body {
                                     render();
                                     setTimeout(() => {
                                         state.tarjetasLoadingState = 'idle';
-                                        state.tarjetasShowData = true;
+                                        state.tarjetasVisibleCardIndex = state.tarjetasTargetCardIndex;
+                                        state.tarjetasTargetCardIndex = null;
                                         render();
                                     }, 5200);
                                 }, 1500);
