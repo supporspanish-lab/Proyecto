@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Mi Argentina</title>
-                <meta name="theme-color" content="#303f9f">
-                <meta name="apple-mobile-web-app-capable" content="yes">
-                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-                <meta name="apple-mobile-web-app-title" content="Mi Argentina">
-                <link rel="icon" href="https://iili.io/KXRBnta.jpg">
-                <link rel="apple-touch-icon" href="https://iili.io/KXRBnta.jpg">
-                <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-                <style>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Argentina (Standalone)</title>
+    <meta name="theme-color" content="#303f9f">
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICAgICAic2hvcnRfbmFtZSI6ICJNaSBBcmdlbnRpbmEiLAogICAgICAibmFtZSI6ICJNaSBBcmdlbnRpbmEiLAogICAgICAiZGVzY3JpcHRpb24iOiAiR2VzdGlvbsOhIHRyw6FtaXRlcywgc2Fjw6EgdHVybm9zLCBhY2NlZMOpIGEgdHVzIGNyZWRlbmNpYWxlcyB5IHJlY2liw60gaW5mb3JtYWNpw7NuIHBlcnNvbmFsaXphZGEuIiwKICAgICAgImljb25zIjogWwogICAgICAgIHsgInNyYyI6ICJodHRwczovL2lpbGkuaW8vS1hSQm50YS5qcGciLCAidHlwZSI6ICJpbWFnZS9qcGVnIiwgInNpemVzIjogIjE5MngxOTIiIH0sCiAgICAgICAgeyAic3JjIjogImh0dHBzOi8vaWlsaS5pby9LWFJCbnRhLmpwZyIsICJ0eXBlIjogImltYWdlL2pwZWciLCAic2l6ZXMiOiAiNTEyeDUxMiIgfQogICAgICBdLAogICAgICAic3RhcnRfdXJsIjogIi4iLAogICAgICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAgICAgInRoZW1lX2NvbG9yIjogIiMzMDNmOWYiLAogICAgICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjRmNmY4IgogICAgfQ==">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mi Argentina">
+    <link rel="icon" type="image/jpeg" href="https://iili.io/KXRBnta.jpg">
+    <link rel="apple-touch-icon" href="https://iili.io/KXRBnta.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
         @import url(https://fonts.googleapis.com/css?family=Google+Sans+Text);
         html {
           font-family: 'Google Sans Text', 'Google Sans';
@@ -23,17 +24,18 @@
           color: light-dark(black, white);
         }
         </style>
-            </head>
-                <body>
+</head>
+<body>
+    
     <div id="loading-overlay" class="loading-overlay">
         <div class="spinner"></div>
     </div>
-    <div id="action-loader" class="action-loader active">
+    <div id="action-loader" class="action-loader">
         <div class="spinner"></div>
     </div>
     
     <div id="screen-container">
-        <div id="main-screen" style="display: flex;">
+        <div id="main-screen" style="display: none;">
             <div class="app-container">
                 <header class="app-header">
                     <!-- Hamburger Icon -->
@@ -229,7 +231,7 @@
                         </div>
                         <div class="dni-card-body" id="dni-card-body">
                             
-                            <div id="dni-initial-view" style="display: block;">
+                            <div id="dni-initial-view">
                                 <button id="solicitar-dni-btn" class="btn btn-outline">Solicitar DNI Digital por primera vez</button>
                                 <button id="ver-dni-digital-btn" class="btn btn-solid">Ver DNI Digital</button>
                                 <p>Datos suministrados por <span class="renaper-link">RENAPER</span></p>
@@ -258,7 +260,7 @@
                             <div id="dni-digital-display" style="display: none;">
                                <h3 id="dni-digital-title">GOMEZ MARIA ELENA</h3>
                                <div class="dni-flipper-container">
-                                   <div id="dni-flipper" class="dni-flipper" style="transform: rotateY(0deg);">
+                                   <div id="dni-flipper" class="dni-flipper">
                                        <div class="dni-card-visual dni-card-front">
                                            <div class="dni-profile-pic" id="main-dni-profile-pic" style="top: 30.1%; left: 5%; width: 25.1%; height: 47.8%;">
                                                <img alt="Foto de perfil" class="profile-image-inner" id="main-dni-profile-image" src="https://i.pravatar.cc/150?img=3">
@@ -327,7 +329,336 @@
             </div>
         </div>
         
-        
+        <div id="hijos-screen" style="display: flex;">
+            <div class="app-container">
+                 <header class="app-header documentos-header">
+                    <!-- Back Arrow Icon -->
+                    <svg id="hijos-back-btn" class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path>
+                    </svg>
+                    <h2>Mis hijos/as</h2>
+                </header>
+                <main>
+                    <div class="dni-flipper-container" id="hijos-dni-flipper-container" style="margin-bottom: 24px;">
+                        <div id="hijos-dni-flipper" class="dni-flipper">
+                            <div class="dni-card-visual dni-card-front">
+                               <div class="dni-profile-pic" id="hijos-dni-profile-pic" style="top: 30.1%; left: 5%; width: 25.1%; height: 47.8%;">
+                                    <img alt="Foto de perfil" class="profile-image-inner" id="hijos-dni-profile-image" src="https://i.pravatar.cc/150?img=3">
+                               </div>
+                               <!-- Text Overlays -->
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-apellido" style="top: 19.6%; left: 30.7%; font-size: 14px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">GOMEZ</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-nombre" style="top: 29.6%; left: 30.7%; font-size: 17px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">MARIA ELENA</div>
+                               <div class="dni-text-overlay" id="hijos-dni-documento" style="top: 87.2%; left: 3.1%; font-size: 21px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">35.123.456</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-nacimiento" style="top: 52.2%; left: 30.7%; font-size: 15px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">15 MAY/MAY 1990</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-tramite" style="top: 90%; left: 31%; font-size: 10px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">12345678901</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-ejemplar" style="top: 41.9%; left: 78.4%; font-size: 14px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">C</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-emision" style="top: 63.4%; left: 31%; font-size: 15px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">10 OCT/OCT 2021</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-vencimiento" style="top: 74.9%; left: 31%; font-size: 15px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">10 OCT/OCT 2036</div>
+                               <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-sexo" style="top: 41.3%; left: 31%; font-size: 17px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">M</div>
+                               <!-- Barcode -->
+                               <div class="dni-qr-pic" id="hijos-dni-qr-pic" style="top: 81.3%; left: 55.7%; width: 40%; height: 16.6%;">
+                                   <img alt="Código de barras" class="profile-image-inner" id="hijos-dni-qr-image" src="https://i.ibb.co/Ld122f3/barcode-dni-r65jxl.png">
+                               </div>
+                               <!-- Base Image -->
+                               <img src="https://iili.io/KXFRqKu.md.png" alt="DNI Digital" class="dni-image">
+                            </div>
+                            <div class="dni-card-visual dni-card-back">
+                                <div class="dni-text-overlay dni-text-overlay--light" id="hijos-dni-domicilio" style="top: 3.7%; left: 23.1%; font-size: 14px; font-family: &quot;Roboto Condensed&quot;, sans-serif;">CALLE FALSA 123</div>
+                               <img src="https://iili.io/KW1zIb1.md.png" alt="DNI Digital Reverso" class="dni-image" id="hijos-dni-back-image">
+                           </div>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-wrapper" id="hijos-carousel-wrapper">
+                        <div class="carousel-track" id="hijos-carousel-track" style="transform: translateX(0px); transition: transform 0.3s ease-in-out;">
+                            <!-- Slide 1: Imágenes y QR -->
+                            <div class="carousel-slide">
+                                 <div class="controls-container">
+                                    <h3 class="section-title" style="margin-top:0; margin-bottom: 20px;">Imágenes y QR</h3>
+                                    <div class="control-group">
+                                        <label for="image-url-input">URL de la Imagen (Frente)</label>
+                                        <input type="url" id="image-url-input" class="custom-input" value="https://i.pravatar.cc/150?img=3">
+                                    </div>
+                                     <div class="control-group">
+                                        <label for="dni-back-url-input">URL de la Imagen (Reverso)</label>
+                                        <input type="url" id="dni-back-url-input" class="custom-input" value="https://iili.io/KW1zIb1.md.png">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="top-slider">Top: <span id="top-value">30.1</span>%</label>
+                                        <input type="range" id="top-slider" min="0" max="100" step="0.1" value="30.1">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="left-slider">Left: <span id="left-value">5</span>%</label>
+                                        <input type="range" id="left-slider" min="0" max="100" step="0.1" value="5">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="width-slider">Width: <span id="width-value">25.1</span>%</label>
+                                        <input type="range" id="width-slider" min="0" max="100" step="0.1" value="25.1">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="height-slider">Height: <span id="height-value">47.8</span>%</label>
+                                        <input type="range" id="height-slider" min="0" max="100" step="0.1" value="47.8">
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <div class="control-group">
+                                        <label for="qr-url-input">URL del Código de Barras</label>
+                                        <input type="url" id="qr-url-input" class="custom-input" value="https://i.ibb.co/Ld122f3/barcode-dni-r65jxl.png">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="qr-top-slider">Top: <span id="qr-top-value">81.3</span>%</label>
+                                        <input type="range" id="qr-top-slider" min="0" max="100" step="0.1" value="81.3">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="qr-left-slider">Left: <span id="qr-left-value">55.7</span>%</label>
+                                        <input type="range" id="qr-left-slider" min="0" max="100" step="0.1" value="55.7">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="qr-width-slider">Width: <span id="qr-width-value">40</span>%</label>
+                                        <input type="range" id="qr-width-slider" min="0" max="100" step="0.1" value="40">
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="qr-height-slider">Height: <span id="qr-height-value">16.6</span>%</label>
+                                        <input type="range" id="qr-height-slider" min="0" max="100" step="0.1" value="16.6">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2: Datos Personales -->
+                            <div class="carousel-slide">
+                                <div class="controls-container">
+                                    <h3 class="section-title" style="margin-top:0; margin-bottom: 20px;">Datos Personales</h3>
+                                    <!-- Apellido -->
+                                    <div class="control-group">
+                                        <label for="apellido-input">Apellido</label>
+                                        <input type="text" id="apellido-input" class="custom-input" value="GOMEZ">
+                                        <label for="apellido-top-slider">Top: <span id="apellido-top-value">19.6</span>%</label>
+                                        <input type="range" id="apellido-top-slider" min="0" max="100" step="0.1" value="19.6">
+                                        <label for="apellido-left-slider">Left: <span id="apellido-left-value">30.7</span>%</label>
+                                        <input type="range" id="apellido-left-slider" min="0" max="100" step="0.1" value="30.7">
+                                        <label for="apellido-fontsize-slider">Font Size: <span id="apellido-fontsize-value">14</span>px</label>
+                                        <input type="range" id="apellido-fontsize-slider" min="8" max="40" step="1" value="14">
+                                        <label for="apellido-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="apellido-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Nombre -->
+                                    <div class="control-group">
+                                        <label for="nombre-input">Nombre</label>
+                                        <input type="text" id="nombre-input" class="custom-input" value="MARIA ELENA">
+                                        <label for="nombre-top-slider">Top: <span id="nombre-top-value">29.6</span>%</label>
+                                        <input type="range" id="nombre-top-slider" min="0" max="100" step="0.1" value="29.6">
+                                        <label for="nombre-left-slider">Left: <span id="nombre-left-value">30.7</span>%</label>
+                                        <input type="range" id="nombre-left-slider" min="0" max="100" step="0.1" value="30.7">
+                                        <label for="nombre-fontsize-slider">Font Size: <span id="nombre-fontsize-value">17</span>px</label>
+                                        <input type="range" id="nombre-fontsize-slider" min="8" max="40" step="1" value="17">
+                                        <label for="nombre-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="nombre-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Documento -->
+                                    <div class="control-group">
+                                        <label for="documento-input">N° de Documento</label>
+                                        <input type="text" id="documento-input" class="custom-input" value="35.123.456">
+                                        <label for="documento-top-slider">Top: <span id="documento-top-value">87.2</span>%</label>
+                                        <input type="range" id="documento-top-slider" min="0" max="100" step="0.1" value="87.2">
+                                        <label for="documento-left-slider">Left: <span id="documento-left-value">3.1</span>%</label>
+                                        <input type="range" id="documento-left-slider" min="0" max="100" step="0.1" value="3.1">
+                                        <label for="documento-fontsize-slider">Font Size: <span id="documento-fontsize-value">21</span>px</label>
+                                        <input type="range" id="documento-fontsize-slider" min="8" max="40" step="1" value="21">
+                                        <label for="documento-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="documento-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     <hr class="control-group-divider">
+                                    <!-- Nacimiento -->
+                                    <div class="control-group">
+                                        <label for="nacimiento-input">Fecha de Nacimiento</label>
+                                        <input type="text" id="nacimiento-input" class="custom-input" value="15 MAY/MAY 1990">
+                                        <label for="nacimiento-top-slider">Top: <span id="nacimiento-top-value">52.2</span>%</label>
+                                        <input type="range" id="nacimiento-top-slider" min="0" max="100" step="0.1" value="52.2">
+                                        <label for="nacimiento-left-slider">Left: <span id="nacimiento-left-value">30.7</span>%</label>
+                                        <input type="range" id="nacimiento-left-slider" min="0" max="100" step="0.1" value="30.7">
+                                        <label for="nacimiento-fontsize-slider">Font Size: <span id="nacimiento-fontsize-value">15</span>px</label>
+                                        <input type="range" id="nacimiento-fontsize-slider" min="8" max="40" step="1" value="15">
+                                        <label for="nacimiento-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="nacimiento-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 3: Datos del DNI -->
+                            <div class="carousel-slide">
+                                 <div class="controls-container">
+                                    <h3 class="section-title" style="margin-top:0; margin-bottom: 20px;">Datos del DNI</h3>
+                                    <!-- Trámite -->
+                                    <div class="control-group">
+                                        <label for="tramite-input">N° de Trámite</label>
+                                        <input type="text" id="tramite-input" class="custom-input" value="12345678901">
+                                         <label for="tramite-top-slider">Top: <span id="tramite-top-value">90</span>%</label>
+                                        <input type="range" id="tramite-top-slider" min="0" max="100" step="0.1" value="90">
+                                        <label for="tramite-left-slider">Left: <span id="tramite-left-value">31</span>%</label>
+                                        <input type="range" id="tramite-left-slider" min="0" max="100" step="0.1" value="31">
+                                        <label for="tramite-fontsize-slider">Font Size: <span id="tramite-fontsize-value">10</span>px</label>
+                                        <input type="range" id="tramite-fontsize-slider" min="8" max="40" step="1" value="10">
+                                        <label for="tramite-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="tramite-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Ejemplar -->
+                                    <div class="control-group">
+                                        <label for="ejemplar-input">Ejemplar</label>
+                                        <input type="text" id="ejemplar-input" class="custom-input" value="C">
+                                         <label for="ejemplar-top-slider">Top: <span id="ejemplar-top-value">41.9</span>%</label>
+                                        <input type="range" id="ejemplar-top-slider" min="0" max="100" step="0.1" value="41.9">
+                                        <label for="ejemplar-left-slider">Left: <span id="ejemplar-left-value">78.4</span>%</label>
+                                        <input type="range" id="ejemplar-left-slider" min="0" max="100" step="0.1" value="78.4">
+                                        <label for="ejemplar-fontsize-slider">Font Size: <span id="ejemplar-fontsize-value">14</span>px</label>
+                                        <input type="range" id="ejemplar-fontsize-slider" min="8" max="40" step="1" value="14">
+                                        <label for="ejemplar-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="ejemplar-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Sexo -->
+                                    <div class="control-group">
+                                        <label for="sexo-input">Sexo</label>
+                                        <input type="text" id="sexo-input" class="custom-input" value="M">
+                                        <label for="sexo-top-slider">Top: <span id="sexo-top-value">41.3</span>%</label>
+                                        <input type="range" id="sexo-top-slider" min="0" max="100" step="0.1" value="41.3">
+                                        <label for="sexo-left-slider">Left: <span id="sexo-left-value">31</span>%</label>
+                                        <input type="range" id="sexo-left-slider" min="0" max="100" step="0.1" value="31">
+                                        <label for="sexo-fontsize-slider">Font Size: <span id="sexo-fontsize-value">17</span>px</label>
+                                        <input type="range" id="sexo-fontsize-slider" min="8" max="40" step="1" value="17">
+                                        <label for="sexo-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="sexo-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Emision -->
+                                    <div class="control-group">
+                                        <label for="emision-input">Fecha de Emisión</label>
+                                        <input type="text" id="emision-input" class="custom-input" value="10 OCT/OCT 2021">
+                                         <label for="emision-top-slider">Top: <span id="emision-top-value">63.4</span>%</label>
+                                        <input type="range" id="emision-top-slider" min="0" max="100" step="0.1" value="63.4">
+                                        <label for="emision-left-slider">Left: <span id="emision-left-value">31</span>%</label>
+                                        <input type="range" id="emision-left-slider" min="0" max="100" step="0.1" value="31">
+                                        <label for="emision-fontsize-slider">Font Size: <span id="emision-fontsize-value">15</span>px</label>
+                                        <input type="range" id="emision-fontsize-slider" min="8" max="40" step="1" value="15">
+                                        <label for="emision-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="emision-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Vencimiento -->
+                                    <div class="control-group">
+                                        <label for="vencimiento-input">Fecha de Vencimiento</label>
+                                        <input type="text" id="vencimiento-input" class="custom-input" value="10 OCT/OCT 2036">
+                                         <label for="vencimiento-top-slider">Top: <span id="vencimiento-top-value">74.9</span>%</label>
+                                        <input type="range" id="vencimiento-top-slider" min="0" max="100" step="0.1" value="74.9">
+                                        <label for="vencimiento-left-slider">Left: <span id="vencimiento-left-value">31</span>%</label>
+                                        <input type="range" id="vencimiento-left-slider" min="0" max="100" step="0.1" value="31">
+                                        <label for="vencimiento-fontsize-slider">Font Size: <span id="vencimiento-fontsize-value">15</span>px</label>
+                                        <input type="range" id="vencimiento-fontsize-slider" min="8" max="40" step="1" value="15">
+                                        <label for="vencimiento-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="vencimiento-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- Domicilio -->
+                                    <div class="control-group">
+                                        <label for="domicilio-input">Domicilio</label>
+                                        <input type="text" id="domicilio-input" class="custom-input" value="CALLE FALSA 123">
+                                        <label for="domicilio-top-slider">Top: <span id="domicilio-top-value">3.7</span>%</label>
+                                        <input type="range" id="domicilio-top-slider" min="0" max="100" step="0.1" value="3.7">
+                                        <label for="domicilio-left-slider">Left: <span id="domicilio-left-value">23.1</span>%</label>
+                                        <input type="range" id="domicilio-left-slider" min="0" max="100" step="0.1" value="23.1">
+                                        <label for="domicilio-fontsize-slider">Font Size: <span id="domicilio-fontsize-value">14</span>px</label>
+                                        <input type="range" id="domicilio-fontsize-slider" min="8" max="40" step="1" value="14">
+                                        <label for="domicilio-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="domicilio-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="control-group-divider">
+                                    <!-- CUIL -->
+                                    <div class="control-group">
+                                        <label for="cuil-input">CUIL</label>
+                                        <input type="text" id="cuil-input" class="custom-input" value="20-35123456-9">
+                                        <label for="cuil-top-slider">Top: <span id="cuil-top-value">45</span>%</label>
+                                        <input type="range" id="cuil-top-slider" min="0" max="100" step="0.1" value="45">
+                                        <label for="cuil-left-slider">Left: <span id="cuil-left-value">9</span>%</label>
+                                        <input type="range" id="cuil-left-slider" min="0" max="100" step="0.1" value="9">
+                                        <label for="cuil-fontsize-slider">Font Size: <span id="cuil-fontsize-value">15</span>px</label>
+                                        <input type="range" id="cuil-fontsize-slider" min="8" max="40" step="1" value="15">
+                                        <label for="cuil-font-select" style="margin-top: 8px;">Tipo de Texto</label>
+                                        <div class="select-wrapper">
+                                            <select id="cuil-font-select" class="custom-select">
+                                                <option value="'Roboto Condensed', sans-serif">DNI Oficial</option>
+                                                <option value="-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif">Sans-serif (App)</option>
+                                                <option value="Georgia, serif">Serif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-dots" id="hijos-carousel-dots"><span class="carousel-dot active"></span><span class="carousel-dot"></span><span class="carousel-dot"></span></div>
+                    
+                </main>
+            </div>
+        </div>
         
         <div id="dni-details-screen" style="display: none;">
             <div class="app-container">
@@ -348,54 +679,54 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">DNI</span>
-                            <span class="info-value" id="details-dni">35.123.456</span>
+                            <span class="info-value" id="details-dni"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Número de trámite</span>
-                            <span class="info-value" id="details-tramite">12345678901</span>
+                            <span class="info-value" id="details-tramite"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Fecha de emisión</span>
-                            <span class="info-value" id="details-emision">10 OCT/OCT 2021</span>
+                            <span class="info-value" id="details-emision"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Fecha de vencimiento</span>
-                            <span class="info-value" id="details-vencimiento">10 OCT/OCT 2036</span>
+                            <span class="info-value" id="details-vencimiento"></span>
                         </div>
                     </div>
                     <hr class="details-divider">
                     <div class="info-list">
                          <div class="info-item">
                             <span class="info-label">Nombre</span>
-                            <span class="info-value" id="details-nombre">MARIA ELENA</span>
+                            <span class="info-value" id="details-nombre"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Apellido</span>
-                            <span class="info-value uppercase" id="details-apellido">GOMEZ</span>
+                            <span class="info-value uppercase" id="details-apellido"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">CUIL</span>
-                            <span class="info-value" id="details-cuil">20-35123456-9</span>
+                            <span class="info-value" id="details-cuil"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Sexo</span>
-                            <span class="info-value uppercase" id="details-sexo">M</span>
+                            <span class="info-value uppercase" id="details-sexo"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Fecha de nacimiento</span>
-                            <span class="info-value" id="details-nacimiento">15 MAY/MAY 1990</span>
+                            <span class="info-value" id="details-nacimiento"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Nacionalidad</span>
-                            <span class="info-value uppercase" id="details-nacionalidad">AR</span>
+                            <span class="info-value uppercase" id="details-nacionalidad"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Lugar de nacimiento</span>
-                            <span class="info-value uppercase" id="details-lugar-nacimiento">ARGENTINA</span>
+                            <span class="info-value uppercase" id="details-lugar-nacimiento"></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Domicilio</span>
-                            <span class="info-value uppercase" id="details-domicilio">CALLE FALSA 123</span>
+                            <span class="info-value uppercase" id="details-domicilio"></span>
                         </div>
                     </div>
                 </main>
@@ -518,207 +849,792 @@
     
 
 
-
         <script type="module" onerror="console.error('Failed to load the app. Try reloading it.')">import '@/index';</script>
-        <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    function initScreenNavigation() {
-                        const screens = {
-                            main: document.getElementById('main-screen'),
-                            documentos: document.getElementById('documentos-screen'),
-                            details: document.getElementById('dni-details-screen'),
-                            telefonos: document.getElementById('telefonos-screen'),
-                        };
-                        const navs = {
-                            documentos: document.getElementById('bottom-nav'),
-                            details: document.querySelector('.details-bottom-nav'),
-                            telefonos: document.querySelector('.telefonos-bottom-nav'),
-                        };
-                        const loadingOverlay = document.getElementById('loading-overlay');
-                        
-                        const showScreen = (screenKey, subView) => {
-                            Object.values(screens).forEach(s => s && (s.style.display = 'none'));
-                            Object.values(navs).forEach(n => n && (n.style.display = 'none'));
-                            
-                            if (screens[screenKey]) screens[screenKey].style.display = 'flex';
-                            
-                            if (screenKey === 'documentos' && navs.documentos) navs.documentos.style.display = 'flex';
-                            if (screenKey === 'details' && navs.details) navs.details.style.display = 'flex';
-                            if (screenKey === 'telefonos' && navs.telefonos) navs.telefonos.style.display = 'flex';
-                            
-                            if (screenKey === 'documentos' && subView === 'digital') {
-                               document.dispatchEvent(new CustomEvent('showDniView', { detail: 'digital' }));
-                            }
-                        };
-
-                        const navigateWithLoader = (screenKey) => {
-                            if (loadingOverlay) loadingOverlay.classList.add('active');
-                            setTimeout(() => {
-                                showScreen(screenKey);
-                                if (loadingOverlay) loadingOverlay.classList.remove('active');
-                            }, 1000);
-                        };
-
-                        document.getElementById('documentos-btn')?.addEventListener('click', e => { e.preventDefault(); navigateWithLoader('documentos'); });
-                        document.getElementById('details-back-btn')?.addEventListener('click', e => { e.preventDefault(); showScreen('documentos', 'digital'); });
-                        document.getElementById('telefonos-btn-docs')?.addEventListener('click', e => { e.preventDefault(); navigateWithLoader('telefonos'); });
-                        document.getElementById('telefonos-btn-details')?.addEventListener('click', e => { e.preventDefault(); navigateWithLoader('telefonos'); });
-                        document.getElementById('telefonos-inicio-btn')?.addEventListener('click', e => { e.preventDefault(); navigateWithLoader('main'); });
-                        document.getElementById('inicio-btn')?.addEventListener('click', e => { e.preventDefault(); navigateWithLoader('main'); });
+        
+    <script>
+        const swCode = "\n        const CACHE_NAME = 'miargentina-standalone-cache-v1';\n        const urlsToCache = [\n          '.', // The HTML file itself\n          'https://iili.io/KXFRqKu.md.png', // DNI Front\n          'https://iili.io/KW1zIb1.md.png', // DNI Back\n          'https://iili.io/KXRBnta.jpg', // App Icon\n          'https://i.pravatar.cc/150?img=3', // Default profile pic\n          'https://i.ibb.co/Ld122f3/barcode-dni-r65jxl.png' // Default barcode\n        ];\n\n        self.addEventListener('install', event => {\n          event.waitUntil(\n            caches.open(CACHE_NAME).then(cache => {\n              console.log('Opened cache, adding app shell files');\n              return cache.addAll(urlsToCache);\n            }).catch(err => console.error('SW Caching failed:', err))\n          );\n        });\n\n        self.addEventListener('activate', event => {\n          const cacheWhitelist = [CACHE_NAME];\n          event.waitUntil(\n            caches.keys().then(cacheNames => {\n              return Promise.all(\n                cacheNames.map(cacheName => {\n                  if (cacheWhitelist.indexOf(cacheName) === -1) {\n                    return caches.delete(cacheName);\n                  }\n                })\n              );\n            })\n          );\n        });\n\n        self.addEventListener('fetch', event => {\n          event.respondWith(\n            fetch(event.request).then(networkResponse => {\n              return caches.open(CACHE_NAME).then(cache => {\n                cache.put(event.request, networkResponse.clone());\n                return networkResponse;\n              });\n            }).catch(() => {\n              return caches.match(event.request);\n            })\n          );\n        });\n    ";
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(swBlob);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('Standalone SW registered.', reg))
+                    .catch(err => console.error('Standalone SW registration failed:', err));
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (function miArgentinaApp() {
+    // Cast to HTMLElement or specific element types to avoid null issues and get TS support
+    const mainScreen = document.getElementById('main-screen');
+    const documentosScreen = document.getElementById('documentos-screen');
+    const hijosScreen = document.getElementById('hijos-screen');
+    const dniDetailsScreen = document.getElementById('dni-details-screen');
+    const telefonosScreen = document.getElementById('telefonos-screen');
+    const bottomNav = document.getElementById('bottom-nav');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const actionLoader = document.getElementById('action-loader');
+    const documentosBtn = document.getElementById('documentos-btn');
+    const hijosBtn = document.getElementById('hijos-btn');
+    const telefonosBtnDocs = document.getElementById('telefonos-btn-docs');
+    const telefonosBtnDetails = document.getElementById('telefonos-btn-details');
+    const telefonosInicioBtn = document.getElementById('telefonos-inicio-btn');
+    // FIX: Changed type from SVGElement to HTMLElement to resolve a TypeScript casting error.
+    // It's more conventional for a clickable element like a button to be an HTMLElement, which might contain an SVG.
+    const backBtn = document.getElementById('back-btn');
+    const hijosBackBtn = document.getElementById('hijos-back-btn');
+    const detailsBackBtn = document.getElementById('details-back-btn');
+    const inicioBtn = document.getElementById('inicio-btn');
+    // DNI Card elements
+    const solicitarDniBtn = document.getElementById('solicitar-dni-btn');
+    const dniInitialView = document.getElementById('dni-initial-view');
+    const dniSolicitudView = document.getElementById('dni-solicitud-view');
+    const dniCardHeader = document.getElementById('dni-card-header');
+    const dniCardBody = document.getElementById('dni-card-body');
+    const confirmarSolicitudBtn = document.getElementById('confirmar-solicitud-btn');
+    const dniDigitalDisplay = document.getElementById('dni-digital-display');
+    const mainDniProfilePic = document.getElementById('main-dni-profile-pic');
+    const mainDniProfileImage = document.getElementById('main-dni-profile-image');
+    const verDetalleBtn = document.getElementById('ver-detalle-btn');
+    const verDniDigitalBtn = document.getElementById('ver-dni-digital-btn');
+    // Header elements for dynamic content
+    const documentosHeader = document.querySelector('.documentos-header');
+    const documentosHeaderTitle = documentosHeader.querySelector('h2');
+    const refreshIcon = document.getElementById('refresh-icon');
+    const welcomeName = document.getElementById('welcome-name');
+    const dniDigitalTitle = document.getElementById('dni-digital-title');
+    const solicitudDniName = document.getElementById('solicitud-dni-name');
+    // Hijos screen controls (Image)
+    const hijosDniProfilePic = document.getElementById('hijos-dni-profile-pic');
+    const hijosDniProfileImage = document.getElementById('hijos-dni-profile-image');
+    const imageUrlInput = document.getElementById('image-url-input');
+    const topSlider = document.getElementById('top-slider');
+    const leftSlider = document.getElementById('left-slider');
+    const widthSlider = document.getElementById('width-slider');
+    const heightSlider = document.getElementById('height-slider');
+    const topValue = document.getElementById('top-value');
+    const leftValue = document.getElementById('left-value');
+    const widthValue = document.getElementById('width-value');
+    const heightValue = document.getElementById('height-value');
+    // Hijos screen controls (QR)
+    const mainDniQrPic = document.getElementById('main-dni-qr-pic');
+    const mainDniQrImage = document.getElementById('main-dni-qr-image');
+    const hijosDniQrPic = document.getElementById('hijos-dni-qr-pic');
+    const hijosDniQrImage = document.getElementById('hijos-dni-qr-image');
+    const qrUrlInput = document.getElementById('qr-url-input');
+    const qrTopSlider = document.getElementById('qr-top-slider');
+    const qrLeftSlider = document.getElementById('qr-left-slider');
+    const qrWidthSlider = document.getElementById('qr-width-slider');
+    const qrHeightSlider = document.getElementById('qr-height-slider');
+    const qrTopValue = document.getElementById('qr-top-value');
+    const qrLeftValue = document.getElementById('qr-left-value');
+    const qrWidthValue = document.getElementById('qr-width-value');
+    const qrHeightValue = document.getElementById('qr-height-value');
+    const detailsBarcodeImage = document.getElementById('details-barcode-image');
+    const detailsProfileImage = document.getElementById('details-profile-image');
+    // Hijos screen controls (Back Image)
+    const mainDniBackImage = document.getElementById('main-dni-back-image');
+    const hijosDniBackImage = document.getElementById('hijos-dni-back-image');
+    const dniBackUrlInput = document.getElementById('dni-back-url-input');
+    // User Menu Elements
+    const userProfileBtn = document.getElementById('user-profile-btn');
+    const profileArrow = document.getElementById('profile-arrow');
+    const userMenu = document.getElementById('user-menu');
+    const menuHijosBtn = document.getElementById('menu-hijos-btn');
+    const menuUserName = document.getElementById('menu-user-name');
+    const menuUserId = document.getElementById('menu-user-id');
+    function setupSlider(slider, targets, property, valueSpan, unit = '%') {
+        if (slider && targets && targets.length > 0 && valueSpan) {
+            // Set initial value
+            const initialValue = slider.value;
+            targets.forEach(target => {
+                if (target) {
+                    target.style[property] = `${initialValue}${unit}`;
+                }
+            });
+            valueSpan.textContent = initialValue;
+            // Add event listener
+            slider.addEventListener('input', () => {
+                const value = slider.value;
+                targets.forEach(target => {
+                    if (target) {
+                        target.style[property] = `${value}${unit}`;
                     }
-
-                    function initDniFlow() {
-                        const actionLoader = document.getElementById('action-loader');
-                        const dniViews = {
-                            initial: document.getElementById('dni-initial-view'),
-                            solicitud: document.getElementById('dni-solicitud-view'),
-                            digital: document.getElementById('dni-digital-display'),
-                        };
-                        const headerElements = {
-                            cardHeader: document.getElementById('dni-card-header'),
-                            cardBody: document.getElementById('dni-card-body'),
-                            header: document.querySelector('#documentos-screen .documentos-header'),
-                            title: document.querySelector('#documentos-screen .documentos-header h2'),
-                            refreshIcon: document.getElementById('refresh-icon'),
-                        };
-
-                        const showDniView = (viewKey) => {
-                            Object.values(dniViews).forEach(v => v && (v.style.display = 'none'));
-                            if (dniViews[viewKey]) dniViews[viewKey].style.display = 'block';
-
-                            const isDigital = viewKey === 'digital';
-                            const isSolicitud = viewKey === 'solicitud';
-                            
-                            if (headerElements.cardHeader) headerElements.cardHeader.style.display = (isDigital || isSolicitud) ? 'none' : 'flex';
-                            if (headerElements.cardBody) headerElements.cardBody.classList.toggle('no-header', isDigital || isSolicitud);
-                            if (headerElements.title) headerElements.title.textContent = isDigital ? document.getElementById('dni-digital-title').textContent : 'Documentos';
-                            if (headerElements.refreshIcon) headerElements.refreshIcon.style.display = isDigital ? 'block' : 'none';
-                            if (headerElements.header) headerElements.header.style.justifyContent = isDigital ? 'space-between' : 'flex-start';
-                        };
-                        document.addEventListener('showDniView', (e) => showDniView(e.detail));
-
-                        const performAction = (view) => {
-                            if (actionLoader) actionLoader.classList.add('active');
-                            setTimeout(() => {
-                                showDniView(view);
-                                if (actionLoader) actionLoader.classList.remove('active');
-                            }, 1000);
-                        };
-
-                        document.getElementById('solicitar-dni-btn')?.addEventListener('click', e => { e.preventDefault(); performAction('solicitud'); });
-                        document.getElementById('ver-dni-digital-btn')?.addEventListener('click', e => { e.preventDefault(); performAction('digital'); });
-                        document.getElementById('confirmar-solicitud-btn')?.addEventListener('click', e => { e.preventDefault(); performAction('digital'); });
-                        document.getElementById('ver-detalle-btn')?.addEventListener('click', e => { e.preventDefault(); document.getElementById('dni-details-screen').style.display = 'flex'; });
-                        document.getElementById('back-btn')?.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            if (getComputedStyle(dniViews.digital).display !== 'none') {
-                               showDniView('initial');
-                               const flipper = document.querySelector('#dni-flipper');
-                               if(flipper) flipper.style.transform = 'rotateY(0deg)';
-                            } else {
-                               document.getElementById('main-screen').style.display = 'flex';
-                               document.getElementById('documentos-screen').style.display = 'none';
-                            }
-                        });
-                    }
-
-                    function initUserMenu() {
-                        const btn = document.getElementById('user-profile-btn');
-                        const menu = document.getElementById('user-menu');
-                        const arrow = document.getElementById('profile-arrow');
-                        if (!btn || !menu || !arrow) return;
-                        
-                        btn.addEventListener('click', e => {
-                            e.stopPropagation();
-                            menu.classList.toggle('active');
-                            arrow.classList.toggle('rotated');
-                        });
-                        
-                        document.addEventListener('click', e => {
-                            if (menu.classList.contains('active') && !menu.contains(e.target) && !btn.contains(e.target)) {
-                                menu.classList.remove('active');
-                                arrow.classList.remove('rotated');
-                            }
-                        });
-                    }
-                    
-                    function initDniInteractions() {
-                        const dniFlipperContainer = document.querySelector('.dni-flipper-container');
-                        const dniFlipper = document.getElementById('dni-flipper');
-
-                        if (dniFlipperContainer && dniFlipper) {
-                            let isDragging = false, startX = 0, startAngle = 0, currentAngle = 0;
-                            const getEventX = (e) => e.type.includes('mouse') ? e.screenX : e.changedTouches[0].screenX;
-                            
-                            const handleDragStart = (e) => {
-                                if (e.type === 'mousedown' && e.button !== 0) return;
-                                isDragging = true;
-                                startX = getEventX(e);
-                                startAngle = currentAngle;
-                                dniFlipper.style.transition = 'none';
-                                if (e.type !== 'touchstart') e.preventDefault();
-                            };
-
-                            const handleDragMove = (e) => {
-                                if (!isDragging) return;
-                                e.preventDefault();
-                                const deltaX = getEventX(e) - startX;
-                                const rotationSensitivity = 180 / dniFlipperContainer.offsetWidth;
-                                currentAngle = startAngle + (deltaX * rotationSensitivity);
-                                dniFlipper.style.transform = 'rotateY(' + currentAngle + 'deg)';
-                            };
-                            
-                            const handleDragEnd = () => {
-                                if (!isDragging) return;
-                                isDragging = false;
-                                dniFlipper.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                                const finalRotation = Math.round(currentAngle / 180) * 180;
-                                dniFlipper.style.transform = 'rotateY(' + finalRotation + 'deg)';
-                                currentAngle = finalRotation;
-                            };
-
-                            dniFlipperContainer.addEventListener('mousedown', handleDragStart);
-                            document.addEventListener('mousemove', handleDragMove);
-                            document.addEventListener('mouseup', handleDragEnd);
-                            dniFlipperContainer.addEventListener('touchstart', handleDragStart, { passive: false });
-                            document.addEventListener('touchmove', handleDragMove, { passive: false });
-                            document.addEventListener('touchend', handleDragEnd);
-                        }
-                        
-                        const card = document.querySelector('#documentos-screen .dni-card');
-                        const header = document.getElementById('dni-card-header');
-                        if (header && card) {
-                            header.addEventListener('click', () => {
-                                const isInitial = getComputedStyle(document.getElementById('dni-initial-view')).display !== 'none' || getComputedStyle(document.getElementById('dni-solicitud-view')).display !== 'none';
-                                if (isInitial) card.classList.toggle('is-collapsed');
-                            });
-                        }
-                    }
-
-                    function initDisabledButtons() {
-                        const selectors = [
-                            '#main-screen a.grid-item:not(#documentos-btn):not(#hijos-btn)',
-                            '#main-screen .turnos-card .btn', '#main-screen .elecciones-card',
-                            '#documentos-screen .dni-actions button:not(#ver-detalle-btn)',
-                            '#documentos-screen .dni-qr-verify',
-                            '#bottom-nav a:not(#inicio-btn):not(#telefonos-btn-docs)',
-                            '.details-bottom-nav a:not(.active):not(#telefonos-btn-details)',
-                            '.telefonos-bottom-nav a:not(#telefonos-inicio-btn)',
-                            '#user-menu a:not(#menu-hijos-btn)',
-                            '.app-header svg:first-of-type'
-                        ];
-                        document.querySelectorAll(selectors.join(', ')).forEach(btn => {
-                            btn.addEventListener('click', (e) => e.preventDefault());
-                        });
-                        document.getElementById('menu-hijos-btn')?.addEventListener('click', e => e.preventDefault());
-                        document.getElementById('hijos-btn')?.addEventListener('click', e => e.preventDefault());
-                    }
-
-                    try { initScreenNavigation(); } catch(e) { console.error('Error in navigation:', e); }
-                    try { initDniFlow(); } catch(e) { console.error('Error in DNI flow:', e); }
-                    try { initUserMenu(); } catch(e) { console.error('Error in user menu:', e); }
-                    try { initDniInteractions(); } catch(e) { console.error('Error in DNI interactions:', e); }
-                    try { initDisabledButtons(); } catch(e) { console.error('Error disabling buttons:', e); }
                 });
-            </script></body>
-                </html>
+                valueSpan.textContent = value;
+            });
+        }
+    }
+    function updateDynamicHeaderData() {
+        const apellidoInput = document.getElementById('apellido-input');
+        const nombreInput = document.getElementById('nombre-input');
+        const cuilInput = document.getElementById('cuil-input');
+        if (apellidoInput && nombreInput && cuilInput) {
+            const apellido = apellidoInput.value;
+            const nombre = nombreInput.value;
+            const cuil = cuilInput.value;
+            const dropdownName = `${nombre} ${apellido}`;
+            const dniTitleName = `${apellido} ${nombre}`;
+            const menuName = `${nombre} ${apellido}`;
+            if (welcomeName) {
+                welcomeName.textContent = nombre;
+            }
+            if (dniDigitalTitle) {
+                dniDigitalTitle.textContent = dniTitleName;
+            }
+            if (solicitudDniName) {
+                solicitudDniName.textContent = dropdownName;
+            }
+            if (menuUserName) {
+                menuUserName.textContent = menuName;
+            }
+            if (menuUserId) {
+                menuUserId.textContent = cuil;
+            }
+        }
+    }
+    function setupTextControl(field) {
+        const textInput = document.getElementById(`${field}-input`);
+        const topSlider = document.getElementById(`${field}-top-slider`);
+        const leftSlider = document.getElementById(`${field}-left-slider`);
+        const fontsizeSlider = document.getElementById(`${field}-fontsize-slider`);
+        const fontSelect = document.getElementById(`${field}-font-select`);
+        const topValue = document.getElementById(`${field}-top-value`);
+        const leftValue = document.getElementById(`${field}-left-value`);
+        const fontsizeValue = document.getElementById(`${field}-fontsize-value`);
+        const mainTarget = document.getElementById(`main-dni-${field}`);
+        const hijosTarget = document.getElementById(`hijos-dni-${field}`);
+        const targets = [mainTarget, hijosTarget].filter(el => el);
+        if (textInput && targets.length > 0) {
+            // Set initial text
+            const initialValue = textInput.value;
+            targets.forEach(target => target.textContent = initialValue);
+            // Add listener
+            textInput.addEventListener('input', () => {
+                const newValue = textInput.value;
+                targets.forEach(target => target.textContent = newValue);
+                if (field === 'nombre' || field === 'apellido' || field === 'cuil') {
+                    updateDynamicHeaderData();
+                }
+            });
+        }
+        setupSlider(topSlider, targets, 'top', topValue, '%');
+        setupSlider(leftSlider, targets, 'left', leftValue, '%');
+        setupSlider(fontsizeSlider, targets, 'fontSize', fontsizeValue, 'px');
+        if (fontSelect && targets.length > 0) {
+            // Set initial font family
+            targets.forEach(target => {
+                if (target) {
+                    target.style.fontFamily = fontSelect.value;
+                }
+            });
+            // Add event listener
+            fontSelect.addEventListener('input', () => {
+                const newFont = fontSelect.value;
+                targets.forEach(target => {
+                    if (target) {
+                        target.style.fontFamily = newFont;
+                    }
+                });
+            });
+        }
+    }
+    // Setup for Profile Image
+    if (imageUrlInput && mainDniProfileImage && hijosDniProfileImage) {
+        const initialUrl = imageUrlInput.value;
+        mainDniProfileImage.src = initialUrl;
+        hijosDniProfileImage.src = initialUrl;
+        if (detailsProfileImage)
+            detailsProfileImage.src = initialUrl;
+        imageUrlInput.addEventListener('input', () => {
+            const newUrl = imageUrlInput.value;
+            mainDniProfileImage.src = newUrl;
+            hijosDniProfileImage.src = newUrl;
+            if (detailsProfileImage)
+                detailsProfileImage.src = newUrl;
+        });
+    }
+    // Setup for Back DNI Image
+    if (dniBackUrlInput && mainDniBackImage && hijosDniBackImage) {
+        mainDniBackImage.src = dniBackUrlInput.value;
+        hijosDniBackImage.src = dniBackUrlInput.value;
+        dniBackUrlInput.addEventListener('input', () => {
+            const newUrl = dniBackUrlInput.value;
+            mainDniBackImage.src = newUrl;
+            hijosDniBackImage.src = newUrl;
+        });
+    }
+    // Setup for QR Image
+    if (qrUrlInput) {
+        const updateAllQrImages = () => {
+            const newUrl = qrUrlInput.value;
+            if (mainDniQrImage) {
+                mainDniQrImage.src = newUrl;
+            }
+            if (hijosDniQrImage) {
+                hijosDniQrImage.src = newUrl;
+            }
+            if (detailsBarcodeImage) {
+                detailsBarcodeImage.src = newUrl;
+            }
+        };
+        // Set initial values
+        updateAllQrImages();
+        // Add event listener
+        qrUrlInput.addEventListener('input', updateAllQrImages);
+    }
+    const profilePicTargets = [hijosDniProfilePic, mainDniProfilePic];
+    setupSlider(topSlider, profilePicTargets, 'top', topValue, '%');
+    setupSlider(leftSlider, profilePicTargets, 'left', leftValue, '%');
+    setupSlider(widthSlider, profilePicTargets, 'width', widthValue, '%');
+    setupSlider(heightSlider, profilePicTargets, 'height', heightValue, '%');
+    const qrPicTargets = [hijosDniQrPic, mainDniQrPic];
+    setupSlider(qrTopSlider, qrPicTargets, 'top', qrTopValue, '%');
+    setupSlider(qrLeftSlider, qrPicTargets, 'left', qrLeftValue, '%');
+    setupSlider(qrWidthSlider, qrPicTargets, 'width', qrWidthValue, '%');
+    setupSlider(qrHeightSlider, qrPicTargets, 'height', qrHeightValue, '%');
+    // Setup for Text Overlays
+    const textFields = [
+        'apellido', 'nombre', 'documento', 'nacimiento',
+        'tramite', 'ejemplar', 'emision', 'vencimiento',
+        'domicilio', 'sexo'
+        // 'cuil' is handled separately for dynamic header updates but uses the same setup logic
+    ];
+    textFields.forEach(setupTextControl);
+    setupTextControl('cuil'); // Ensure CUIL is also set up
+    updateDynamicHeaderData(); // Set initial dynamic names
+    let isFlipped = false; // Shared state for DNI card flip
+    function resetDniCard() {
+        if (dniCardHeader)
+            dniCardHeader.style.display = 'flex';
+        if (dniInitialView)
+            dniInitialView.style.display = 'block';
+        if (dniSolicitudView)
+            dniSolicitudView.style.display = 'none';
+        if (dniDigitalDisplay)
+            dniDigitalDisplay.style.display = 'none';
+        if (dniCardBody)
+            dniCardBody.classList.remove('no-header');
+        // Reset header
+        if (documentosHeaderTitle)
+            documentosHeaderTitle.textContent = 'Documentos';
+        if (refreshIcon)
+            refreshIcon.style.display = 'none';
+        if (documentosHeader)
+            documentosHeader.style.justifyContent = 'flex-start';
+        // Reset flip
+        const dniFlipper = document.getElementById('dni-flipper');
+        if (dniFlipper) {
+            if (isFlipped) {
+                // Animate it back to the front if it was flipped
+                dniFlipper.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                dniFlipper.style.transform = 'rotateY(0deg)';
+            }
+        }
+        isFlipped = false; // Always reset the logical state
+    }
+    function showScreen(screenName) {
+        // Hide all screens first
+        if (mainScreen)
+            mainScreen.style.display = 'none';
+        if (documentosScreen)
+            documentosScreen.style.display = 'none';
+        if (hijosScreen)
+            hijosScreen.style.display = 'none';
+        if (dniDetailsScreen)
+            dniDetailsScreen.style.display = 'none';
+        if (telefonosScreen)
+            telefonosScreen.style.display = 'none';
+        if (bottomNav)
+            bottomNav.style.display = 'none';
+        switch (screenName) {
+            case 'main':
+                if (mainScreen)
+                    mainScreen.style.display = 'flex';
+                resetDniCard();
+                break;
+            case 'documentos':
+                if (documentosScreen)
+                    documentosScreen.style.display = 'flex';
+                if (bottomNav)
+                    bottomNav.style.display = 'flex';
+                break;
+            case 'hijos':
+                if (hijosScreen)
+                    hijosScreen.style.display = 'flex';
+                break;
+            case 'details':
+                if (dniDetailsScreen)
+                    dniDetailsScreen.style.display = 'flex';
+                break;
+            case 'telefonos':
+                if (telefonosScreen)
+                    telefonosScreen.style.display = 'flex';
+                break;
+        }
+    }
+    function showDniDigitalView() {
+        if (dniInitialView)
+            dniInitialView.style.display = 'none';
+        if (dniSolicitudView)
+            dniSolicitudView.style.display = 'none';
+        if (dniDigitalDisplay)
+            dniDigitalDisplay.style.display = 'block';
+        if (dniCardHeader)
+            dniCardHeader.style.display = 'none';
+        if (dniCardBody)
+            dniCardBody.classList.add('no-header');
+        if (documentosHeaderTitle)
+            documentosHeaderTitle.textContent = 'DNI Digital';
+        if (refreshIcon)
+            refreshIcon.style.display = 'block';
+        if (documentosHeader)
+            documentosHeader.style.justifyContent = 'space-between';
+    }
+    function populateDniDetails() {
+        // Get values from the input fields on the "hijos" (editor) screen
+        const dni = document.getElementById('documento-input').value;
+        const tramite = document.getElementById('tramite-input').value;
+        const emision = document.getElementById('emision-input').value;
+        const vencimiento = document.getElementById('vencimiento-input').value;
+        const nombre = document.getElementById('nombre-input').value;
+        const apellido = document.getElementById('apellido-input').value;
+        const sexo = document.getElementById('sexo-input').value;
+        const nacimiento = document.getElementById('nacimiento-input').value;
+        const domicilio = document.getElementById('domicilio-input').value;
+        const cuil = document.getElementById('cuil-input').value;
+        // Hardcoded data for non-editable fields (for now)
+        const nacionalidad = 'AR';
+        const lugarNacimiento = 'ARGENTina';
+        // Populate the details screen with the retrieved values
+        document.getElementById('details-dni').textContent = dni;
+        document.getElementById('details-tramite').textContent = tramite;
+        document.getElementById('details-emision').textContent = emision;
+        document.getElementById('details-vencimiento').textContent = vencimiento;
+        document.getElementById('details-nombre').textContent = nombre;
+        document.getElementById('details-apellido').textContent = apellido;
+        document.getElementById('details-cuil').textContent = cuil;
+        document.getElementById('details-sexo').textContent = sexo;
+        document.getElementById('details-nacimiento').textContent = nacimiento;
+        document.getElementById('details-nacionalidad').textContent = nacionalidad;
+        document.getElementById('details-lugar-nacimiento').textContent = lugarNacimiento;
+        document.getElementById('details-domicilio').textContent = domicilio;
+    }
+    if (documentosBtn) {
+        documentosBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('active');
+            }
+            setTimeout(() => {
+                showScreen('documentos');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.remove('active');
+                }
+            }, 1500);
+        });
+    }
+    if (verDniDigitalBtn) {
+        verDniDigitalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (actionLoader) {
+                actionLoader.classList.add('active');
+            }
+            setTimeout(() => {
+                showDniDigitalView();
+                if (actionLoader) {
+                    actionLoader.classList.remove('active');
+                }
+            }, 1500);
+        });
+    }
+    if (hijosBtn) {
+        hijosBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('hijos');
+        });
+    }
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (dniDigitalDisplay && getComputedStyle(dniDigitalDisplay).display !== 'none') {
+                resetDniCard();
+            }
+            else {
+                showScreen('main');
+            }
+        });
+    }
+    if (detailsBackBtn) {
+        detailsBackBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('documentos');
+            showDniDigitalView();
+        });
+    }
+    if (hijosBackBtn) {
+        hijosBackBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('main');
+        });
+    }
+    if (inicioBtn) {
+        inicioBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('main');
+        });
+    }
+    const handleTelefonosNav = (e) => {
+        e.preventDefault();
+        if (loadingOverlay) {
+            loadingOverlay.classList.add('active');
+        }
+        setTimeout(() => {
+            showScreen('telefonos');
+            if (loadingOverlay) {
+                loadingOverlay.classList.remove('active');
+            }
+        }, 1500);
+    };
+    if (telefonosBtnDocs) {
+        telefonosBtnDocs.addEventListener('click', handleTelefonosNav);
+    }
+    if (telefonosBtnDetails) {
+        telefonosBtnDetails.addEventListener('click', handleTelefonosNav);
+    }
+    if (telefonosInicioBtn) {
+        telefonosInicioBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('active');
+            }
+            setTimeout(() => {
+                showScreen('main');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.remove('active');
+                }
+            }, 1500);
+        });
+    }
+    if (solicitarDniBtn) {
+        solicitarDniBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (actionLoader) {
+                actionLoader.classList.add('active');
+            }
+            setTimeout(() => {
+                if (dniInitialView)
+                    dniInitialView.style.display = 'none';
+                if (dniCardHeader)
+                    dniCardHeader.style.display = 'none';
+                if (dniSolicitudView)
+                    dniSolicitudView.style.display = 'block';
+                if (dniCardBody)
+                    dniCardBody.classList.add('no-header');
+                if (actionLoader) {
+                    actionLoader.classList.remove('active');
+                }
+            }, 1500);
+        });
+    }
+    if (confirmarSolicitudBtn) {
+        confirmarSolicitudBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (actionLoader) {
+                actionLoader.classList.add('active');
+            }
+            setTimeout(() => {
+                if (dniSolicitudView)
+                    dniSolicitudView.style.display = 'none';
+                showDniDigitalView();
+                if (actionLoader) {
+                    actionLoader.classList.remove('active');
+                }
+            }, 1500);
+        });
+    }
+    if (verDetalleBtn) {
+        verDetalleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            populateDniDetails();
+            showScreen('details');
+        });
+    }
+    // User Menu Logic
+    if (userProfileBtn && userMenu && profileArrow) {
+        userProfileBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents the document click listener from firing immediately
+            userMenu.classList.toggle('active');
+            profileArrow.classList.toggle('rotated');
+        });
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (userMenu.classList.contains('active')) {
+                const target = e.target;
+                // Check if the click is outside the menu AND not on the profile button itself
+                if (!userMenu.contains(target) && !userProfileBtn.contains(target)) {
+                    userMenu.classList.remove('active');
+                    profileArrow.classList.remove('rotated');
+                }
+            }
+        });
+    }
+    // Link from menu to Hijos screen
+    if (menuHijosBtn) {
+        menuHijosBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen('hijos');
+            // Close menu after navigation
+            if (userMenu && profileArrow) {
+                userMenu.classList.remove('active');
+                profileArrow.classList.remove('rotated');
+            }
+        });
+    }
+    // Prevent inactive menu links from navigating
+    if (userMenu && profileArrow) {
+        const inactiveLinks = userMenu.querySelectorAll('.user-menu-list a:not(#menu-hijos-btn), .user-menu-footer a');
+        inactiveLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                userMenu.classList.remove('active');
+                profileArrow.classList.remove('rotated');
+            });
+        });
+    }
+    // DNI Card Collapse/Expand Logic
+    const dniCard = documentosScreen.querySelector('.dni-card');
+    if (dniCardHeader && dniCard) {
+        dniCardHeader.addEventListener('click', () => {
+            // Only allow collapsing if the initial or solicitud view is visible
+            const isInitialState = getComputedStyle(dniInitialView).display !== 'none' || getComputedStyle(dniSolicitudView).display !== 'none';
+            if (isInitialState) {
+                dniCard.classList.toggle('is-collapsed');
+            }
+        });
+    }
+    // DNI Flipper Logic
+    const dniFlipperContainer = document.querySelector('.dni-flipper-container');
+    const dniFlipper = document.getElementById('dni-flipper');
+    if (dniFlipperContainer && dniFlipper) {
+        let isDragging = false;
+        let startX = 0;
+        let startAngle = 0;
+        let currentAngle = 0;
+        const getEventX = (e) => {
+            return e.type.includes('mouse') ? e.screenX : e.changedTouches[0].screenX;
+        };
+        const handleDragStart = (e) => {
+            if (e.type === 'mousedown' && e.button !== 0)
+                return;
+            isDragging = true;
+            startX = getEventX(e);
+            startAngle = currentAngle;
+            dniFlipper.style.transition = 'none'; // No transition while dragging
+            if (e.type !== 'touchstart') {
+                e.preventDefault();
+            }
+        };
+        const handleDragMove = (e) => {
+            if (!isDragging)
+                return;
+            e.preventDefault(); // prevent scrolling while dragging card
+            const currentX = getEventX(e);
+            const deltaX = currentX - startX;
+            // A full drag across the card width should be about a 180-degree turn
+            const rotationSensitivity = 180 / dniFlipperContainer.offsetWidth;
+            const deltaAngle = deltaX * rotationSensitivity;
+            currentAngle = startAngle + deltaAngle;
+            dniFlipper.style.transform = `rotateY(${currentAngle}deg)`;
+        };
+        const handleDragEnd = (e) => {
+            if (!isDragging)
+                return;
+            isDragging = false;
+            dniFlipper.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            // Snap to the nearest 180-degree side
+            const finalRotation = Math.round(currentAngle / 180) * 180;
+            // Update the logical state based on the final angle
+            // Use modulo to handle multiple spins, though unlikely
+            isFlipped = (Math.round(finalRotation / 180) % 2) !== 0;
+            dniFlipper.style.transform = `rotateY(${finalRotation}deg)`;
+            currentAngle = finalRotation; // Store the final angle
+        };
+        // Mouse events
+        dniFlipperContainer.addEventListener('mousedown', handleDragStart);
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+        // Touch events - passive: false is required to call e.preventDefault() in the move handler
+        dniFlipperContainer.addEventListener('touchstart', handleDragStart, { passive: false });
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+    }
+    // Hijos DNI Flipper Logic
+    const hijosDniFlipperContainer = document.getElementById('hijos-dni-flipper-container');
+    const hijosDniFlipper = document.getElementById('hijos-dni-flipper');
+    if (hijosDniFlipperContainer && hijosDniFlipper) {
+        let isDragging = false;
+        let startX = 0;
+        let startAngle = 0;
+        let currentAngle = 0;
+        const getEventX = (e) => {
+            return e.type.includes('mouse') ? e.screenX : e.changedTouches[0].screenX;
+        };
+        const handleDragStart = (e) => {
+            if (e.type === 'mousedown' && e.button !== 0)
+                return;
+            isDragging = true;
+            startX = getEventX(e);
+            startAngle = currentAngle;
+            hijosDniFlipper.style.transition = 'none'; // No transition while dragging
+            if (e.type !== 'touchstart') {
+                e.preventDefault();
+            }
+        };
+        const handleDragMove = (e) => {
+            if (!isDragging)
+                return;
+            e.preventDefault(); // prevent scrolling while dragging card
+            const currentX = getEventX(e);
+            const deltaX = currentX - startX;
+            const rotationSensitivity = 180 / hijosDniFlipperContainer.offsetWidth;
+            const deltaAngle = deltaX * rotationSensitivity;
+            currentAngle = startAngle + deltaAngle;
+            hijosDniFlipper.style.transform = `rotateY(${currentAngle}deg)`;
+        };
+        const handleDragEnd = (e) => {
+            if (!isDragging)
+                return;
+            isDragging = false;
+            hijosDniFlipper.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            const finalRotation = Math.round(currentAngle / 180) * 180;
+            hijosDniFlipper.style.transform = `rotateY(${finalRotation}deg)`;
+            currentAngle = finalRotation;
+        };
+        // Mouse events
+        hijosDniFlipperContainer.addEventListener('mousedown', handleDragStart);
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+        // Touch events
+        hijosDniFlipperContainer.addEventListener('touchstart', handleDragStart, { passive: false });
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+    }
+    // Hijos Carousel Logic
+    const carouselWrapper = document.getElementById('hijos-carousel-wrapper');
+    const carouselTrack = document.getElementById('hijos-carousel-track');
+    const slides = Array.from(carouselTrack.children);
+    const dotsContainer = document.getElementById('hijos-carousel-dots');
+    if (carouselWrapper && carouselTrack && slides.length > 0 && dotsContainer) {
+        let currentIndex = 0;
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID;
+        const slideWidth = () => slides[0].offsetWidth;
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.classList.add('carousel-dot');
+            if (i === 0)
+                dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                goToSlide(i);
+            });
+            dotsContainer.appendChild(dot);
+        });
+        const dots = Array.from(dotsContainer.children);
+        function goToSlide(slideIndex) {
+            if (slideIndex < 0 || slideIndex >= slides.length)
+                return;
+            const offset = -slideIndex * slideWidth();
+            carouselTrack.style.transform = `translateX(${offset}px)`;
+            carouselTrack.style.transition = 'transform 0.3s ease-in-out';
+            currentIndex = slideIndex;
+            updateDots();
+            prevTranslate = offset;
+        }
+        function updateDots() {
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+        const getPositionX = (e) => {
+            return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+        };
+        function touchStart(index) {
+            return function (e) {
+                isDragging = true;
+                startPos = getPositionX(e);
+                animationID = requestAnimationFrame(animation);
+                carouselTrack.style.transition = 'none';
+            };
+        }
+        function touchMove(e) {
+            if (isDragging) {
+                const currentPosition = getPositionX(e);
+                currentTranslate = prevTranslate + currentPosition - startPos;
+            }
+        }
+        function touchEnd() {
+            isDragging = false;
+            cancelAnimationFrame(animationID);
+            const movedBy = currentTranslate - prevTranslate;
+            // Snap logic
+            if (movedBy < -100 && currentIndex < slides.length - 1) {
+                currentIndex += 1;
+            }
+            if (movedBy > 100 && currentIndex > 0) {
+                currentIndex -= 1;
+            }
+            goToSlide(currentIndex);
+        }
+        function animation() {
+            setSliderPosition();
+            if (isDragging)
+                requestAnimationFrame(animation);
+        }
+        function setSliderPosition() {
+            carouselTrack.style.transform = `translateX(${currentTranslate}px)`;
+        }
+        // Event Listeners
+        slides.forEach((slide, index) => {
+            const slideImage = slide.querySelector('img');
+            if (slideImage)
+                slideImage.addEventListener('dragstart', (e) => e.preventDefault());
+            const startHandler = touchStart(index);
+            const interactionStart = (e) => {
+                const target = e.target;
+                // Prevent starting a drag if the user is interacting with any control element or its container.
+                // This allows sliders and inputs to be used without moving the carousel.
+                if (target.closest('.control-group')) {
+                    return;
+                }
+                startHandler(e);
+            };
+            // Touch events
+            slide.addEventListener('touchstart', interactionStart);
+            slide.addEventListener('touchend', touchEnd);
+            slide.addEventListener('touchmove', touchMove);
+            // Mouse events
+            slide.addEventListener('mousedown', interactionStart);
+            slide.addEventListener('mouseup', touchEnd);
+            slide.addEventListener('mouseleave', () => {
+                if (isDragging)
+                    touchEnd();
+            });
+            slide.addEventListener('mousemove', touchMove);
+        });
+        // Resize observer
+        const resizeObserver = new ResizeObserver(() => {
+            goToSlide(currentIndex);
+        });
+        resizeObserver.observe(carouselWrapper);
+    }
+})();
+        });
+    </script>
+</body>
+</html>
