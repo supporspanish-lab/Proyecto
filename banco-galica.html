@@ -18,10 +18,7 @@
                     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
                     
                     <style>
-                        
-
-
-:root {
+                        :root {
   --primary-blue: #003366;
   --light-blue-bg: #e6f3ff;
   --text-dark: #212529;
@@ -459,7 +456,7 @@ body {
   margin-top: 16px;
 }
 
-.app-main.tarjetas-page, .app-main.account-detail-page {
+.app-main.tarjetas-page, .app-main.account-detail-page, .app-main.more-page {
     background-color: #f0f2f5;
     padding-top: 16px;
     padding-bottom: 16px;
@@ -716,11 +713,10 @@ body {
     line-height: 1.4;
 }
 .visa-card .card-last-four {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    font-size: 20px;
+    margin-top: 8px;
+    font-size: 16px;
     font-weight: 500;
+    font-family: monospace;
 }
 
 .go-to-cards-card {
@@ -769,19 +765,6 @@ body {
   color: var(--active-blue);
 }
 
-.nav-item-central {
-  position: relative;
-  width: 74px;
-  height: 74px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #40e0d0, #1e90ff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -32px;
-  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-}
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -792,28 +775,52 @@ body {
 }
 
 .central-button {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background-color: #000;
-  color: white;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.5s ease-in-out, transform 0.8s ease-in-out;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #343a40;
+    border: 3px solid #4dbce9;
+    cursor: pointer;
+    margin-top: -32px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    padding: 0;
+    perspective: 1000px;
 }
 
-.central-button.qr-mode {
-  background-color: var(--orange-accent);
-  transform: rotate(360deg);
+.central-button .flipper {
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-.central-button span {
-  font-size: 30px;
-  font-weight: 500;
-  font-family: serif;
+.central-button.is-flipped .flipper {
+    transform: rotateY(180deg);
+}
+
+.central-button .front,
+.central-button .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.central-button .front {
+    z-index: 2;
+}
+
+.central-button .back {
+    background-color: var(--active-blue);
+    transform: rotateY(180deg);
 }
 
 
@@ -1000,6 +1007,25 @@ body {
     font-size: 14px;
     max-width: 250px;
     margin: 0 auto;
+}
+
+.no-usage-info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.no-usage-info-card p {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+.no-usage-info-card svg {
+    width: 28px;
+    height: 28px;
 }
 
 .card-info-table h3 {
@@ -1308,6 +1334,143 @@ body {
     cursor: pointer;
 }
 
+/* --- More Page Styles --- */
+.more-page {
+    padding-top: 8px !important;
+}
+
+.more-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+}
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #e0e7ff;
+    color: #4338ca;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.profile-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.profile-subtext {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+.menu-section {
+    margin-top: 24px;
+}
+
+.menu-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.menu-section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.menu-list {
+    padding: 0 16px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 16px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item span {
+    font-size: 16px;
+    color: var(--text-dark);
+}
+
+.menu-item-right-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.new-badge {
+    background-color: #e6f7ff;
+    color: #0069d9;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.session-control-card {
+    margin-top: 24px;
+    padding: 0;
+}
+
+.session-button {
+    width: 100%;
+    text-align: left;
+    padding: 16px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--active-blue);
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.session-button:first-child {
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.version-info {
+    text-align: center;
+    margin-top: 24px;
+    padding-bottom: 8px;
+    color: var(--text-gray);
+    font-size: 12px;
+    line-height: 1.5;
+}
                     </style>
                 </head>
                 <body>
@@ -1323,11 +1486,11 @@ body {
     "balance": "3.383.374",
     "cents": "10",
     "currency": "$",
-    "number": "Nº 4004892-5 097-3",
-    "alias": "VERDE.VUELTA.DELTA",
+    "number": "Nº 4015282-1 097-2",
+    "alias": "ROMERO.DIETA.DELTA",
     "cbu": "00700979-30004015282128",
-    "cuil": "20-11387130-1",
-    "titular": "TELLERIA ANDRES F",
+    "cuil": "20-11387130-0",
+    "titular": "ANDRES FERNANDO TELLERIA ",
     "actions": [
       {
         "label": "Transferir dinero",
@@ -1344,59 +1507,59 @@ body {
     ],
     "movements": [
       {
-        "description": "ing. brutos s/ cred",
-        "amount": -1.20,
+        "description": "Ing. brutos s/ cred",
+        "amount": -1.2,
         "originalDate": "06/10/25"
       },
       {
-        "description": "transferencia de terceros",
-        "amount": 12.000,
+        "description": "Transferencia de terceros",
+        "amount": 12000,
+        "originalDate": "06/10/25"
+      },
+      {
+        "description": "Deb. autom. de serv.",
+        "amount": -15553,
+        "originalDate": "06/10/25"
+      },
+      {
+        "description": "Ing. brutos s/ cred",
+        "amount": -12.28,
+        "originalDate": "06/10/25"
+      },
+      {
+        "description": "Transferencia de terceros",
+        "amount": 122797,
+        "originalDate": "06/10/25"
+      },
+      {
+        "description": "Ing. brutos s/ cred",
+        "amount": -1.2,
+        "originalDate": "03/10/25"
+      },
+      {
+        "description": "Transferencia de terceros",
+        "amount": 12000,
+        "originalDate": "03/10/25"
+      },
+      {
+        "description": "Ing. brutos s/ cred",
+        "amount": -1.2,
+        "originalDate": "03/10/25"
+      },
+      {
+        "description": "Transferencia de terceros",
+        "amount": 12000,
+        "originalDate": "03/10/25"
+      },
+      {
+        "description": "Ing. brutos s/ cred",
+        "amount": -100.03,
         "originalDate": "01/10/25"
       },
       {
-        "description": "Interes capitalizado",
-        "amount": 4.17,
-        "originalDate": "22/09/25"
-      },
-      {
-        "description": "Transf. ctas propias",
-        "amount": -25000,
-        "originalDate": "03/09/25"
-      },
-      {
-        "description": "Venta de titulos / valores",
-        "amount": 26512.08,
-        "originalDate": "03/09/25"
-      },
-      {
-        "description": "Comision y derechos de mercado compra/",
-        "amount": -64.14,
-        "originalDate": "03/09/25"
-      },
-      {
-        "description": "Transferencia a terceros",
-        "amount": -38000,
-        "originalDate": "28/08/25"
-      },
-      {
-        "description": "Venta de titulos / valores",
-        "amount": 40042.81,
-        "originalDate": "28/08/25"
-      },
-      {
-        "description": "Comision y derechos de mercado compra/",
-        "amount": -99.14,
-        "originalDate": "28/08/25"
-      },
-      {
-        "description": "Transf. ctas propias",
-        "amount": -1995000,
-        "originalDate": "27/08/25"
-      },
-      {
-        "description": "Venta de titulos / valores",
-        "amount": 1342915.29,
-        "originalDate": "25/08/25"
+        "description": "Transferencia de terceros",
+        "amount": 1000334.98,
+        "originalDate": "01/10/25"
       }
     ]
   },
@@ -1407,9 +1570,9 @@ body {
     "currency": "U$D",
     "number": "Nº 4004892-5 097-3",
     "alias": "VERDE.VUELTA.DELTA",
-    "cbu": "00700979-30004015282128",
-    "cuil": "20-11387130-1",
-    "titular": "TELLERIA ANDRES F",
+    "cbu": "00700979-31004004892533",
+    "cuil": "20-11387130-0",
+    "titular": "ANDRES FERNANDO TELLERIA",
     "actions": [
       {
         "label": "Transferir dinero",
@@ -1426,59 +1589,59 @@ body {
     ],
     "movements": [
       {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "02/10/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "01/10/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "30/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
+        "description": "Pago tarjeta visa",
+        "amount": -2125.6,
         "originalDate": "29/09/25"
       },
       {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
+        "description": "Rescate fima",
+        "amount": 0.01,
         "originalDate": "29/09/25"
       },
       {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "29/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "26/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "25/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "24/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "23/09/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
+        "description": "Interes capitalizado",
+        "amount": 0.01,
         "originalDate": "22/09/25"
+      },
+      {
+        "description": "Pago tarjeta visa",
+        "amount": -352.53,
+        "originalDate": "27/08/25"
+      },
+      {
+        "description": "Rescate fima",
+        "amount": 100,
+        "originalDate": "25/08/25"
+      },
+      {
+        "description": "Suscripcion fima",
+        "amount": -100,
+        "originalDate": "25/08/25"
+      },
+      {
+        "description": "Interes capitalizado",
+        "amount": 0.01,
+        "originalDate": "22/08/25"
+      },
+      {
+        "description": "Transferencia de cuenta propia",
+        "amount": 10000,
+        "originalDate": "11/08/25"
+      },
+      {
+        "description": "Pago tarjeta visa",
+        "amount": -310.5,
+        "originalDate": "28/07/25"
+      },
+      {
+        "description": "Interes capitalizado",
+        "amount": 0.01,
+        "originalDate": "22/07/25"
+      },
+      {
+        "description": "Transferencia de cuenta propia",
+        "amount": 4500,
+        "originalDate": "11/07/25"
       }
     ]
   }
@@ -1488,20 +1651,20 @@ body {
     "brand": "VISA",
     "type": "Crédito",
     "number": "**** **** **** 2634",
-    "fullNumber": "4517 6990 1122 2634",
+    "fullNumber": "4593 5400 1347 2634",
     "validFrom": "01/24",
-    "expiry": "12/29",
-    "cvv": "123",
+    "expiry": "11/28",
+    "cvv": "233",
     "className": "visa-credit-card-black"
   },
   {
     "brand": "VISA",
     "type": "Débito",
     "number": "**** **** **** 2469",
-    "fullNumber": "4517 6990 2663 2469",
+    "fullNumber": "4517 6901 7489 2469",
     "validFrom": "08/25",
     "expiry": "09/31",
-    "cvv": "484",
+    "cvv": "432",
     "className": "visa-debit-card"
   }
 ];
@@ -1510,7 +1673,7 @@ body {
                 let state = {
                     isLoggedIn: false,
                     isAppLoading: true,
-                    currentPage: 'home', // login, home, tarjetas, accountDetail, token
+                    currentPage: 'home', // login, home, tarjetas, accountDetail, token, more
                     selectedAccount: null,
                     initialTab: 'Información',
                     isQrMode: false,
@@ -1534,7 +1697,7 @@ body {
                     CopyIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"><\/rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"><\/path><\/svg>',
                     UsdIcon: () => '<span class="usd-icon">U$D</span>',
                     StarIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"><\/polygon><\/svg>',
-                    ChevronRightIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"><\/polyline><\/svg>',
+                    ChevronRightIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#868e96" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"><\/polyline><\/svg>',
                     ChevronLeftIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"><\/polyline><\/svg>',
                     MoreHorizontalIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"><\/circle><circle cx="19" cy="12" r="1"><\/circle><circle cx="5" cy="12" r="1"><\/circle><\/svg>',
                     PencilIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"><\/path><\/svg>',
@@ -1550,7 +1713,8 @@ body {
                     FaceIdIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2-2v-2"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M10 14a3.5 3.5 0 0 0 4 0"/></svg>',
                     DownloadIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"><\/path><polyline points="7 10 12 15 17 10"><\/polyline><line x1="12" y1="15" x2="12" y2="3"><\/line><\/svg>',
                     GenerateTokenIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.5a2.5 2.5 0 0 1-2.5 2.5H8.5L4 22V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11z"/><rect x="9" y="10" width="6" height="4" rx="1"><\/rect><path d="M10.5 10V9a1.5 1.5 0 0 1 3 0v1"><\/path><\/svg>',
-                    QrCodeIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"><\/rect><rect x="14" y="3" width="7" height="7"><\/rect><rect x="3" y="14" width="7" height="7"><\/rect><path d="M14 14h1v1h-1z" stroke-width="1"><\/path><path d="M17 14h1v1h-1z" stroke-width="1"><\/path><path d="M14 17h3v1h-3z" stroke-width="1"><\/path><path d="M19 17h1v1h-1z" stroke-width="1"><\/path><path d="M14 20h1v1h-1z" stroke-width="1"><\/path><path d="M17 20h3v1h-3z" stroke-width="1"><\/path><\/svg>',
+                    ModoIcon: () => '<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="28" font-weight="700" font-family="Roboto, sans-serif">M<\/text><\/svg>',
+                    QrCodeIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"><\/rect><rect x="14" y="3" width="7" height="7"><\/rect><rect x="3" y="14" width="7" height="7"><\/rect><rect x="14" y="14" width="7" height="7"><\/rect><\/svg>',
                     CloseIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"><\/line><line x1="6" y1="6" x2="18" y2="18"><\/line><\/svg>',
                     InfoIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"><\/circle><line x1="12" y1="16" x2="12" y2="12"><\/line><line x1="12" y1="8" x2="12.01" y2="8"><\/line><\/svg>',
                     WarningIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"><\/path><line x1="12" y1="9" x2="12" y2="13"><\/line><line x1="12" y1="17" x2="12.01" y2="17"><\/line><\/svg>',
@@ -1561,6 +1725,10 @@ body {
                     MoreGesturesIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#0057b8"><circle cx="6" cy="12" r="1.5"><\/circle><circle cx="12" cy="12" r="1.5"><\/circle><circle cx="18" cy="12" r="1.5"><\/circle><\/svg>',
                     NoUsageIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"><\/path><\/svg>',
                     ValidatingIcon: () => '<svg class="validating-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#212529" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="8" rx="2" ry="2"><\/rect><circle cx="8" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><circle cx="12" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><circle cx="16" cy="11" r="0.5" fill="#212529" stroke="none"><\/circle><rect x="14" y="13" width="6" height="5" rx="1" fill="white"><\/rect><rect x="14" y="13" width="6" height="5" rx="1"><\/rect><path d="M18 13v-1.5a2 2 0 0 0-4 0v1.5"><\/path><circle cx="17" cy="15.5" r="0.5" fill="#212529" stroke="none"><\/circle><\/svg>',
+                    FinancialManagementIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M4 10v11"/><path d="M9 10v11"/><path d="M15 10v11"/><path d="M20 10v11"/><path d="M2 10l10-7 10 7"/></svg>',
+                    SecurityIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><circle cx="12" cy="11" r="3" /><path d="M15 17a5 5 0 0 0-6 0" /></svg>',
+                    BenefitsIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"><\/polyline><rect x="2" y="7" width="20" height="5"><\/rect><line x1="12" y1="22" x2="12" y2="7"><\/line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C9.81 2 12 4.19 12 7z"><\/path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C14.19 2 12 4.19 12 7z"><\/path></svg>',
+                    CustomerSupportIcon: () => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"><\/rect><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"><\/path><line x1="12" y1="17" x2="12.01" y2="17"><\/line></svg>',
                 };
                 
                 const iconMap = {
@@ -1655,9 +1823,9 @@ body {
                     `;
                 }
 
-                function renderHeader() {
+                function renderHeader(page, account) {
                     let headerHTML = '';
-                    if (state.currentPage === 'tarjetas') {
+                    if (page === 'tarjetas') {
                         headerHTML = `
                             <header class="app-header app-header-tarjetas">
                                 <h1 class="header-title">Tarjetas</h1>
@@ -1666,8 +1834,7 @@ body {
                                 </div>
                             </header>
                         `;
-                    } else if (state.currentPage === 'accountDetail' && state.selectedAccount) {
-                        const account = state.selectedAccount;
+                    } else if (page === 'accountDetail' && account) {
                         headerHTML = `
                              <header class="app-header app-header-detail">
                                 <button class="icon-button back-button" data-action="go-back" aria-label="Volver">${ICONS.ChevronLeftIcon()}</button>
@@ -1678,7 +1845,7 @@ body {
                                 <button class="icon-button more-button" aria-label="Más opciones">${ICONS.MoreHorizontalIcon()}</button>
                             </header>
                         `;
-                    } else {
+                    } else if (page === 'home') {
                          headerHTML = `
                             <header class="app-header">
                                 <img src="https://iili.io/KGzjc92.png" alt="Galica Logo" class="header-logo" />
@@ -1704,16 +1871,21 @@ body {
                                 ${ICONS.CardIcon()}
                                 <span>Tarjetas</span>
                             </button>
-                            <div class="nav-item-central">
-                                 <button id="central-button" class="central-button ${state.isQrMode ? 'qr-mode' : ''}" aria-label="Acción principal">
-                                    ${state.isQrMode ? ICONS.QrCodeIcon() : '<span>M</span>'}
-                                </button>
-                            </div>
+                            <button id="central-button" class="central-button ${state.isQrMode ? 'is-flipped' : ''}" aria-label="Acción principal">
+                                <div class="flipper">
+                                    <div class="front">
+                                        ${ICONS.ModoIcon()}
+                                    </div>
+                                    <div class="back">
+                                        ${ICONS.QrCodeIcon()}
+                                    </div>
+                                </div>
+                            </button>
                             <button class="nav-item">
                                 ${ICONS.TransfersIcon()}
                                 <span>Transferencias</span>
                             </button>
-                            <button class="nav-item" data-action="fullscreen">
+                             <button class="nav-item ${state.currentPage === 'more' ? 'active' : ''}" data-navigate="more">
                                 ${ICONS.MoreIcon()}
                                 <span>Más</span>
                             </button>
@@ -1769,11 +1941,13 @@ body {
                                     <div class="card visa-card">
                                         <h4>VISA</h4>
                                         <p class="card-type">Crédito</p>
-                                        <p class="card-info">Tu resumen está listo.</p>
-                                        <p class="card-info">Vence el 06/10</p>
-                                        <p class="card-last-four"></p>
+                                        <p class="card-info">Tu resumen está listo.<br/>Vence el 06/10</p>
+                                        <p class="card-last-four">2634</p>
                                     </div>
-                                    <div class="card go-to-cards-card"><button class="icon-button" aria-label="Ir a Tarjetas">${ICONS.ArrowRightCircleIcon()}</button><span>Ir a Tarjetas</span></div>
+                                    <div class="card go-to-cards-card">
+                                        ${ICONS.ArrowRightCircleIcon()}
+                                        <span>Ir a Tarjetas</span>
+                                    </div>
                                 </div>
                             </div>
                         </main>
@@ -1792,6 +1966,10 @@ body {
                             </button>
                         </div>
                     ` : `
+                        <div class="card no-usage-info-card">
+                            ${ICONS.NoUsageIcon()}
+                            <p>Todavía no usaste la tarjeta</p>
+                        </div>
                         <div class="card card-info-table">
                             <h3>Información de tu tarjeta</h3>
                             <div class="debit-card-info-row">
@@ -1918,7 +2096,7 @@ body {
                     `;
                 }
 
-                function renderTokenPage() {
+                 function renderTokenPage() {
                     return `
                         <div class="token-page-container">
                              <header class="token-header">
@@ -1950,6 +2128,94 @@ body {
                     `;
                 }
 
+                function renderMorePage() {
+                    const financialMenuItems = ['Inversiones', 'Compra/Venta de Dólares', 'Préstamos', 'Pago de servicios', 'MODO', 'Seguros', 'NFT Galicia', 'Transferencias internacionales'];
+                    const securityMenuItems = ['Token Galicia', 'Claves'];
+                    const benefitsMenuItems = ['Promociones y ahorros', 'Tus Viajes'];
+                    const supportMenuItems = ['Ayuda', 'Cajeros y Sucursales'];
+
+                    return `
+                    <main class="app-main more-page">
+                        <h1 class="more-page-title">Más</h1>
+                        <div class="card profile-card">
+                            <div class="profile-avatar">AT</div>
+                            <div class="profile-info">
+                                <span class="profile-name">Andres Fernando Telleria</span>
+                                <span class="profile-subtext">Información personal</span>
+                            </div>
+                            ${ICONS.ChevronRightIcon()}
+                        </div>
+                        <div class="menu-section">
+                            <div class="menu-section-header">
+                                <h2>Gestión financiera</h2>
+                                ${ICONS.FinancialManagementIcon()}
+                            </div>
+                            <div class="card menu-list">
+                                ${financialMenuItems.map(item => `
+                                    <button class="menu-item">
+                                        <span>${item}</span>
+                                        ${ICONS.ChevronRightIcon()}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="menu-section">
+                            <div class="menu-section-header">
+                                <h2>Seguridad</h2>
+                                ${ICONS.SecurityIcon()}
+                            </div>
+                            <div class="card menu-list">
+                                ${securityMenuItems.map(item => `
+                                    <button class="menu-item">
+                                        <span>${item}</span>
+                                        ${ICONS.ChevronRightIcon()}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="menu-section">
+                            <div class="menu-section-header">
+                                <h2>Beneficios</h2>
+                                ${ICONS.BenefitsIcon()}
+                            </div>
+                             <div class="card menu-list">
+                                ${benefitsMenuItems.map(item => `
+                                    <button class="menu-item">
+                                        <span>${item}</span>
+                                        <div class="menu-item-right-content">
+                                            ${item === 'Tus Viajes' ? '<span class="new-badge">Nuevo</span>' : ''}
+                                            ${ICONS.ChevronRightIcon()}
+                                        </div>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                         <div class="menu-section">
+                            <div class="menu-section-header">
+                                <h2>Atención al cliente</h2>
+                                ${ICONS.CustomerSupportIcon()}
+                            </div>
+                            <div class="card menu-list">
+                                ${supportMenuItems.map(item => `
+                                    <button class="menu-item">
+                                        <span>${item}</span>
+                                        ${ICONS.ChevronRightIcon()}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="card session-control-card">
+                            <button class="session-button">Cambiar de sesión</button>
+                            <button class="session-button">Cerrar sesión</button>
+                        </div>
+                        <div class="version-info">
+                            <p>Versión 9.21.4</p>
+                            <p>Último ingreso: 06/10/2025 21:55:58</p>
+                        </div>
+                    </main>
+                    `;
+                }
+
                 // --- APP LOGIC ---
                 
                 function clearTimers() {
@@ -1957,6 +2223,21 @@ body {
                     if (state.timers.token) clearInterval(state.timers.token);
                     state.timers.qr = null;
                     state.timers.token = null;
+                }
+                
+                 function startQrTimer() {
+                    if (state.timers.qr) clearInterval(state.timers.qr); // Clear existing before setting new one
+                    state.timers.qr = setInterval(() => {
+                        state.isQrMode = true;
+                        const button = document.getElementById('central-button');
+                        if (button) button.classList.add('is-flipped');
+
+                        setTimeout(() => {
+                            state.isQrMode = false;
+                            if (button) button.classList.remove('is-flipped');
+                        }, 2500);
+
+                    }, 8000);
                 }
 
                 function handleNavigation(page) {
@@ -2016,11 +2297,13 @@ body {
                         pageContent = renderTarjetasPage();
                     } else if (state.currentPage === 'accountDetail') {
                         pageContent = renderAccountDetailPage();
+                    } else if (state.currentPage === 'more') {
+                        pageContent = renderMorePage();
                     }
                     
                     root.innerHTML = `
                         <div class="mobile-screen">
-                            ${renderHeader()}
+                            ${renderHeader(state.currentPage, state.selectedAccount)}
                             ${pageContent}
                             ${renderBottomNav()}
                         </div>
@@ -2047,17 +2330,6 @@ body {
                     }
                 }
                 
-                function startQrTimer() {
-                    state.timers.qr = setInterval(() => {
-                        state.isQrMode = !state.isQrMode;
-                        const btn = document.getElementById('central-button');
-                        if (btn) {
-                            btn.innerHTML = state.isQrMode ? ICONS.QrCodeIcon() : '<span>M</span>';
-                            btn.classList.toggle('qr-mode', state.isQrMode);
-                        }
-                    }, 8000);
-                }
-
                 function startTokenTimer() {
                     let countdown = 39;
                     const totalDuration = 39;
@@ -2072,10 +2344,12 @@ body {
                          const countdownEl = document.getElementById('token-countdown');
                          const progressEl = document.getElementById('token-progress-bar');
                          if (!codeEl || !countdownEl || !progressEl) {
-                             clearInterval(state.timers.token);
+                             if(state.timers.token) clearInterval(state.timers.token);
                              return;
                          }
-                         codeEl.textContent = codeEl.textContent === '...' ? generateToken() : codeEl.textContent;
+                         if (codeEl.textContent === '...') {
+                             codeEl.textContent = generateToken();
+                         }
                          countdownEl.textContent = `Este código se renovará en ${countdown} segundos`;
                          progressEl.style.width = `${(countdown / totalDuration) * 100}%`;
                     };
@@ -2086,7 +2360,8 @@ body {
                         countdown--;
                         if (countdown < 1) {
                             countdown = totalDuration;
-                            document.getElementById('token-code').textContent = generateToken();
+                            const codeEl = document.getElementById('token-code');
+                            if(codeEl) codeEl.textContent = generateToken();
                         }
                         updateUI();
                     }, 1000);
@@ -2205,7 +2480,7 @@ body {
                                         state.tarjetasVisibleCardIndex = state.tarjetasTargetCardIndex;
                                         state.tarjetasTargetCardIndex = null;
                                         render();
-                                    }, 1500);
+                                    }, 5200);
                                 }, 1500);
                             }
                         } else if (action === 'switch-tab') {
