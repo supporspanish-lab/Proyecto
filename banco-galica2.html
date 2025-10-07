@@ -20,6 +20,7 @@
                     <style>
                         
 
+
 :root {
   --primary-blue: #003366;
   --light-blue-bg: #e6f3ff;
@@ -691,24 +692,35 @@ body {
 }
 
 .visa-card {
-    background-color: #e9ecef;
+    background-color: #111;
+    color: #fff;
     padding: 16px;
     border-radius: 12px;
+    position: relative;
 }
 
 .visa-card h4 {
     font-weight: bold;
-    font-family: monospace;
-    font-size: 18px;
-    letter-spacing: 1px;
+    font-family: 'Arial', sans-serif;
+    font-style: italic;
+    font-size: 20px;
 }
 .visa-card .card-type {
-    font-size: 12px;
-    color: var(--text-gray);
-    margin-bottom: 12px;
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 16px;
 }
 .visa-card .card-info {
     font-size: 14px;
+    color: #fff;
+    line-height: 1.4;
+}
+.visa-card .card-last-four {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .go-to-cards-card {
@@ -841,26 +853,12 @@ body {
     height: 100%;
 }
 .visa-debit-card {
-    background: linear-gradient(135deg, #102951, #9f4c28);
+    background: linear-gradient(105deg, #23395B 0%, #D35400 100%);
 }
-.visa-credit-card-gray {
-    background: #e9ecef;
-    color: var(--text-dark);
+.visa-credit-card-black {
+    background: #111;
+    color: #fff;
 }
-.visa-credit-card-gray .tarjeta-brand .visa-logo-text {
-    color: var(--text-dark);
-    font-style: normal;
-}
-.visa-credit-card-gray .tarjeta-brand .tarjeta-debit-text {
-    color: var(--text-dark);
-}
-.visa-credit-card-gray .mostrar-datos-btn {
-    color: var(--text-dark);
-}
-.visa-credit-card-gray .tarjeta-label {
-    color: var(--text-gray);
-}
-
 .tarjeta-header {
     display: flex;
     justify-content: space-between;
@@ -903,8 +901,7 @@ body {
 }
 .tarjeta-details {
     display: flex;
-    justify-content: flex-start;
-    gap: 48px;
+    justify-content: space-between;
     font-size: 12px;
     align-items: flex-end;
 }
@@ -1323,14 +1320,14 @@ body {
                 const accountsData = [
   {
     "type": "Caja de ahorro en pesos",
-    "balance": "0",
-    "cents": "00",
+    "balance": "3.383.374",
+    "cents": "10",
     "currency": "$",
-    "number": "Nº 4121779-8 999-7",
-    "alias": "TRAMO.MIRADA.BANCO",
-    "cbu": "00709990-30004121779879",
-    "cuil": "20-04439188-1",
-    "titular": "GUILLERMO ANTONIO DELFINO",
+    "number": "Nº 4004892-5 097-3",
+    "alias": "VERDE.VUELTA.DELTA",
+    "cbu": "00700979-30004015282128",
+    "cuil": "20-11387130-1",
+    "titular": "TELLERIA ANDRES F",
     "actions": [
       {
         "label": "Transferir dinero",
@@ -1347,13 +1344,13 @@ body {
     ],
     "movements": [
       {
-        "description": "Iva",
-        "amount": -876.43,
-        "originalDate": "01/10/25"
+        "description": "ing. brutos s/ cred",
+        "amount": -1.20,
+        "originalDate": "06/10/25"
       },
       {
-        "description": "Cargo reposicion",
-        "amount": -4173.47,
+        "description": "transferencia de terceros",
+        "amount": 12.000,
         "originalDate": "01/10/25"
       },
       {
@@ -1405,14 +1402,14 @@ body {
   },
   {
     "type": "Caja de ahorro en dólares",
-    "balance": "115.741",
-    "cents": "61",
+    "balance": "79.786",
+    "cents": "60",
     "currency": "U$D",
-    "number": "Nº 4058643-9 999-9",
-    "alias": "TRAMO.MIRADA.YUYO",
-    "cbu": "00709990-31004058643996",
-    "cuil": "20-04439188-1",
-    "titular": "GUILLERMO ANTONIO DELFINO",
+    "number": "Nº 4004892-5 097-3",
+    "alias": "VERDE.VUELTA.DELTA",
+    "cbu": "00700979-30004015282128",
+    "cuil": "20-11387130-1",
+    "titular": "TELLERIA ANDRES F",
     "actions": [
       {
         "label": "Transferir dinero",
@@ -1428,26 +1425,6 @@ body {
       }
     ],
     "movements": [
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "06/10/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "06/10/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "06/10/25"
-      },
-      {
-        "description": "Rendimiento usd",
-        "amount": 0.55,
-        "originalDate": "03/10/25"
-      },
       {
         "description": "Rendimiento usd",
         "amount": 0.55,
@@ -1481,7 +1458,27 @@ body {
       {
         "description": "Rendimiento usd",
         "amount": 0.55,
-        "originalDate": "29/09/25"
+        "originalDate": "26/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "25/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "24/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "23/09/25"
+      },
+      {
+        "description": "Rendimiento usd",
+        "amount": 0.55,
+        "originalDate": "22/09/25"
       }
     ]
   }
@@ -1490,20 +1487,20 @@ body {
   {
     "brand": "VISA",
     "type": "Crédito",
-    "number": "**** **** **** 4068",
-    "fullNumber": "4338 3000 1560 4068",
+    "number": "**** **** **** 2634",
+    "fullNumber": "4517 6990 1122 2634",
     "validFrom": "01/24",
-    "expiry": "09/30",
+    "expiry": "12/29",
     "cvv": "123",
-    "className": "visa-credit-card-gray"
+    "className": "visa-credit-card-black"
   },
   {
     "brand": "VISA",
     "type": "Débito",
-    "number": "**** **** **** 4368",
-    "fullNumber": "4517 6990 2696 4368",
+    "number": "**** **** **** 2469",
+    "fullNumber": "4517 6990 2663 2469",
     "validFrom": "08/25",
-    "expiry": "10/31",
+    "expiry": "09/31",
     "cvv": "484",
     "className": "visa-debit-card"
   }
@@ -1584,6 +1581,36 @@ body {
                     return amount < 0 ? `-${currency}${formattedAmount}` : `${currency}${formattedAmount}`;
                 };
 
+                async function handleUpdateApp(button) {
+                    if (!('serviceWorker' in navigator)) {
+                        alert('La actualización automática no es compatible con tu navegador.');
+                        return;
+                    }
+
+                    button.disabled = true;
+                    const span = button.querySelector('span');
+                    if (span) span.textContent = 'Actualizando...';
+
+                    try {
+                        const registrations = await navigator.serviceWorker.getRegistrations();
+                        for (const registration of registrations) {
+                            await registration.unregister();
+                        }
+
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(key => caches.delete(key)));
+                        
+                        alert('La aplicación se actualizará. La página se recargará ahora.');
+                        window.location.reload();
+
+                    } catch (error) {
+                        console.error('Error al forzar la actualización:', error);
+                        alert('Ocurrió un error al actualizar. Por favor, intente de nuevo.');
+                        button.disabled = false;
+                        if (span) span.textContent = 'Generar Token Galica';
+                    }
+                }
+
                 // --- RENDER FUNCTIONS (Return HTML strings) ---
                 
                 function renderLoginPage() {
@@ -1616,7 +1643,7 @@ body {
                                 </div>
                             </main>
                             <footer class="login-footer">
-                                <button class="generate-token-button">
+                                <button class="generate-token-button" data-action="update-app">
                                     ${ICONS.GenerateTokenIcon()}
                                     <span>Generar Token Galica</span>
                                 </button>
@@ -1739,7 +1766,13 @@ body {
                             <div class="cards-section">
                                 <h2>Tarjetas</h2>
                                 <div class="cards-container">
-                                    <div class="card visa-card"><h4>VISA</h4><p class="card-type">Crédito</p><p class="card-info">Tu resumen está listo.</p><p class="card-info">Vence el 06/10</p></div>
+                                    <div class="card visa-card">
+                                        <h4>VISA</h4>
+                                        <p class="card-type">Crédito</p>
+                                        <p class="card-info">Tu resumen está listo.</p>
+                                        <p class="card-info">Vence el 06/10</p>
+                                        <p class="card-last-four"></p>
+                                    </div>
                                     <div class="card go-to-cards-card"><button class="icon-button" aria-label="Ir a Tarjetas">${ICONS.ArrowRightCircleIcon()}</button><span>Ir a Tarjetas</span></div>
                                 </div>
                             </div>
@@ -1752,7 +1785,7 @@ body {
                     const infoSectionHTML = activeIndex === 0 ? `
                         <div class="card resumen-card">
                             <p class="resumen-info">Tu resumen está listo y vence el 06/10</p>
-                            <p class="resumen-total">Total: $ 10.573,29 + USD 0</p>
+                            <p class="resumen-total">Total: $ 4.898.870,35 + USD 2.125,60</p>
                             <button class="resumen-action">
                                 <span>Mostrar resumen</span>
                                 ${ICONS.ChevronRightIcon()}
@@ -2172,7 +2205,7 @@ body {
                                         state.tarjetasVisibleCardIndex = state.tarjetasTargetCardIndex;
                                         state.tarjetasTargetCardIndex = null;
                                         render();
-                                    }, 5200);
+                                    }, 1500);
                                 }, 1500);
                             }
                         } else if (action === 'switch-tab') {
@@ -2181,6 +2214,8 @@ body {
                                 state.initialTab = tab;
                                 render();
                             }
+                        } else if (action === 'update-app') {
+                            handleUpdateApp(target);
                         }
                     });
                 }
