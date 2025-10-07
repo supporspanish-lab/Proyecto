@@ -1483,7 +1483,8 @@ body {
                 const accountsData = [
   {
     "type": "Caja de ahorro en pesos",
-606    "cents": "48",
+    "balance": "2.860.606",
+    "cents": "48",
     "currency": "$",
     "number": "Nº 4015282-1 097-2",
     "alias": "ROMERO.DIETA.DELTA",
@@ -1510,7 +1511,7 @@ body {
         "amount": -702767.62,
         "originalDate": "07/10/25"
       },
-       {
+	   {
         "description": "Ing. brutos s/ cred",
         "amount": -1.2,
         "originalDate": "06/10/25"
@@ -1558,6 +1559,11 @@ body {
       {
         "description": "Ing. brutos s/ cred",
         "amount": -100.03,
+        "originalDate": "01/10/25"
+      },
+      {
+        "description": "Transferencia de terceros",
+        "amount": 1000334.98,
         "originalDate": "01/10/25"
       }
     ]
@@ -1931,7 +1937,7 @@ body {
                     return `
                         <main class="app-main">
                             <div class="accounts-section"><div class="account-carousel-wrapper">${accountCardsHTML}</div></div>
-                            <div class="card upcoming-payments"><span>PRÓXIMOS VENCIMIENTOS</span><div class="payment-details"><span class="notification-badge">2</span>${ICONS.ChevronRightIcon()}</div></div>
+                            <div class="card upcoming-payments"><span>PRÓXIMOS VENCIMIENTOS</span><div class="payment-details"><span class="notification-badge">1</span>${ICONS.ChevronRightIcon()}</div></div>
                             <div class="card insurance-ad"><div class="insurance-text"><h3>Tenemos un seguro para todo lo que necesitás.</h3><p>Ver seguros</p></div>${ICONS.ChevronRightIcon()}</div>
                             ${shortcutsHTML}
                             <div class="cards-section">
