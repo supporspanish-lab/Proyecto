@@ -27,7 +27,7 @@
     <div id="jump-button" style="position: absolute; bottom: 30px; right: 30px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
     <div id="attack-button" style="position: absolute; bottom: 30px; right: 120px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
     <script>
-        let camera, scene, renderer, character, coordsDiv, world, characterBody, mixer, clock;
+        let camera, scene, renderer, character, skeleton, coordsDiv, world, characterBody, skeletonBody, mixer, skeletonMixer, clock;
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
         let characterState = 'idle';
         const velocity = new THREE.Vector3();
@@ -165,6 +165,57 @@
                 console.error(error);
             });
 
+            // Load skeleton
+            loader.load('Skeleton_Warrior.glb', function(gltf) {
+                skeleton = gltf.scene;
+                skeleton.position.copy(characterBody.position);
+                skeleton.position.x += 5; // offset to the side
+                skeleton.position.y -= 1; // same as character adjustment
+                skeleton.scale.set(5, 5, 5);
+                scene.add(skeleton);
+
+                // Hide specific meshes if needed
+                skeleton.traverse(function(child) {
+                    if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) { // assuming similar to knight
+                        child.visible = false;
+                    }
+                });
+
+                // Skeleton animations
+                skeletonMixer = new THREE.AnimationMixer(skeleton);
+                const skeletonClips = gltf.animations;
+                const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
+                const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
+                skeleton.animationActions = {};
+                if (idleClip) {
+                    skeleton.animationActions.idle = skeletonMixer.clipAction(idleClip);
+                }
+                if (hitBClip) {
+                    skeleton.animationActions.hit_b = skeletonMixer.clipAction(hitBClip);
+                    skeleton.animationActions.hit_b.setLoop(THREE.LoopOnce);
+                    skeleton.animationActions.hit_b.clampWhenFinished = true;
+                }
+                if (skeleton.animationActions.idle) {
+                    skeleton.activeAction = skeleton.animationActions.idle;
+                    skeleton.activeAction.play();
+                }
+
+                // Skeleton physics
+                const skeletonShape = new CANNON.Sphere(1);
+                skeletonBody = new CANNON.Body({ mass: 1 });
+                skeletonBody.addShape(skeletonShape);
+                skeletonBody.position.copy(skeleton.position);
+                skeletonBody.position.y += 1; // adjust for feet
+                skeletonBody.linearDamping = 0.9;
+                skeletonBody.angularDamping = 1.0;
+                skeletonBody.allowSleep = true;
+                skeletonBody.sleepSpeedLimit = 0.1;
+                skeletonBody.sleepTimeLimit = 1.0;
+                world.addBody(skeletonBody);
+            }, undefined, function(error) {
+                console.error(error);
+            });
+
             // No controls, manual camera
 
             coordsDiv = document.getElementById('coords');
@@ -277,6 +328,9 @@
                     case 'KeyD': moveRight = true; break;
                     case 'Space': jump(); break;
                     case 'KeyE': attack(); break;
+                    case 'ControlLeft':
+                    case 'ControlRight':
+                        attack(); break;
                 }
             };
 
@@ -388,6 +442,11 @@
                 character.position.copy(characterBody.position);
                 character.position.y -= 1; // Adjust to make feet on ground
 
+                if (skeleton && skeletonBody) {
+                    skeleton.position.copy(skeletonBody.position);
+                    skeleton.position.y -= 1; // Adjust to make feet on ground
+                }
+
                 // Tank Controls for turning
                 if (characterState !== 'attacking') {
                     const turnSpeed = Math.PI; // 180 degrees per second
@@ -409,6 +468,7 @@
             }
 
             if (mixer) mixer.update(deltaTime);
+            if (skeletonMixer) skeletonMixer.update(deltaTime);
             renderer.render(scene, camera);
         }
     </script>
