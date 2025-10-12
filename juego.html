@@ -18,13 +18,13 @@
 </head>
 <body>
     <div id="coords">Posición: (-156.62, 20, 0)</div>
-    <div id="skeleton-health" style="position: absolute; top: 60px; left: 10px; width: 200px; height: 20px; background: red; border: 1px solid black;">
-        <div id="skeleton-health-bar" style="height: 100%; background: green; width: 100%;"></div>
-    </div>
+    <div id="fps" style="position: absolute; top: 40px; left: 10px; color: white; font-family: Arial, sans-serif; background: rgba(0,0,0,0.5); padding: 5px; z-index: 1;">FPS: 0</div>
+    <div id="player-health" style="position: absolute; top: 70px; left: 10px; width: 200px; height: 20px; background: red; border: 1px solid black; z-index: 1;"><div id="player-health-bar" style="height: 100%; background: green; width: 100%;"></div></div>
     <div id="settings-icon">⚙️</div>
     <div id="settings-panel">
         <label for="far-plane">Distancia de vista:</label><br>
         <input type="range" id="far-plane" min="100" max="2000" value="1000" step="50">
+        <br><label><input type="checkbox" id="ai-enemies"> Activar IA Enemigos</label>
         <br><button id="generate-enemy">Generar Enemigo</button>
     </div>
     <div id="joystick-container" style="position: absolute; bottom: 50px; left: 50px; width: 150px; height: 150px; z-index: 10;"></div>
@@ -38,6 +38,15 @@
         const velocity = new THREE.Vector3();
         const direction = new THREE.Vector3();
         let skeletons = []; let skeletonBodies = []; let skeletonMixers = []; let skeletonHealths = [];
+        let healthDivs = []; let healthBars = [];
+        let frameCount = 0;
+        let physicsTime = 0;
+        let fps = 0;
+        let lastTime = performance.now();
+        let aiEnemies = false;
+        let playerHealth = 100;
+        let attackTimer = 0;
+        let attackCooldowns = [];
 
         init();
         animate();
@@ -59,11 +68,16 @@
                 const newSkeletonMixer = new THREE.AnimationMixer(newSkeleton);
                 const skeletonClips = gltf.animations;
                 const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
+                const runningClip = THREE.AnimationClip.findByName(skeletonClips, 'Running_A');
                 const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
                 const deathClip = THREE.AnimationClip.findByName(skeletonClips, 'Death_A');
+                const attackClip = THREE.AnimationClip.findByName(skeletonClips, '1H_Melee_Attack_Slice_Horizontal');
                 newSkeleton.animationActions = {};
                 if (idleClip) {
                     newSkeleton.animationActions.idle = newSkeletonMixer.clipAction(idleClip);
+                }
+                if (runningClip) {
+                    newSkeleton.animationActions.running = newSkeletonMixer.clipAction(runningClip);
                 }
                 if (hitBClip) {
                     newSkeleton.animationActions.hit_b = newSkeletonMixer.clipAction(hitBClip);
@@ -74,6 +88,11 @@
                     newSkeleton.animationActions.death = newSkeletonMixer.clipAction(deathClip);
                     newSkeleton.animationActions.death.setLoop(THREE.LoopOnce);
                     newSkeleton.animationActions.death.clampWhenFinished = true;
+                }
+                if (attackClip) {
+                    newSkeleton.animationActions.attack = newSkeletonMixer.clipAction(attackClip);
+                    newSkeleton.animationActions.attack.setLoop(THREE.LoopOnce);
+                    newSkeleton.animationActions.attack.clampWhenFinished = true;
                 }
                 if (newSkeleton.animationActions.idle) {
                     newSkeleton.activeAction = newSkeleton.animationActions.idle;
@@ -87,15 +106,28 @@
                 newSkeletonBody.position.y += 1;
                 newSkeletonBody.linearDamping = 0.9;
                 newSkeletonBody.angularDamping = 1.0;
-                newSkeletonBody.allowSleep = true;
-                newSkeletonBody.sleepSpeedLimit = 0.1;
-                newSkeletonBody.sleepTimeLimit = 1.0;
                 world.addBody(newSkeletonBody);
 
                 skeletons.push(newSkeleton);
                 skeletonBodies.push(newSkeletonBody);
                 skeletonMixers.push(newSkeletonMixer);
                 skeletonHealths.push(100);
+                attackCooldowns.push(0);
+
+                const healthDiv = document.createElement('div');
+                healthDiv.style.position = 'absolute';
+                healthDiv.style.width = '120px';
+                healthDiv.style.height = '12px';
+                healthDiv.style.background = 'red';
+                healthDiv.style.border = '1px solid black';
+                const healthBar = document.createElement('div');
+                healthBar.style.height = '100%';
+                healthBar.style.background = 'green';
+                healthBar.style.width = '100%';
+                healthDiv.appendChild(healthBar);
+                document.body.appendChild(healthDiv);
+                healthDivs.push(healthDiv);
+                healthBars.push(healthBar);
             }, undefined, function(error) {
                 console.error(error);
             });
@@ -108,8 +140,8 @@
 
             // Physics world
             world = new CANNON.World();
-            world.gravity.set(0, -100, 0);
-            world.allowSleep = true; // Allow bodies to sleep
+            world.gravity.set(0, -50, 0); // Reduced gravity for better performance
+            world.allowSleep = false; // Disable sleep for consistent performance
 
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 5, 10);
@@ -198,14 +230,18 @@
                 const attackAction = mixer.clipAction(THREE.AnimationClip.findByName(clips, '1H_Melee_Attack_Slice_Horizontal'));
                 attackAction.setLoop(THREE.LoopOnce);
                 attackAction.clampWhenFinished = true;
+                const hitAction = mixer.clipAction(THREE.AnimationClip.findByName(clips, 'Hit_B'));
+                hitAction.setLoop(THREE.LoopOnce);
+                hitAction.clampWhenFinished = true;
 
-                character.animationActions = { 
-                    idle: idleAction, 
+                character.animationActions = {
+                    idle: idleAction,
                     running: runningAction,
                     jump_start: jumpStartAction,
                     jump_idle: jumpIdleAction,
                     jump_land: jumpLandAction,
-                    attack: attackAction
+                    attack: attackAction,
+                    hit: hitAction
                 };
                 character.activeAction = idleAction;
                 idleAction.play();
@@ -220,74 +256,94 @@
                 characterBody.position.set(-1554.91, 400.87, -145.05);
                 characterBody.linearDamping = 0.9;
                 characterBody.angularDamping = 1.0; // Prevent sphere from rolling
-                characterBody.allowSleep = true;
-                characterBody.sleepSpeedLimit = 0.1; // Body will sleep if speed is below this value
-                characterBody.sleepTimeLimit = 1.0; // Body will sleep if speed is below sleepSpeedLimit for this duration
                 world.addBody(characterBody);
 
                 camera.lookAt(character.position);
-            }, undefined, function(error) {
-                console.error(error);
-            });
 
-            // Load skeleton
-            loader.load('Skeleton_Warrior.glb', function(gltf) {
-                skeleton = gltf.scene;
-                skeleton.position.copy(characterBody.position);
-                skeleton.position.x += 5; // offset to the side
-                skeleton.position.y -= 1; // same as character adjustment
-                skeleton.scale.set(5, 5, 5);
-                scene.add(skeleton);
+                // Load skeleton after character is loaded
+                loader.load('Skeleton_Warrior.glb', function(gltf) {
+                    skeleton = gltf.scene;
+                    skeleton.position.copy(characterBody.position);
+                    skeleton.position.x += 5; // offset to the side
+                    skeleton.position.y -= 1; // same as character adjustment
+                    skeleton.scale.set(5, 5, 5);
+                    scene.add(skeleton);
 
-                // Hide specific meshes if needed
-                skeleton.traverse(function(child) {
-                    if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) { // assuming similar to knight
-                        child.visible = false;
+                    // Hide specific meshes if needed
+                    skeleton.traverse(function(child) {
+                        if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) { // assuming similar to knight
+                            child.visible = false;
+                        }
+                    });
+
+                    // Skeleton animations
+                    skeletonMixer = new THREE.AnimationMixer(skeleton);
+                    const skeletonClips = gltf.animations;
+                    const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
+                    const runningClip = THREE.AnimationClip.findByName(skeletonClips, 'Running_A');
+                    const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
+                    const deathClip = THREE.AnimationClip.findByName(skeletonClips, 'Death_A');
+                    const attackClip = THREE.AnimationClip.findByName(skeletonClips, '1H_Melee_Attack_Slice_Horizontal');
+                    skeleton.animationActions = {};
+                    if (idleClip) {
+                        skeleton.animationActions.idle = skeletonMixer.clipAction(idleClip);
                     }
+                    if (runningClip) {
+                        skeleton.animationActions.running = skeletonMixer.clipAction(runningClip);
+                    }
+                    if (hitBClip) {
+                        skeleton.animationActions.hit_b = skeletonMixer.clipAction(hitBClip);
+                        skeleton.animationActions.hit_b.setLoop(THREE.LoopOnce);
+                        skeleton.animationActions.hit_b.clampWhenFinished = true;
+                    }
+                    if (deathClip) {
+                        skeleton.animationActions.death = skeletonMixer.clipAction(deathClip);
+                        skeleton.animationActions.death.setLoop(THREE.LoopOnce);
+                        skeleton.animationActions.death.clampWhenFinished = true;
+                    }
+                    if (attackClip) {
+                        skeleton.animationActions.attack = skeletonMixer.clipAction(attackClip);
+                        skeleton.animationActions.attack.setLoop(THREE.LoopOnce);
+                        skeleton.animationActions.attack.clampWhenFinished = true;
+                    }
+                    if (skeleton.animationActions.idle) {
+                        skeleton.activeAction = skeleton.animationActions.idle;
+                        skeleton.activeAction.play();
+                    }
+
+                    // Skeleton physics
+                    const skeletonShape = new CANNON.Sphere(1);
+                    skeletonBody = new CANNON.Body({ mass: 1 });
+                    skeletonBody.addShape(skeletonShape);
+                    skeletonBody.position.copy(skeleton.position);
+                    skeletonBody.position.y += 1; // adjust for feet
+                    skeletonBody.linearDamping = 0.9;
+                    skeletonBody.angularDamping = 1.0;
+                    world.addBody(skeletonBody);
+
+                    skeletons.push(skeleton);
+                    skeletonBodies.push(skeletonBody);
+                    skeletonMixers.push(skeletonMixer);
+                    skeletonHealths.push(100);
+                    attackCooldowns.push(0);
+   
+                    const healthDiv = document.createElement('div');
+                    healthDiv.style.position = 'absolute';
+                    healthDiv.style.width = '120px';
+                    healthDiv.style.height = '12px';
+                    healthDiv.style.background = 'red';
+                    healthDiv.style.border = '1px solid black';
+                    const healthBar = document.createElement('div');
+                    healthBar.style.height = '100%';
+                    healthBar.style.background = 'green';
+                    healthBar.style.width = '100%';
+                    healthDiv.appendChild(healthBar);
+                    document.body.appendChild(healthDiv);
+                    healthDivs.push(healthDiv);
+                    healthBars.push(healthBar);
+                }, undefined, function(error) {
+                    console.error(error);
                 });
-
-                // Skeleton animations
-                skeletonMixer = new THREE.AnimationMixer(skeleton);
-                const skeletonClips = gltf.animations;
-                const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
-                const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
-                const deathClip = THREE.AnimationClip.findByName(skeletonClips, 'Death_A');
-                skeleton.animationActions = {};
-                if (idleClip) {
-                    skeleton.animationActions.idle = skeletonMixer.clipAction(idleClip);
-                }
-                if (hitBClip) {
-                    skeleton.animationActions.hit_b = skeletonMixer.clipAction(hitBClip);
-                    skeleton.animationActions.hit_b.setLoop(THREE.LoopOnce);
-                    skeleton.animationActions.hit_b.clampWhenFinished = true;
-                }
-                if (deathClip) {
-                    skeleton.animationActions.death = skeletonMixer.clipAction(deathClip);
-                    skeleton.animationActions.death.setLoop(THREE.LoopOnce);
-                    skeleton.animationActions.death.clampWhenFinished = true;
-                }
-                if (skeleton.animationActions.idle) {
-                    skeleton.activeAction = skeleton.animationActions.idle;
-                    skeleton.activeAction.play();
-                }
-
-                // Skeleton physics
-                const skeletonShape = new CANNON.Sphere(1);
-                skeletonBody = new CANNON.Body({ mass: 1 });
-                skeletonBody.addShape(skeletonShape);
-                skeletonBody.position.copy(skeleton.position);
-                skeletonBody.position.y += 1; // adjust for feet
-                skeletonBody.linearDamping = 0.9;
-                skeletonBody.angularDamping = 1.0;
-                skeletonBody.allowSleep = true;
-                skeletonBody.sleepSpeedLimit = 0.1;
-                skeletonBody.sleepTimeLimit = 1.0;
-                world.addBody(skeletonBody);
-
-                skeletons.push(skeleton);
-                skeletonBodies.push(skeletonBody);
-                skeletonMixers.push(skeletonMixer);
-                skeletonHealths.push(100);
             }, undefined, function(error) {
                 console.error(error);
             });
@@ -312,6 +368,11 @@
             farPlaneInput.addEventListener('input', (e) => {
                 camera.far = parseFloat(e.target.value);
                 camera.updateProjectionMatrix();
+            });
+
+            const aiEnemiesCheckbox = document.getElementById('ai-enemies');
+            aiEnemiesCheckbox.addEventListener('change', (e) => {
+                aiEnemies = e.target.checked;
             });
 
             const generateEnemyButton = document.getElementById('generate-enemy');
@@ -340,13 +401,14 @@
             const attack = function() {
                 if (characterState === 'idle' || characterState === 'running') {
                     characterState = 'attacking';
+                    attackTimer = 0;
                     let closestSkeleton = null;
                     let closestDistance = Infinity;
                     let closestIndex = -1;
                     for (let i = 0; i < skeletons.length; i++) {
                         if (skeletonHealths[i] > 0) {
                             const distance = characterBody.position.distanceTo(skeletonBodies[i].position);
-                            if (distance < 10 && distance < closestDistance) {
+                            if (distance < 6 && distance < closestDistance) {
                                 closestDistance = distance;
                                 closestSkeleton = skeletons[i];
                                 closestIndex = i;
@@ -355,10 +417,6 @@
                     }
                     if (closestSkeleton) {
                         skeletonHealths[closestIndex] -= 20;
-                        if (closestIndex === 0) {
-                            const healthPercent = (skeletonHealths[closestIndex] / 100) * 100;
-                            document.getElementById('skeleton-health-bar').style.width = `${healthPercent}%`;
-                        }
                         if (skeletons[closestIndex].animationActions.hit_b && skeletonMixers[closestIndex]) {
                             skeletons[closestIndex].activeAction.fadeOut(0.2);
                             skeletons[closestIndex].animationActions.hit_b.reset().fadeIn(0.2).play();
@@ -369,9 +427,6 @@
                                 skeletons[closestIndex].activeAction.fadeOut(0.2);
                                 skeletons[closestIndex].animationActions.death.reset().fadeIn(0.2).play();
                                 skeletons[closestIndex].activeAction = skeletons[closestIndex].animationActions.death;
-                            }
-                            if (closestIndex === 0) {
-                                document.getElementById('skeleton-health').textContent = 'Enemigo Derrotado';
                             }
                         }
                     }
@@ -477,7 +532,23 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            const deltaTime = clock.getDelta();
+            const now = performance.now();
+            const deltaTime = (now - lastTime) / 1000;
+            lastTime = now;
+            fps = 1 / deltaTime;
+            frameCount++;
+            if (characterState === 'attacking') {
+                attackTimer += deltaTime;
+                if (attackTimer > 1) { // Force end attack after 1 second
+                    characterState = 'idle';
+                }
+            }
+            // Update enemy attack cooldowns
+            for (let i = 0; i < attackCooldowns.length; i++) {
+                if (attackCooldowns[i] > 0) {
+                    attackCooldowns[i] -= deltaTime;
+                }
+            }
 
             if (characterBody && character && mixer) {
                 // Ground check
@@ -550,13 +621,18 @@
                     character.activeAction = desiredAction;
                 }
 
-                // Transition from landing/attacking to idle when animation finishes
-                if ((characterState === 'landing' || characterState === 'attacking') && !character.activeAction.isRunning()) {
+                // Transition from landing/attacking/hit to idle when animation finishes
+                if ((characterState === 'landing' || characterState === 'attacking' || characterState === 'hit') && !character.activeAction.isRunning()) {
                     characterState = 'idle';
                 }
 
-                // Step physics world
-                world.step(1/60);
+                // Step physics world with fixed timestep (max 1 step per frame)
+                physicsTime += deltaTime;
+                const timeStep = 1/30; // Reduced to 30 FPS for better performance
+                if (physicsTime >= timeStep) {
+                    world.step(timeStep);
+                    physicsTime -= timeStep;
+                }
 
                 // Sync Three.js mesh with physics body
                 character.position.copy(characterBody.position);
@@ -566,6 +642,38 @@
                     if (skeletons[i] && skeletonBodies[i]) {
                         skeletons[i].position.copy(skeletonBodies[i].position);
                         skeletons[i].position.y -= 1;
+
+                        // AI logic
+                        if (aiEnemies && skeletonHealths[i] > 0) {
+                            const distance = skeletons[i].position.distanceTo(character.position);
+                            if (distance > 6) {
+                                const direction = new THREE.Vector3().subVectors(character.position, skeletons[i].position).normalize();
+                                const speed = 20;
+                                skeletonBodies[i].velocity.x = direction.x * speed;
+                                skeletonBodies[i].velocity.z = direction.z * speed;
+                                skeletons[i].lookAt(character.position);
+                                // Set running animation
+                                if (skeletons[i].activeAction !== skeletons[i].animationActions.running) {
+                                    skeletons[i].activeAction.fadeOut(0.2);
+                                    skeletons[i].animationActions.running.reset().fadeIn(0.2).play();
+                                    skeletons[i].activeAction = skeletons[i].animationActions.running;
+                                }
+                            } else {
+                                skeletonBodies[i].velocity.x = 0;
+                                skeletonBodies[i].velocity.z = 0;
+                                // Set idle animation if not attacking
+                                if (skeletons[i].activeAction !== skeletons[i].animationActions.attack && skeletons[i].activeAction !== skeletons[i].animationActions.idle) {
+                                    skeletons[i].activeAction.fadeOut(0.2);
+                                    skeletons[i].animationActions.idle.reset().fadeIn(0.2).play();
+                                    skeletons[i].activeAction = skeletons[i].animationActions.idle;
+                                }
+                                if (distance < 6 && attackCooldowns[i] <= 0 && skeletons[i].activeAction !== skeletons[i].animationActions.attack) {
+                                    skeletons[i].activeAction.fadeOut(0.2);
+                                    skeletons[i].animationActions.attack.reset().fadeIn(0.2).play();
+                                    skeletons[i].activeAction = skeletons[i].animationActions.attack;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -587,6 +695,35 @@
 
                 // Update coords display
                 coordsDiv.textContent = `Posición: (${character.position.x.toFixed(2)}, ${character.position.y.toFixed(2)}, ${character.position.z.toFixed(2)})`;
+
+                // Update FPS display
+                document.getElementById('fps').textContent = `FPS: ${fps.toFixed(1)}`;
+
+                // Update player health
+                document.getElementById('player-health-bar').style.width = `${playerHealth}%`;
+
+                // Update health bars every 3 frames for performance
+                if (frameCount % 3 === 0) {
+                    for (let i = 0; i < skeletons.length; i++) {
+                        if (skeletons[i]) {
+                            const healthDiv = healthDivs[i];
+                            const healthBar = healthBars[i];
+                            const worldPos = skeletons[i].position.clone();
+                            const screenPos = worldPos.clone();
+                            screenPos.project(camera);
+                            const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+                            const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+                            const distance = camera.position.distanceTo(skeletons[i].position);
+                            const scale = Math.max(0.3, 1 - distance / 200); // Scale down with distance
+                            healthDiv.style.left = `${x - 60 * scale}px`;
+                            healthDiv.style.top = `${y - 150 * scale}px`;
+                            healthDiv.style.width = `${120 * scale}px`;
+                            healthDiv.style.height = `${12 * scale}px`;
+                            const healthPercent = (skeletonHealths[i] / 100) * 100;
+                            healthBar.style.width = `${healthPercent}%`;
+                        }
+                    }
+                }
             }
 
             if (mixer) mixer.update(deltaTime);
@@ -598,12 +735,32 @@
                         skeletons[i].animationActions.idle.reset().fadeIn(0.2).play();
                         skeletons[i].activeAction = skeletons[i].animationActions.idle;
                     }
+                    if (skeletons[i] && skeletons[i].activeAction === skeletons[i].animationActions.attack && !skeletons[i].activeAction.isRunning()) {
+                        // Hit player if close
+                        if (skeletons[i].position.distanceTo(character.position) < 6) {
+                            playerHealth -= 10;
+                            if (character.animationActions.hit) {
+                                character.activeAction.fadeOut(0.2);
+                                character.animationActions.hit.reset().fadeIn(0.2).play();
+                                character.activeAction = character.animationActions.hit;
+                            }
+                        }
+                        // Set random cooldown 1-3 seconds
+                        attackCooldowns[i] = 1 + Math.random() * 2;
+                        skeletons[i].activeAction.fadeOut(0.2);
+                        skeletons[i].animationActions.idle.reset().fadeIn(0.2).play();
+                        skeletons[i].activeAction = skeletons[i].animationActions.idle;
+                    }
                     if (skeletons[i] && skeletons[i].activeAction === skeletons[i].animationActions.death && !skeletons[i].activeAction.isRunning()) {
                         scene.remove(skeletons[i]);
+                        document.body.removeChild(healthDivs[i]);
                         skeletons.splice(i, 1);
                         skeletonBodies.splice(i, 1);
                         skeletonMixers.splice(i, 1);
                         skeletonHealths.splice(i, 1);
+                        healthDivs.splice(i, 1);
+                        healthBars.splice(i, 1);
+                        attackCooldowns.splice(i, 1);
                         i--;
                     }
                 }
