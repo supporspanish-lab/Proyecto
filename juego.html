@@ -18,6 +18,7 @@
 </head>
 <body>
     <div id="coords">Posición: (-156.62, 20, 0)</div>
+    <div id="skeleton-health" style="position: absolute; top: 60px; left: 10px; color: white; background: rgba(0,0,0,0.5); padding: 5px;">Vida Enemigo: 100</div>
     <div id="settings-icon">⚙️</div>
     <div id="settings-panel">
         <label for="far-plane">Distancia de vista:</label><br>
@@ -28,6 +29,7 @@
     <div id="attack-button" style="position: absolute; bottom: 30px; right: 120px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
     <script>
         let camera, scene, renderer, character, skeleton, coordsDiv, world, characterBody, skeletonBody, mixer, skeletonMixer, clock;
+        let skeletonHealth = 100;
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
         let characterState = 'idle';
         const velocity = new THREE.Vector3();
@@ -186,6 +188,7 @@
                 const skeletonClips = gltf.animations;
                 const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
                 const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
+                const deathClip = THREE.AnimationClip.findByName(skeletonClips, 'Death_A');
                 skeleton.animationActions = {};
                 if (idleClip) {
                     skeleton.animationActions.idle = skeletonMixer.clipAction(idleClip);
@@ -194,6 +197,11 @@
                     skeleton.animationActions.hit_b = skeletonMixer.clipAction(hitBClip);
                     skeleton.animationActions.hit_b.setLoop(THREE.LoopOnce);
                     skeleton.animationActions.hit_b.clampWhenFinished = true;
+                }
+                if (deathClip) {
+                    skeleton.animationActions.death = skeletonMixer.clipAction(deathClip);
+                    skeleton.animationActions.death.setLoop(THREE.LoopOnce);
+                    skeleton.animationActions.death.clampWhenFinished = true;
                 }
                 if (skeleton.animationActions.idle) {
                     skeleton.activeAction = skeleton.animationActions.idle;
@@ -255,6 +263,28 @@
             const attack = function() {
                 if (characterState === 'idle' || characterState === 'running') {
                     characterState = 'attacking';
+                    // Check if skeleton is in range
+                    if (skeleton && skeletonBody && skeletonHealth > 0) {
+                        const distance = characterBody.position.distanceTo(skeletonBody.position);
+                        if (distance < 10) { // attack range
+                            skeletonHealth -= 20;
+                            document.getElementById('skeleton-health').textContent = `Vida Enemigo: ${skeletonHealth}`;
+                            if (skeleton.animationActions.hit_b && skeletonMixer) {
+                                skeleton.activeAction.fadeOut(0.2);
+                                skeleton.animationActions.hit_b.reset().fadeIn(0.2).play();
+                                skeleton.activeAction = skeleton.animationActions.hit_b;
+                            }
+                            if (skeletonHealth <= 0) {
+                                // Enemy defeated, play death animation
+                                if (skeleton.animationActions.death && skeletonMixer) {
+                                    skeleton.activeAction.fadeOut(0.2);
+                                    skeleton.animationActions.death.reset().fadeIn(0.2).play();
+                                    skeleton.activeAction = skeleton.animationActions.death;
+                                }
+                                document.getElementById('skeleton-health').textContent = 'Enemigo Derrotado';
+                            }
+                        }
+                    }
                 }
             };
 
@@ -468,7 +498,20 @@
             }
 
             if (mixer) mixer.update(deltaTime);
-            if (skeletonMixer) skeletonMixer.update(deltaTime);
+            if (skeletonMixer) {
+                skeletonMixer.update(deltaTime);
+                // Transition back to idle if hit_b finished
+                if (skeleton && skeleton.activeAction === skeleton.animationActions.hit_b && !skeleton.activeAction.isRunning()) {
+                    skeleton.activeAction.fadeOut(0.2);
+                    skeleton.animationActions.idle.reset().fadeIn(0.2).play();
+                    skeleton.activeAction = skeleton.animationActions.idle;
+                }
+                // Remove skeleton if death finished
+                if (skeleton && skeleton.activeAction === skeleton.animationActions.death && !skeleton.activeAction.isRunning()) {
+                    scene.remove(skeleton);
+                    skeleton = null;
+                }
+            }
             renderer.render(scene, camera);
         }
     </script>
