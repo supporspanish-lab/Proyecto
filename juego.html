@@ -106,6 +106,9 @@
                 newSkeletonBody.position.y += 1;
                 newSkeletonBody.linearDamping = 0.9;
                 newSkeletonBody.angularDamping = 1.0;
+                newSkeletonBody.allowSleep = true;
+                newSkeletonBody.sleepSpeedLimit = 0.1;
+                newSkeletonBody.sleepTimeLimit = 1.0;
                 world.addBody(newSkeletonBody);
 
                 skeletons.push(newSkeleton);
@@ -140,8 +143,8 @@
 
             // Physics world
             world = new CANNON.World();
-            world.gravity.set(0, -50, 0); // Reduced gravity for better performance
-            world.allowSleep = false; // Disable sleep for consistent performance
+            world.gravity.set(0, -30, 0); // Further reduced gravity
+            world.allowSleep = true; // Allow sleep to reduce calculations
 
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 5, 10);
@@ -256,6 +259,9 @@
                 characterBody.position.set(-1554.91, 400.87, -145.05);
                 characterBody.linearDamping = 0.9;
                 characterBody.angularDamping = 1.0; // Prevent sphere from rolling
+                characterBody.allowSleep = true;
+                characterBody.sleepSpeedLimit = 0.1;
+                characterBody.sleepTimeLimit = 1.0;
                 world.addBody(characterBody);
 
                 camera.lookAt(character.position);
@@ -319,6 +325,9 @@
                     skeletonBody.position.y += 1; // adjust for feet
                     skeletonBody.linearDamping = 0.9;
                     skeletonBody.angularDamping = 1.0;
+                    skeletonBody.allowSleep = true;
+                    skeletonBody.sleepSpeedLimit = 0.1;
+                    skeletonBody.sleepTimeLimit = 1.0;
                     world.addBody(skeletonBody);
 
                     skeletons.push(skeleton);
@@ -628,7 +637,7 @@
 
                 // Step physics world with fixed timestep (max 1 step per frame)
                 physicsTime += deltaTime;
-                const timeStep = 1/30; // Reduced to 30 FPS for better performance
+                const timeStep = 1/30; // Physics at 30 FPS, render at 60 FPS
                 if (physicsTime >= timeStep) {
                     world.step(timeStep);
                     physicsTime -= timeStep;
@@ -702,8 +711,8 @@
                 // Update player health
                 document.getElementById('player-health-bar').style.width = `${playerHealth}%`;
 
-                // Update health bars every 3 frames for performance
-                if (frameCount % 3 === 0) {
+                // Update health bars every 10 frames for mobile performance
+                if (frameCount % 10 === 0) {
                     for (let i = 0; i < skeletons.length; i++) {
                         if (skeletons[i]) {
                             const healthDiv = healthDivs[i];
