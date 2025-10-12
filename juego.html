@@ -12,10 +12,17 @@
     <style>
         body { margin: 0; overflow: hidden; }
         #coords { position: absolute; top: 10px; left: 10px; color: white; font-family: Arial, sans-serif; background: rgba(0,0,0,0.5); padding: 5px; cursor: pointer; z-index: 1; }
+        #settings-icon { position: absolute; top: 10px; right: 10px; color: white; font-size: 24px; cursor: pointer; z-index: 100; }
+        #settings-panel { position: absolute; top: 50px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; display: none; z-index: 100; border-radius: 5px; font-family: Arial, sans-serif; }
     </style>
 </head>
 <body>
     <div id="coords">Posición: (-156.62, 20, 0)</div>
+    <div id="settings-icon">⚙️</div>
+    <div id="settings-panel">
+        <label for="far-plane">Distancia de vista:</label><br>
+        <input type="range" id="far-plane" min="100" max="2000" value="1000" step="50">
+    </div>
     <div id="joystick-container" style="position: absolute; bottom: 50px; left: 50px; width: 150px; height: 150px; z-index: 10;"></div>
     <div id="jump-button" style="position: absolute; bottom: 30px; right: 30px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
     <div id="attack-button" style="position: absolute; bottom: 30px; right: 120px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
@@ -164,6 +171,20 @@
             coordsDiv.addEventListener('click', function() {
                 navigator.clipboard.writeText(coordsDiv.textContent.replace('Posición: ', ''));
                 alert('Coordenadas copiadas al portapapeles');
+            });
+
+            // Settings
+            const settingsIcon = document.getElementById('settings-icon');
+            const settingsPanel = document.getElementById('settings-panel');
+            const farPlaneInput = document.getElementById('far-plane');
+
+            settingsIcon.addEventListener('click', () => {
+                settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
+            });
+
+            farPlaneInput.addEventListener('input', (e) => {
+                camera.far = parseFloat(e.target.value);
+                camera.updateProjectionMatrix();
             });
 
             const jump = function() {
