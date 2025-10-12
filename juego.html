@@ -60,8 +60,11 @@
                 scene.add(newSkeleton);
 
                 newSkeleton.traverse(function(child) {
-                    if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) {
+                    if (child.isMesh && child.name === 'Skeleton_Cape') {
                         child.visible = false;
+                    }
+                    if (child.isMesh && child.name === 'Skeleton_Warrior_Helmet') {
+                        child.visible = true; // Show helmet initially
                     }
                 });
 
@@ -277,8 +280,11 @@
 
                     // Hide specific meshes if needed
                     skeleton.traverse(function(child) {
-                        if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) { // assuming similar to knight
+                        if (child.isMesh && child.name === 'Skeleton_Cape') {
                             child.visible = false;
+                        }
+                        if (child.isMesh && child.name === 'Skeleton_Warrior_Helmet') {
+                            child.visible = true; // Show helmet initially
                         }
                     });
 
@@ -417,7 +423,7 @@
                     for (let i = 0; i < skeletons.length; i++) {
                         if (skeletonHealths[i] > 0) {
                             const distance = characterBody.position.distanceTo(skeletonBodies[i].position);
-                            if (distance < 6 && distance < closestDistance) {
+                            if (distance < 12 && distance < closestDistance) {
                                 closestDistance = distance;
                                 closestSkeleton = skeletons[i];
                                 closestIndex = i;
@@ -651,6 +657,12 @@
                     if (skeletons[i] && skeletonBodies[i]) {
                         skeletons[i].position.copy(skeletonBodies[i].position);
                         skeletons[i].position.y -= 1;
+
+                        // Dynamic helmet visibility based on health
+                        const helmet = skeletons[i].getObjectByName('Skeleton_Warrior_Helmet');
+                        if (helmet) {
+                            helmet.visible = skeletonHealths[i] > 50;
+                        }
 
                         // AI logic
                         if (aiEnemies && skeletonHealths[i] > 0) {
