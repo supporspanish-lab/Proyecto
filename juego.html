@@ -18,11 +18,14 @@
 </head>
 <body>
     <div id="coords">Posición: (-156.62, 20, 0)</div>
-    <div id="skeleton-health" style="position: absolute; top: 60px; left: 10px; color: white; background: rgba(0,0,0,0.5); padding: 5px;">Vida Enemigo: 100</div>
+    <div id="skeleton-health" style="position: absolute; top: 60px; left: 10px; width: 200px; height: 20px; background: red; border: 1px solid black;">
+        <div id="skeleton-health-bar" style="height: 100%; background: green; width: 100%;"></div>
+    </div>
     <div id="settings-icon">⚙️</div>
     <div id="settings-panel">
         <label for="far-plane">Distancia de vista:</label><br>
         <input type="range" id="far-plane" min="100" max="2000" value="1000" step="50">
+        <br><button id="generate-enemy">Generar Enemigo</button>
     </div>
     <div id="joystick-container" style="position: absolute; bottom: 50px; left: 50px; width: 150px; height: 150px; z-index: 10;"></div>
     <div id="jump-button" style="position: absolute; bottom: 30px; right: 30px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
@@ -34,9 +37,69 @@
         let characterState = 'idle';
         const velocity = new THREE.Vector3();
         const direction = new THREE.Vector3();
+        let skeletons = []; let skeletonBodies = []; let skeletonMixers = []; let skeletonHealths = [];
 
         init();
         animate();
+
+        function spawnSkeleton(position) {
+            const loader = new THREE.GLTFLoader();
+            loader.load('Skeleton_Warrior.glb', function(gltf) {
+                const newSkeleton = gltf.scene;
+                newSkeleton.position.copy(position);
+                newSkeleton.scale.set(5, 5, 5);
+                scene.add(newSkeleton);
+
+                newSkeleton.traverse(function(child) {
+                    if (child.isMesh && ['Skeleton_Cape', 'Skeleton_Helmet'].includes(child.name)) {
+                        child.visible = false;
+                    }
+                });
+
+                const newSkeletonMixer = new THREE.AnimationMixer(newSkeleton);
+                const skeletonClips = gltf.animations;
+                const idleClip = THREE.AnimationClip.findByName(skeletonClips, 'Idle');
+                const hitBClip = THREE.AnimationClip.findByName(skeletonClips, 'Hit_B');
+                const deathClip = THREE.AnimationClip.findByName(skeletonClips, 'Death_A');
+                newSkeleton.animationActions = {};
+                if (idleClip) {
+                    newSkeleton.animationActions.idle = newSkeletonMixer.clipAction(idleClip);
+                }
+                if (hitBClip) {
+                    newSkeleton.animationActions.hit_b = newSkeletonMixer.clipAction(hitBClip);
+                    newSkeleton.animationActions.hit_b.setLoop(THREE.LoopOnce);
+                    newSkeleton.animationActions.hit_b.clampWhenFinished = true;
+                }
+                if (deathClip) {
+                    newSkeleton.animationActions.death = newSkeletonMixer.clipAction(deathClip);
+                    newSkeleton.animationActions.death.setLoop(THREE.LoopOnce);
+                    newSkeleton.animationActions.death.clampWhenFinished = true;
+                }
+                if (newSkeleton.animationActions.idle) {
+                    newSkeleton.activeAction = newSkeleton.animationActions.idle;
+                    newSkeleton.activeAction.play();
+                }
+
+                const skeletonShape = new CANNON.Sphere(1);
+                const newSkeletonBody = new CANNON.Body({ mass: 1 });
+                newSkeletonBody.addShape(skeletonShape);
+                newSkeletonBody.position.copy(newSkeleton.position);
+                newSkeletonBody.position.y += 1;
+                newSkeletonBody.linearDamping = 0.9;
+                newSkeletonBody.angularDamping = 1.0;
+                newSkeletonBody.allowSleep = true;
+                newSkeletonBody.sleepSpeedLimit = 0.1;
+                newSkeletonBody.sleepTimeLimit = 1.0;
+                world.addBody(newSkeletonBody);
+
+                skeletons.push(newSkeleton);
+                skeletonBodies.push(newSkeletonBody);
+                skeletonMixers.push(newSkeletonMixer);
+                skeletonHealths.push(100);
+            }, undefined, function(error) {
+                console.error(error);
+            });
+        }
 
         function init() {
             scene = new THREE.Scene();
@@ -220,6 +283,11 @@
                 skeletonBody.sleepSpeedLimit = 0.1;
                 skeletonBody.sleepTimeLimit = 1.0;
                 world.addBody(skeletonBody);
+
+                skeletons.push(skeleton);
+                skeletonBodies.push(skeletonBody);
+                skeletonMixers.push(skeletonMixer);
+                skeletonHealths.push(100);
             }, undefined, function(error) {
                 console.error(error);
             });
@@ -246,6 +314,15 @@
                 camera.updateProjectionMatrix();
             });
 
+            const generateEnemyButton = document.getElementById('generate-enemy');
+            generateEnemyButton.addEventListener('click', () => {
+                if (characterBody) {
+                    const randomOffset = new THREE.Vector3((Math.random() - 0.5) * 20, 0, (Math.random() - 0.5) * 20);
+                    const spawnPos = new THREE.Vector3(characterBody.position.x + randomOffset.x, characterBody.position.y + randomOffset.y, characterBody.position.z + randomOffset.z);
+                    spawnSkeleton(spawnPos);
+                }
+            });
+
             const jump = function() {
                 if (characterState !== 'idle' && characterState !== 'running') return;
                 const rayFrom = new CANNON.Vec3(characterBody.position.x, characterBody.position.y + 0.1, characterBody.position.z);
@@ -263,24 +340,37 @@
             const attack = function() {
                 if (characterState === 'idle' || characterState === 'running') {
                     characterState = 'attacking';
-                    // Check if skeleton is in range
-                    if (skeleton && skeletonBody && skeletonHealth > 0) {
-                        const distance = characterBody.position.distanceTo(skeletonBody.position);
-                        if (distance < 10) { // attack range
-                            skeletonHealth -= 20;
-                            document.getElementById('skeleton-health').textContent = `Vida Enemigo: ${skeletonHealth}`;
-                            if (skeleton.animationActions.hit_b && skeletonMixer) {
-                                skeleton.activeAction.fadeOut(0.2);
-                                skeleton.animationActions.hit_b.reset().fadeIn(0.2).play();
-                                skeleton.activeAction = skeleton.animationActions.hit_b;
+                    let closestSkeleton = null;
+                    let closestDistance = Infinity;
+                    let closestIndex = -1;
+                    for (let i = 0; i < skeletons.length; i++) {
+                        if (skeletonHealths[i] > 0) {
+                            const distance = characterBody.position.distanceTo(skeletonBodies[i].position);
+                            if (distance < 10 && distance < closestDistance) {
+                                closestDistance = distance;
+                                closestSkeleton = skeletons[i];
+                                closestIndex = i;
                             }
-                            if (skeletonHealth <= 0) {
-                                // Enemy defeated, play death animation
-                                if (skeleton.animationActions.death && skeletonMixer) {
-                                    skeleton.activeAction.fadeOut(0.2);
-                                    skeleton.animationActions.death.reset().fadeIn(0.2).play();
-                                    skeleton.activeAction = skeleton.animationActions.death;
-                                }
+                        }
+                    }
+                    if (closestSkeleton) {
+                        skeletonHealths[closestIndex] -= 20;
+                        if (closestIndex === 0) {
+                            const healthPercent = (skeletonHealths[closestIndex] / 100) * 100;
+                            document.getElementById('skeleton-health-bar').style.width = `${healthPercent}%`;
+                        }
+                        if (skeletons[closestIndex].animationActions.hit_b && skeletonMixers[closestIndex]) {
+                            skeletons[closestIndex].activeAction.fadeOut(0.2);
+                            skeletons[closestIndex].animationActions.hit_b.reset().fadeIn(0.2).play();
+                            skeletons[closestIndex].activeAction = skeletons[closestIndex].animationActions.hit_b;
+                        }
+                        if (skeletonHealths[closestIndex] <= 0) {
+                            if (skeletons[closestIndex].animationActions.death && skeletonMixers[closestIndex]) {
+                                skeletons[closestIndex].activeAction.fadeOut(0.2);
+                                skeletons[closestIndex].animationActions.death.reset().fadeIn(0.2).play();
+                                skeletons[closestIndex].activeAction = skeletons[closestIndex].animationActions.death;
+                            }
+                            if (closestIndex === 0) {
                                 document.getElementById('skeleton-health').textContent = 'Enemigo Derrotado';
                             }
                         }
@@ -472,9 +562,11 @@
                 character.position.copy(characterBody.position);
                 character.position.y -= 1; // Adjust to make feet on ground
 
-                if (skeleton && skeletonBody) {
-                    skeleton.position.copy(skeletonBody.position);
-                    skeleton.position.y -= 1; // Adjust to make feet on ground
+                for (let i = 0; i < skeletons.length; i++) {
+                    if (skeletons[i] && skeletonBodies[i]) {
+                        skeletons[i].position.copy(skeletonBodies[i].position);
+                        skeletons[i].position.y -= 1;
+                    }
                 }
 
                 // Tank Controls for turning
@@ -498,18 +590,22 @@
             }
 
             if (mixer) mixer.update(deltaTime);
-            if (skeletonMixer) {
-                skeletonMixer.update(deltaTime);
-                // Transition back to idle if hit_b finished
-                if (skeleton && skeleton.activeAction === skeleton.animationActions.hit_b && !skeleton.activeAction.isRunning()) {
-                    skeleton.activeAction.fadeOut(0.2);
-                    skeleton.animationActions.idle.reset().fadeIn(0.2).play();
-                    skeleton.activeAction = skeleton.animationActions.idle;
-                }
-                // Remove skeleton if death finished
-                if (skeleton && skeleton.activeAction === skeleton.animationActions.death && !skeleton.activeAction.isRunning()) {
-                    scene.remove(skeleton);
-                    skeleton = null;
+            for (let i = 0; i < skeletonMixers.length; i++) {
+                if (skeletonMixers[i]) {
+                    skeletonMixers[i].update(deltaTime);
+                    if (skeletons[i] && skeletons[i].activeAction === skeletons[i].animationActions.hit_b && !skeletons[i].activeAction.isRunning()) {
+                        skeletons[i].activeAction.fadeOut(0.2);
+                        skeletons[i].animationActions.idle.reset().fadeIn(0.2).play();
+                        skeletons[i].activeAction = skeletons[i].animationActions.idle;
+                    }
+                    if (skeletons[i] && skeletons[i].activeAction === skeletons[i].animationActions.death && !skeletons[i].activeAction.isRunning()) {
+                        scene.remove(skeletons[i]);
+                        skeletons.splice(i, 1);
+                        skeletonBodies.splice(i, 1);
+                        skeletonMixers.splice(i, 1);
+                        skeletonHealths.splice(i, 1);
+                        i--;
+                    }
                 }
             }
             renderer.render(scene, camera);
