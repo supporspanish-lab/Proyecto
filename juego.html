@@ -17,7 +17,8 @@
 <body>
     <div id="coords">Posición: (-156.62, 20, 0)</div>
     <div id="joystick-container" style="position: absolute; bottom: 50px; left: 50px; width: 150px; height: 150px; z-index: 10;"></div>
-    <div id="jump-button" style="position: absolute; bottom: 40px; right: 40px; width: 100px; height: 100px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
+    <div id="jump-button" style="position: absolute; bottom: 30px; right: 30px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
+    <div id="attack-button" style="position: absolute; bottom: 30px; right: 120px; width: 80px; height: 80px; background-color: rgba(255, 255, 255, 0.4); border-radius: 50%; z-index: 10;"></div>
     <script>
         let camera, scene, renderer, character, coordsDiv, world, characterBody, mixer, clock;
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
@@ -122,13 +123,17 @@
                 const jumpLandAction = mixer.clipAction(THREE.AnimationClip.findByName(clips, 'Jump_Land'));
                 jumpLandAction.setLoop(THREE.LoopOnce);
                 jumpLandAction.clampWhenFinished = true;
+                const attackAction = mixer.clipAction(THREE.AnimationClip.findByName(clips, '1H_Melee_Attack_Slice_Horizontal'));
+                attackAction.setLoop(THREE.LoopOnce);
+                attackAction.clampWhenFinished = true;
 
                 character.animationActions = { 
                     idle: idleAction, 
                     running: runningAction,
                     jump_start: jumpStartAction,
                     jump_idle: jumpIdleAction,
-                    jump_land: jumpLandAction
+                    jump_land: jumpLandAction,
+                    attack: attackAction
                 };
                 character.activeAction = idleAction;
                 idleAction.play();
@@ -162,15 +167,22 @@
             });
 
             const jump = function() {
+                if (characterState !== 'idle' && characterState !== 'running') return;
                 const rayFrom = new CANNON.Vec3(characterBody.position.x, characterBody.position.y + 0.1, characterBody.position.z);
                 const rayTo = new CANNON.Vec3(characterBody.position.x, characterBody.position.y - 1.1, characterBody.position.z);
                 const result = new CANNON.RaycastResult();
                 const isOnGround = world.raycastClosest(rayFrom, rayTo, {}, result);
 
-                if (isOnGround && (characterState === 'idle' || characterState === 'running')) {
+                if (isOnGround) {
                     const jumpVelocity = 150;
                     characterBody.velocity.y = jumpVelocity;
                     characterState = 'jumping';
+                }
+            };
+
+            const attack = function() {
+                if (characterState === 'idle' || characterState === 'running') {
+                    characterState = 'attacking';
                 }
             };
 
@@ -179,6 +191,7 @@
             if (isMobile) {
                 const joystickContainer = document.getElementById('joystick-container');
                 const jumpButton = document.getElementById('jump-button');
+                const attackButton = document.getElementById('attack-button');
 
                 const joystickOptions = {
                     zone: joystickContainer,
@@ -223,6 +236,11 @@
                     e.preventDefault();
                     jump();
                 });
+
+                attackButton.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    attack();
+                });
                 
                 // Hide keyboard instructions if on mobile, etc.
                 // For now, we just enable the joystick.
@@ -237,6 +255,7 @@
                     case 'KeyS': moveBackward = true; break;
                     case 'KeyD': moveRight = true; break;
                     case 'Space': jump(); break;
+                    case 'KeyE': attack(); break;
                 }
             };
 
@@ -276,7 +295,7 @@
                 if (isOnGround) {
                     if (characterState === 'jumping' || characterState === 'falling') {
                         characterState = 'landing';
-                    } else if (characterState !== 'landing') { // If not landing, must be idle/running
+                    } else if (characterState !== 'landing' && characterState !== 'attacking') { // If not landing or attacking, must be idle/running
                         const isMoving = moveForward || moveBackward || moveLeft || moveRight;
                         characterState = isMoving ? 'running' : 'idle';
                     }
@@ -305,7 +324,7 @@
                 // Update character state if on ground is now handled above
 
                 // Physics update for movement
-                if (targetSpeed !== 0) {
+                if (targetSpeed !== 0 && characterState !== 'attacking') {
                     characterBody.wakeUp();
                     const forward = new THREE.Vector3(0, 0, 1).applyQuaternion(character.quaternion);
                     const velocity = forward.multiplyScalar(targetSpeed);
@@ -326,6 +345,7 @@
                     case 'falling': desiredAction = character.animationActions.jump_idle; break;
                     case 'landing': desiredAction = character.animationActions.jump_land; break;
                     case 'running': desiredAction = character.animationActions.running; break;
+                    case 'attacking': desiredAction = character.animationActions.attack; break;
                     default: desiredAction = character.animationActions.idle; break;
                 }
 
@@ -335,8 +355,8 @@
                     character.activeAction = desiredAction;
                 }
 
-                // Transition from landing to idle when animation finishes
-                if (characterState === 'landing' && !character.activeAction.isRunning()) {
+                // Transition from landing/attacking to idle when animation finishes
+                if ((characterState === 'landing' || characterState === 'attacking') && !character.activeAction.isRunning()) {
                     characterState = 'idle';
                 }
 
@@ -348,9 +368,11 @@
                 character.position.y -= 1; // Adjust to make feet on ground
 
                 // Tank Controls for turning
-                const turnSpeed = Math.PI; // 180 degrees per second
-                if (moveLeft) character.rotateY(turnSpeed * deltaTime);
-                if (moveRight) character.rotateY(-turnSpeed * deltaTime);
+                if (characterState !== 'attacking') {
+                    const turnSpeed = Math.PI; // 180 degrees per second
+                    if (moveLeft) character.rotateY(turnSpeed * deltaTime);
+                    if (moveRight) character.rotateY(-turnSpeed * deltaTime);
+                }
 
                 // Update camera
                 const scale = character.scale.y;
