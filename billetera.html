@@ -11,7 +11,7 @@
 
     <!-- PWA Enhancements -->
     <meta name="theme-color" content="#003366"/>
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href='data:application/manifest+json,{"short_name":"Galicia","name":"Banco Galicia","icons":[{"src":"/icon-192x192.png","type":"image/png","sizes":"192x192","purpose":"any maskable"},{"src":"/icon-512x512.png","type":"image/png","sizes":"512x512","purpose":"any maskable"},{"src":"https://iili.io/KGaTONe.jpg","type":"image/jpeg","sizes":"512x512","purpose":"any maskable"}],"start_url":".","display":"standalone","theme_color":"%23003366","background_color":"%23f8f9fa","description":"Aplicación de Home Banking de Banco Galicia."}' />
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2407,6 +2407,56 @@
             font-weight: 700;
             font-size: 18px !important;
         }
+
+        /* --- Insufficient Funds Modal --- */
+        .insufficient-funds-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+        }
+        .insufficient-funds-modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .insufficient-funds-modal-content h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .insufficient-funds-modal-content p {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .insufficient-funds-modal-content button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            background-color: var(--orange-accent);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -2636,6 +2686,7 @@
                 currentTransfer: null,
                 isProcessingTransfer: false,
                 isQrMode: false,
+                showInsufficientFundsModal: false,
                 tarjetas: {
                     loadingState: 'idle', // 'idle' | 'wait' | 'load'
                     visibleCardIndex: null,
@@ -2720,6 +2771,7 @@
                     ${state.profilePage.showPasswordModal ? AdminPasswordModal() : ''}
                     ${state.transferFlow.isAliasLoading ? WaitModal('Espera un instante...') : ''}
                     ${state.transferFlow.isProcessingAmount ? WaitModal('Espere...') : ''}
+                    ${state.showInsufficientFundsModal ? InsufficientFundsModal() : ''}
                 `;
 
                 return pageHtml + overlays;
@@ -3348,6 +3400,19 @@
                     </div>
                 </div>`;
             }
+             function InsufficientFundsModal() {
+                return `
+                    <div class="insufficient-funds-modal-overlay">
+                        <div class="insufficient-funds-modal-content">
+                            ${icons.InfoIconOrange}
+                            <h2>Saldo Insuficiente</h2>
+                            <p>No tenés saldo suficiente en la cuenta seleccionada para realizar esta transferencia.</p>
+                            <button data-action="closeInsufficientFundsModal">Entendido</button>
+                        </div>
+                    </div>
+                `;
+            }
+
 
             // --- ALL EVENT HANDLERS ---
             const handlers = {
@@ -3381,7 +3446,20 @@
                     state.currentPage = page;
                     // Reset sub-states when navigating to a new top-level page
                     if(page === 'tarjetas') state.tarjetas = { loadingState: 'idle', visibleCardIndex: null, targetCardIndex: null, activeIndex: 0, };
-                    if(page === 'transferencias') state.transferFlow = { aliasInput: '', isAliasLoading: false, amountInput: '2.000', step: 'amount', concept: 'Varios', motivo: '', selectedAccounts: [], isProcessingAmount: false };
+                    if(page === 'transferencias') {
+                        const pesoAccount = state.accounts.find(acc => acc.currency === '$');
+                        const defaultSelection = pesoAccount ? [pesoAccount.number] : [];
+                        state.transferFlow = { 
+                            aliasInput: '', 
+                            isAliasLoading: false, 
+                            amountInput: '2.000', 
+                            step: 'amount', 
+                            concept: 'Varios', 
+                            motivo: '', 
+                            selectedAccounts: defaultSelection,
+                            isProcessingAmount: false 
+                        };
+                    }
                     if(page === 'token') handlers.startTokenTimer();
                     if(page === 'profile') handlers.initProfileForm();
                     render();
@@ -3507,22 +3585,77 @@
                     }, 1500);
                 },
                 finalConfirmTransfer: () => {
-                    state.isProcessingTransfer = true; render();
+                    const { currentTransfer, accounts } = state;
+                    const sourceAccountNumber = currentTransfer.sourceAccountNumber;
+                    const transferAmount = parseFloat(currentTransfer.amount.replace(/\./g, '').replace(',', '.'));
+                    let hasSufficientFunds = false;
+
+                    if (sourceAccountNumber === 'FIMA') {
+                        const fimaBalance = 718.70; // Hardcoded value from AmountTransferPage
+                        if (transferAmount <= fimaBalance) {
+                            hasSufficientFunds = true;
+                        }
+                    } else {
+                        const sourceAccount = accounts.find(acc => acc.number === sourceAccountNumber);
+                        if (sourceAccount) {
+                            const currentBalance = parseFloat(`${sourceAccount.balance.replace(/\./g, '')}.${sourceAccount.cents}`);
+                            if (transferAmount <= currentBalance) {
+                                hasSufficientFunds = true;
+                            }
+                        }
+                    }
+
+                    if (!hasSufficientFunds) {
+                        state.showInsufficientFundsModal = true;
+                        render();
+                        return; // Stop the transfer
+                    }
+
+                    // If funds are sufficient, proceed:
+                    state.isProcessingTransfer = true; 
+                    render();
+
                     setTimeout(() => {
-                        const transferAmount = parseFloat(state.currentTransfer.amount.replace(/\./g, '').replace(',', '.'));
                         const newAccounts = state.accounts.map(acc => {
                             if (acc.number === state.currentTransfer.sourceAccountNumber) {
-                                const currentBalance = parseFloat(`${acc.balance.replace(/\./g, '')}.${acc.cents}`);
-                                const newBalance = currentBalance - transferAmount;
+                                const currentBalanceNum = parseFloat(`${acc.balance.replace(/\./g, '')}.${acc.cents}`);
+                                const newBalance = currentBalanceNum - transferAmount;
                                 const [newBalanceInt, newCents] = newBalance.toFixed(2).split('.');
-                                const newMovement = { id: generateUniqueId(), type: 'Transferencia', description: `Transferencia a ${state.currentTransfer.recipientName}`, amount: -transferAmount, originalDate: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit'}), details: { movementType: 'TRANSFERENCIA DE TERCEROS', recipientName: (state.currentTransfer.recipientName || '').toUpperCase(), recipientCuit: state.currentTransfer.cuit, recipientCbu: state.currentTransfer.cbu, concept: (state.currentTransfer.concept || '').toUpperCase(), longId1: generateRandomNumberString(18), longId2: generateRandomNumberString(9) } };
-                                return { ...acc, balance: new Intl.NumberFormat('es-AR').format(parseInt(newBalanceInt, 10)), cents: newCents.padStart(2, '0'), movements: [newMovement, ...acc.movements] };
-                            } return acc;
+                                const newMovement = { 
+                                    id: generateUniqueId(), 
+                                    type: 'Transferencia', 
+                                    description: `Transferencia a ${state.currentTransfer.recipientName}`, 
+                                    amount: -transferAmount, 
+                                    originalDate: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit'}), 
+                                    details: { 
+                                        movementType: 'TRANSF. CTAS PROPIAS', 
+                                        recipientName: (state.currentTransfer.recipientName || '').toUpperCase(), 
+                                        recipientCuit: state.currentTransfer.cuit, 
+                                        recipientCbu: state.currentTransfer.cbu, 
+                                        concept: (state.currentTransfer.concept || '').toUpperCase(), 
+                                        longId1: generateRandomNumberString(18), 
+                                        longId2: generateRandomNumberString(9) 
+                                    } 
+                                };
+                                return { 
+                                    ...acc, 
+                                    balance: new Intl.NumberFormat('es-AR').format(parseInt(newBalanceInt, 10)), 
+                                    cents: newCents.padStart(2, '0'), 
+                                    movements: [newMovement, ...acc.movements] 
+                                };
+                            } 
+                            return acc;
                         });
                         state.accounts = newAccounts;
-                        saveStateToLocal(); // Save state after transfer
-                        state.isProcessingTransfer = false; state.currentPage = 'transferReceipt'; render();
+                        saveStateToLocal();
+                        state.isProcessingTransfer = false; 
+                        state.currentPage = 'transferReceipt'; 
+                        render();
                     }, 3500);
+                },
+                closeInsufficientFundsModal: () => {
+                    state.showInsufficientFundsModal = false;
+                    render();
                 },
                 dismissAd: () => { const banner = document.getElementById('fima-banner'); if (banner) banner.style.display = 'none'; },
                 shareReceipt: async () => {
@@ -3573,7 +3706,7 @@
                         doc.line(20, yPosition, 190, yPosition);
                         doc.setFontSize(10);
                         doc.setTextColor(150);
-                        doc.text("Gracias por utilizar Banco Galica.", 105, yPosition + 10, { align: "center" });
+                        doc.text("Gracias por utilizar Banco Galicia.", 105, yPosition + 10, { align: "center" });
 
                         const pdfBlob = doc.output('blob');
                         const fileName = `comprobante-galica-${Date.now()}.pdf`;
