@@ -8,6 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- PWA Enhancements -->
+    <meta name="theme-color" content="#003366"/>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <style>
         :root {
           --primary-blue: #003366;
@@ -1920,6 +1928,13 @@
             outline: none;
             border-bottom-color: var(--orange-accent);
         }
+        .alias-error {
+            color: var(--notification-red);
+            font-size: 14px;
+            margin-top: 8px;
+            min-height: 21px; /* Prevents layout shift */
+            text-align: left;
+        }
         .alias-transfer-footer {
             padding: 16px;
             background-color: var(--background-gray);
@@ -2465,7 +2480,9 @@
                 plus: icons.PlusIcon,
             };
 
-            // --- STATIC DATA & UTILS ---
+            // --- LOCAL STORAGE & DATA MANAGEMENT ---
+            const LOCAL_STORAGE_KEY = 'galicaBilleteraState';
+            
             const generateUniqueId = () => Math.random().toString(36).substring(2, 10).toUpperCase();
             const generateRandomNumberString = (length) => {
                 let result = '';
@@ -2535,7 +2552,6 @@
                     ]
                 }
             ];
-
             const initialUserData = {
                 userId: generateUniqueId(),
                 name: 'Andres Fernando Telleria',
@@ -2544,7 +2560,6 @@
                 email: 'andres.telleria@example.com',
                 phone: '11 2345-6789'
             };
-
             const initialTransferRecipients = [
                 {
                     id: 1,
@@ -2556,8 +2571,57 @@
                     alias: 'NARANJA.FANTA.PAN',
                 }
             ];
-            
+            const initialCardsData = [
+                {
+                    brand: 'VISA',
+                    type: 'Crédito',
+                    number: '**** **** **** 2634',
+                    fullNumber: '4593 5400 1347 2634',
+                    validFrom: '01/24',
+                    expiry: '11/28',
+                    cvv: '233',
+                    className: 'visa-credit-card-black'
+                },
+                {
+                    brand: 'VISA',
+                    type: 'Débito',
+                    number: '**** **** **** 2469',
+                    fullNumber: '4517 6901 7489 2469',
+                    validFrom: '08/25',
+                    expiry: '09/31',
+                    cvv: '432',
+                    className: 'visa-debit-card'
+                }
+            ];
+
+            function saveStateToLocal() {
+                const stateToSave = {
+                    accounts: state.accounts,
+                    userData: state.userData,
+                    transferRecipients: state.transferRecipients,
+                    cards: state.cards,
+                };
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+            }
+
+            function loadStateFromLocal() {
+                try {
+                    const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+                    if (savedState) {
+                        return JSON.parse(savedState);
+                    }
+                } catch (e) {
+                    console.error("Could not load state from local storage", e);
+                    return null;
+                }
+                return null;
+            }
+
             // --- GLOBAL STATE ---
+            const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+            
+            const savedData = loadStateFromLocal();
+
             let state = {
                 isLoggedIn: false,
                 isAppLoading: true,
@@ -2565,31 +2629,10 @@
                 selectedAccount: null,
                 selectedMovement: null,
                 initialTab: 'Información',
-                accounts: JSON.parse(JSON.stringify(initialAccountsData)),
-                userData: JSON.parse(JSON.stringify(initialUserData)),
-                transferRecipients: JSON.parse(JSON.stringify(initialTransferRecipients)),
-                cards: [
-                    {
-                        brand: 'VISA',
-                        type: 'Crédito',
-                        number: '**** **** **** 2634',
-                        fullNumber: '4593 5400 1347 2634',
-                        validFrom: '01/24',
-                        expiry: '11/28',
-                        cvv: '233',
-                        className: 'visa-credit-card-black'
-                    },
-                    {
-                        brand: 'VISA',
-                        type: 'Débito',
-                        number: '**** **** **** 2469',
-                        fullNumber: '4517 6901 7489 2469',
-                        validFrom: '08/25',
-                        expiry: '09/31',
-                        cvv: '432',
-                        className: 'visa-debit-card'
-                    }
-                ],
+                accounts: savedData?.accounts || deepClone(initialAccountsData),
+                userData: savedData?.userData || deepClone(initialUserData),
+                transferRecipients: savedData?.transferRecipients || deepClone(initialTransferRecipients),
+                cards: savedData?.cards || deepClone(initialCardsData),
                 currentTransfer: null,
                 isProcessingTransfer: false,
                 isQrMode: false,
@@ -2626,9 +2669,6 @@
                 }
             };
             
-            // Deep copy utility for state management
-            const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
-
             const root = document.getElementById('root');
 
             // --- MAIN RENDER FUNCTION ---
@@ -3145,6 +3185,7 @@
                     <main class="alias-transfer-main">
                         <h2>Escribí el Alias, CBU o CVU</h2>
                         <input id="alias-input" type="text" value="${state.transferFlow.aliasInput}" class="alias-input" aria-label="Alias, CBU o CVU" autofocus />
+                        <p id="alias-error-msg" class="alias-error"></p>
                     </main>
                     <footer class="alias-transfer-footer">
                         <button class="continue-button" data-action="aliasContinue" ${!state.transferFlow.aliasInput.trim() ? 'disabled' : ''}>Continuar</button>
@@ -3407,16 +3448,33 @@
                     if (continueButton) {
                         continueButton.disabled = !value.trim();
                     }
+                    const errorMsgEl = document.getElementById('alias-error-msg');
+                    if (errorMsgEl) {
+                        errorMsgEl.textContent = ''; // Clear error on new input
+                    }
                 },
                 aliasContinue: () => {
-                    state.transferFlow.isAliasLoading = true; render();
-                    setTimeout(() => {
-                        const aliasOrCbu = state.transferFlow.aliasInput;
-                        const recipientData = state.transferRecipients.find(r => (r.alias && r.alias.toLowerCase() === aliasOrCbu.toLowerCase()) || r.cbu === aliasOrCbu) || state.transferRecipients[0];
-                        const isCbu = !isNaN(aliasOrCbu.replace(/-/g, '')) && aliasOrCbu.length > 20;
-                        state.currentTransfer = { ...recipientData, recipientName: recipientData.recipientName, alias: isCbu ? recipientData.alias : aliasOrCbu.toUpperCase(), cbu: isCbu ? aliasOrCbu : recipientData.cbu };
-                        state.transferFlow.isAliasLoading = false; state.currentPage = 'confirmTransfer'; render();
-                    }, 2500);
+                    const aliasOrCbu = state.transferFlow.aliasInput.trim();
+                    const foundRecipient = state.transferRecipients.find(r =>
+                        (r.alias && r.alias.toLowerCase() === aliasOrCbu.toLowerCase()) ||
+                        (r.cbu && r.cbu === aliasOrCbu)
+                    );
+
+                    if (foundRecipient) {
+                        state.transferFlow.isAliasLoading = true;
+                        render();
+                        setTimeout(() => {
+                            state.currentTransfer = { ...foundRecipient };
+                            state.transferFlow.isAliasLoading = false;
+                            state.currentPage = 'confirmTransfer';
+                            render();
+                        }, 1500);
+                    } else {
+                        const errorEl = document.getElementById('alias-error-msg');
+                        if (errorEl) {
+                            errorEl.textContent = 'Alias o CBU inválido. Verificá los datos e intentá de nuevo.';
+                        }
+                    }
                 },
                 handleAmountInput: (value) => {
                     const numericValue = value.replace(/[^\d]/g, '');
@@ -3462,6 +3520,7 @@
                             } return acc;
                         });
                         state.accounts = newAccounts;
+                        saveStateToLocal(); // Save state after transfer
                         state.isProcessingTransfer = false; state.currentPage = 'transferReceipt'; render();
                     }, 3500);
                 },
@@ -3589,7 +3648,8 @@
                             expiry: state.profilePage.cardsFormData[i].expiry,
                             cvv: state.profilePage.cardsFormData[i].cvv,
                         }));
-
+                        
+                        saveStateToLocal(); // Save state after profile update
                         state.profilePage.isSaving = false;
                         handlers.navigate('more');
                     }, 1500);
@@ -3678,6 +3738,17 @@
             setupDelegatedListeners();
             render();
         });
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        });
+      }
     </script>
 </body>
 </html>
