@@ -21,6 +21,13 @@
             "balance_usd": 0,
             "created_at": "2025-10-18T11:43:31-04:00",
             "last_modified": "2025-10-18T12:10:55-04:00"
+        },
+        "Mauricio tolaba": {
+            "password": "4665",
+            "balance_ars": 150,
+            "balance_usd": 0,
+            "created_at": "2025-10-18T16:47:00-04:00",
+            "last_modified": "2025-10-18T16:47:00-04:00"
         }
     }
 }
