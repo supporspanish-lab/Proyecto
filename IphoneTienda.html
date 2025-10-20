@@ -18,12 +18,21 @@
   --text-secondary: #6c757d;
   --border-color: rgba(0, 0, 0, 0.1);
 }
+body.dark-mode {
+  --background-color: #000000;
+  --surface-color: #2c2c2e;
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--background-color);
   color: var(--text-primary);
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 #root { width: 100%; min-height: 100vh; }
 .app-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; }
@@ -70,6 +79,9 @@ body {
 }
 #hero-video-2 {
   object-position: right; /* Alinea el video a la derecha */
+}
+#hero-video-3 {
+  object-fit: cover; /* Hace que el video cubra todo el contenedor */
 }
 
 .category-section { width: 100%; animation: contentFadeIn 0.5s ease-in-out; }
@@ -297,6 +309,30 @@ body {
   .cart-sidebar { width: 100vw; right: -100vw; }
   .payment-options { grid-template-columns: 1fr; }
   .payment-option-btn { padding: 15px; }
+  .card-form .form-row { grid-template-columns: 1fr; } /* Stack expiry and CVC vertically */
+}
+/* --- Notification --- */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px); /* Start off-screen */
+  background-color: #28a745; /* Green for success */
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 3000;
+  font-weight: 500;
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.215, 0.610, 0.355, 1), opacity 0.4s ease;
+  white-space: nowrap;
+}
+.notification.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
 }
     </style>
 </head>
@@ -409,6 +445,7 @@ body {
                 </div>
             </div>
         </div>
+        <div id="notification" class="notification"></div>
     </div>
     <script>
         // Los datos de products.json ahora están incrustados directamente aquí
@@ -571,10 +608,13 @@ document.addEventListener('DOMContentLoaded', () => {
         productGrid.innerHTML = '';
 
         // Mostrar u ocultar el mensaje promocional
-        if (activeCategory === 'iphones' || activeCategory === 'iphones-b-stock') {
+        if (activeCategory === 'iphones') {
             categoryPromoMessage.textContent = '¡Al comprar 3 o más productos te llevas un 35% de Descuento!';
             categoryPromoMessage.style.display = 'block';
-        } else if (activeCategory === 'accessories' || activeCategory === 'cases') {
+        } else if (activeCategory === 'iphones-b-stock') {
+            categoryPromoMessage.innerHTML = '<strong>Nota:</strong> Estos son iPhones B-Stock. Presentan pequeñas fallas de fábrica (cosméticas o de componentes menores) que <strong>no afectan su rendimiento principal</strong>. Por esta razón, se ofrecen a un precio reducido.';
+            categoryPromoMessage.style.display = 'block';
+        }else if (activeCategory === 'accessories' || active-category === 'cases') {
             categoryPromoMessage.textContent = '¡Al comprar 10 o más unidades en esta categoría, obtienes un 35% de descuento!';
             categoryPromoMessage.style.display = 'block';
         } else {
@@ -686,21 +726,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     video.autoplay = true;
                     video.muted = true;
                     video.playsInline = true;
+                    video.id = 'product-detail-main-image'; // Asignar el ID al video
                     mainImage.replaceWith(video);
 
-                    // Cuando el video termine, esperar 3s y volver a la imagen
-                    video.addEventListener('ended', () => {
-                        setTimeout(() => {
-                            const newImage = document.createElement('img');
-                            newImage.src = product.imageUrls[0]; // Imagen de referencia
-                            newImage.alt = product.name;
-                            newImage.id = 'product-detail-main-image';
-                            newImage.className = 'product-detail-main-image';
-                            video.replaceWith(newImage);
-                        }, 3000); // 3 segundos de retraso
-                    });
                 }
-            }, 2000); // 2 segundos de retraso
+            }, 1500); // 1.5 segundos de retraso
         }
     }
 
@@ -978,6 +1008,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- LOGIC & EVENT HANDLERS ---
+    let notificationTimeout;
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        if (!notification) return;
+
+        notification.textContent = message;
+        notification.classList.add('show');
+
+        // Clear any existing timer
+        if (notificationTimeout) {
+            clearTimeout(notificationTimeout);
+        }
+
+        // Set a new timer to hide the notification
+        notificationTimeout = setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000); // Hide after 3 seconds
+    }
+
     const calculateTotal = () => {
          const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
          const subtotal = cartItems.reduce((sum, item) => sum + (parsePrice(item.product.price) * item.quantity), 0);
@@ -1006,6 +1056,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         updateCart();
+        showNotification('Artículo añadido al carrito');
     }
 
     // --- EVENT LISTENER SETUP ---
@@ -1053,8 +1104,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const selectedColor = swatch.dataset.color;
 
                 if (product && product.colorImages && product.colorImages[selectedColor]) {
-                    const mainImage = document.getElementById('product-detail-main-image');
-                    mainImage.src = product.colorImages[selectedColor];
+                    const mainMediaElement = document.getElementById('product-detail-main-image');
+                    
+                    // Si el elemento actual es un video, lo reemplazamos por una imagen
+                    if (mainMediaElement.tagName === 'VIDEO') {
+                        const newImage = document.createElement('img');
+                        newImage.src = product.colorImages[selectedColor];
+                        newImage.alt = product.name;
+                        newImage.id = 'product-detail-main-image';
+                        newImage.className = 'product-detail-main-image';
+                        mainMediaElement.replaceWith(newImage);
+                    } else {
+                        // Si ya es una imagen, solo cambiamos el src
+                        mainMediaElement.style.opacity = 0;
+                        setTimeout(() => { mainMediaElement.src = product.colorImages[selectedColor]; mainMediaElement.style.opacity = 1; }, 200);
+                    }
                 }
             }
             // Animación especial para el color del iPhone 17
@@ -1271,7 +1335,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     video2.style.opacity = 1;
                     video2.currentTime = 0;
                     video2.play();
-                }, 1000);
+                }, 2000); // Pausa de 2 segundos
             });
 
             video2.addEventListener('ended', () => {
@@ -1280,7 +1344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     video1.style.opacity = 1;
                     video1.currentTime = 0;
                     video1.play();
-                }, 3000); // 3 segundos de retraso
+                }, 4000); // Pausa de 4 segundos antes de reiniciar el ciclo
             });
         }
     }
