@@ -10,10 +10,10 @@
         },
         "GABRIELA": {
             "password": "2739",
-            "balance_ars": 1000000,
+            "balance_ars": 11000000,
             "balance_usd": 0,
             "created_at": "2025-10-22T19:35:47-04:00",
-            "last_modified": "2025-10-22T19:35:47-04:00"
+            "last_modified": "2025-10-22T19:38:08-04:00"
         }
     }
 }
