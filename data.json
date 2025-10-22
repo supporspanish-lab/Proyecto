@@ -7,13 +7,6 @@
             "balance_usd": 1,
             "created_at": "2025-10-16T19:48:28-04:00",
             "last_modified": "2025-10-16T20:04:03-04:00"
-        },
-        "GABRIELA": {
-            "password": "2739",
-            "balance_ars": 11000000,
-            "balance_usd": 0,
-            "created_at": "2025-10-22T19:35:47-04:00",
-            "last_modified": "2025-10-22T19:38:08-04:00"
         }
     }
 }
