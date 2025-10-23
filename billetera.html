@@ -13,9 +13,10 @@
     <!-- PWA Enhancements -->
     <meta name="theme-color" content="#ffffff"/>
     <link rel="icon" href="https://iili.io/KGaTONe.jpg">
-    <link rel="manifest" href='data:application/manifest+json,{"short_name":"Galicia","name":"Banco Galicia","icons":[{"src":"/icon-192x192.png","type":"image/png","sizes":"192x192","purpose":"any maskable"},{"src":"/icon-512x512.png","type":"image/png","sizes":"512x512","purpose":"any maskable"},{"src":"https://iili.io/KGaTONe.jpg","type":"image/jpeg","sizes":"512x512","purpose":"any maskable"}],"start_url":".","display":"standalone","theme_color":"%23003366","background_color":"%23f8f9fa","description":"Aplicación de Home Banking de Banco Galicia."}' />
+    <link rel="manifest" href='data:application/manifest+json,{"short_name":"Galicia","name":"Banco Galicia","icons":[{"src":"/icon-192x192.png","type":"image/png","sizes":"192x192","purpose":"any maskable"},{"src":"/icon-512x512.png","type":"image/png","sizes":"512x512","purpose":"any maskable"},{"src":"https://iili.io/KGaTONe.jpg","type":"image/jpeg","sizes":"512x512","purpose":"any maskable"}],"start_url":"/","display":"standalone","theme_color":"%23003366","background_color":"%23f8f9fa","description":"Aplicación de Home Banking de Banco Galicia."}' />
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <style>
@@ -3741,7 +3742,19 @@
                                         if (foundAccount.accountsData) {
                                             state.accounts = foundAccount.accountsData.map(acc => {
                                                 const [balanceInt, balanceCents] = parseFloat(acc.balance || 0).toFixed(2).split('.');
-                                                return { ...acc, balance: new Intl.NumberFormat('es-AR').format(balanceInt), cents: balanceCents.padStart(2, '0') };
+                                                // Find corresponding initial account template to get default properties like actions, cuil, titular
+                                                const defaultAccountTemplate = initialAccountsData.find(initialAcc => initialAcc.type === acc.type) || {};
+                                                return {
+                                                    ...defaultAccountTemplate, // Start with default template to get all default properties
+                                                    ...acc, // Override with actual data from data.json
+                                                    balance: new Intl.NumberFormat('es-AR').format(balanceInt),
+                                                    cents: balanceCents.padStart(2, '0'),
+                                                    // Ensure number is correctly formatted if it comes from data.json without "Nº " prefix
+                                                    number: acc.number && !acc.number.startsWith('Nº ') ? `Nº ${acc.number}` : acc.number || defaultAccountTemplate.number,
+                                                    // Ensure cuil and titular are present, falling back to userData if needed
+                                                    cuil: acc.cuil || foundAccount.userData?.cuil || defaultAccountTemplate.cuil,
+                                                    titular: acc.titular || foundAccount.userData?.name || defaultAccountTemplate.titular,
+                                                };
                                             });
                                         }
                                         if (foundAccount.cardsData) {
