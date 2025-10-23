@@ -1,46 +1,46 @@
 {
-    "created_at": "2025-10-22T19:57:19-04:00",
+    "created_at": "2025-10-22T20:27:09-04:00",
     "accounts": {
         "leon": {
-            "balance_ars": 0,
-            "password": "1111",
-            "created_at": "2025-10-22T20:25:16-04:00",
+            "balance_ars": 1111,
+            "password": "2222",
+            "created_at": "2025-10-22T20:27:33-04:00",
             "transferRecipients": [],
-            "last_modified": "2025-10-22T20:25:16-04:00",
+            "last_modified": "2025-10-22T20:27:33-04:00",
             "userData": {
-                "userId": "68f975ecf3924",
+                "userId": "68f976753969c",
                 "name": "leon irusta",
-                "cuil": "213213",
-                "email": "sdasd",
-                "phone": "2323"
+                "cuil": "2323",
+                "email": "leonirusta@gmail.com",
+                "phone": "213"
             },
             "accountsData": [
                 {
                     "type": "Caja de ahorro en pesos",
-                    "balance": 222,
+                    "balance": 1111,
                     "cents": "00",
                     "currency": "$",
-                    "alias": "sdsd",
-                    "cbu": "sadas",
+                    "alias": "2321",
+                    "cbu": "213",
                     "number": "Nº ",
                     "movements": []
                 },
                 {
                     "type": "Caja de ahorro en dólares",
-                    "balance": 111,
+                    "balance": 222,
                     "currency": "U$D",
                     "cents": "00",
-                    "alias": "232",
-                    "cbu": "213",
-                    "balance_usd": 0
+                    "alias": "213",
+                    "cbu": "123",
+                    "balance_usd": 222
                 }
             ],
             "cardsData": [
                 {
                     "type": "Débito",
                     "fullNumber": "213213213",
-                    "expiry": "123213",
-                    "cvv": "123123"
+                    "expiry": "21321321",
+                    "cvv": "213213"
                 }
             ]
         }
