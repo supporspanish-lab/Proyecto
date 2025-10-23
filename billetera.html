@@ -3392,6 +3392,7 @@
                                 <div class="form-group no-border"><label>Banco</label><input type="text" name="destinationBank" value="${r.destinationBank}" data-form="recipient" data-index="${i}" /></div>
                             </div>
                         `).join('')}
+                        <button type="button" class="save-profile-button" data-action="saveRecipients" style="margin-top: 20px;">${icons.SaveIcon}<span>Guardar Destinatarios</span></button>
                     </div>`;
                 
                 const accountsForm = `
@@ -3400,9 +3401,9 @@
                         ${accountsFormData.map((acc, i) => `
                         <div class="account-form-container">
                              <h3 class="account-form-title">${state.accounts[i].type}</h3>
-                             <div class="form-group"><label>Número de Cuenta</label><input type="text" name="number" value="${acc.number}" data-form="account" data-index="${i}" /></div>
-                             <div class="form-group"><label>Alias de CBU</label><input type="text" name="alias" value="${acc.alias}" data-form="account" data-index="${i}" /></div>
-                             <div class="form-group"><label>CBU</label><input type="text" name="cbu" value="${acc.cbu}" data-form="account" data-index="${i}" /></div>
+                             <div class="form-group"><label>Número de Cuenta</label><input type="text" name="number" value="${acc.number}" data-form="account" data-index="${i}" readonly /></div>
+                             <div class="form-group"><label>Alias de CBU</label><input type="text" name="alias" value="${acc.alias}" data-form="account" data-index="${i}" readonly /></div>
+                             <div class="form-group"><label>CBU</label><input type="text" name="cbu" value="${acc.cbu}" data-form="account" data-index="${i}" readonly /></div>
                              <div class="form-group no-border">
                                 <div class="balance-label-container">
                                     <label>Saldo</label>
@@ -3427,15 +3428,15 @@
                             <h3 class="account-form-title">${state.cards[i].brand} ${state.cards[i].type}</h3>
                             <div class="form-group">
                                 <label>Número de Tarjeta</label>
-                                <input type="text" name="fullNumber" value="${card.fullNumber}" data-form="card" data-index="${i}" />
+                                <input type="text" name="fullNumber" value="${card.fullNumber}" data-form="card" data-index="${i}" readonly />
                             </div>
                             <div class="form-group">
                                 <label>Vencimiento (MM/AA)</label>
-                                <input type="text" name="expiry" value="${card.expiry}" data-form="card" data-index="${i}" />
+                                <input type="text" name="expiry" value="${card.expiry}" data-form="card" data-index="${i}" readonly />
                             </div>
                             <div class="form-group no-border">
                                 <label>CVV</label>
-                                <input type="text" name="cvv" value="${card.cvv}" maxlength="3" data-form="card" data-index="${i}" />
+                                <input type="text" name="cvv" value="${card.cvv}" maxlength="3" data-form="card" data-index="${i}" readonly />
                             </div>
                         </div>
                         `).join('')}
@@ -3447,7 +3448,6 @@
                         ${recipientsForm}
                         ${accountsForm}
                         ${cardsForm}
-                        <button type="submit" class="save-profile-button">${icons.SaveIcon}<span>Guardar Cambios</span></button>
                     </form> 
                 `;
             }
@@ -3758,10 +3758,15 @@
                                             });
                                         }
                                         if (foundAccount.cardsData) {
-                                            state.cards = foundAccount.cardsData.map(card => ({
-                                                ...card,
-                                                number: '**** **** **** ' + card.fullNumber.slice(-4)
-                                            }));
+                                            state.cards = foundAccount.cardsData.map(card => {
+                                                // Find a template based on the card type ('Débito', 'Crédito')
+                                                const defaultCardTemplate = initialCardsData.find(initialCard => initialCard.type === card.type) || {};
+                                                return {
+                                                    ...defaultCardTemplate, // Start with the template
+                                                    ...card, // Override with data from the backend
+                                                    number: '**** **** **** ' + (card.fullNumber || '').slice(-4) // Ensure number is always formatted
+                                                };
+                                            });
                                         }
                                         
                                         saveStateToLocal(); // Persistir el nuevo estado en local storage
@@ -4153,6 +4158,16 @@
                     state.profilePage.recipientsFormData.splice(index, 1);
                     render();
                 },
+                saveRecipients: () => {
+                    state.profilePage.isSaving = true; render();
+                    setTimeout(() => {
+                        state.transferRecipients = deepClone(state.profilePage.recipientsFormData);
+                        saveStateToLocal();
+                        state.profilePage.isSaving = false;
+                        alert('Destinatarios guardados con éxito.');
+                        handlers.navigate('more');
+                    }, 1500);
+                },
                 saveProfile: () => {
                     state.profilePage.isSaving = true; render();
                     setTimeout(() => {
@@ -4250,7 +4265,6 @@
                     }
                      // Specific inputs for transfer flow (optimized)
                     if (target.id === 'alias-input') { handlers.handleAliasInput(target.value); }
-                    if (target.id === 'amount-input') { handlers.handleAmountInput(target.value); }
                     if (target.id === 'motivo') { handlers.setTransferMotivo(target.value); }
                 });
 
