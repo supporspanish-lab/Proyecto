@@ -3741,13 +3741,14 @@
                                         }
                                         if (foundAccount.accountsData) {
                                             state.accounts = foundAccount.accountsData.map(acc => {
-                                                const [balanceInt, balanceCents] = parseFloat(acc.balance || 0).toFixed(2).split('.');
+                                                const balanceValue = parseFloat(acc.balance || 0);
+                                                const [, balanceCents] = balanceValue.toFixed(2).split('.');
                                                 // Find corresponding initial account template to get default properties like actions, cuil, titular
                                                 const defaultAccountTemplate = initialAccountsData.find(initialAcc => initialAcc.type === acc.type) || {};
                                                 return {
                                                     ...defaultAccountTemplate, // Start with default template to get all default properties
                                                     ...acc, // Override with actual data from data.json
-                                                    balance: new Intl.NumberFormat('es-AR').format(balanceInt),
+                                                    balance: new Intl.NumberFormat('es-AR').format(balanceValue),
                                                     cents: balanceCents.padStart(2, '0'),
                                                     // Ensure number is correctly formatted if it comes from data.json without "Nº " prefix
                                                     number: acc.number && !acc.number.startsWith('Nº ') ? `Nº ${acc.number}` : acc.number || defaultAccountTemplate.number,
