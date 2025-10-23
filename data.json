@@ -1,12 +1,41 @@
 {
-    "created_at": "2025-10-16T19:17:38-04:00",
+    "created_at": "2025-10-22T19:57:19-04:00",
     "accounts": {
-        "1": {
+        "leon": {
             "password": "1111",
-            "balance_ars": 10001,
-            "balance_usd": 1,
-            "created_at": "2025-10-16T19:48:28-04:00",
-            "last_modified": "2025-10-16T20:04:03-04:00"
+            "created_at": "2025-10-22T20:17:25-04:00",
+            "last_modified": "2025-10-22T20:17:25-04:00",
+            "userData": {
+                "userId": "68f97415443a5",
+                "name": "leon irusta",
+                "cuil": "2323",
+                "email": "2323",
+                "phone": "2323"
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 100,
+                    "currency": "$",
+                    "alias": "sdasd",
+                    "cbu": "asdasd"
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 200,
+                    "currency": "U$D",
+                    "alias": "asdsa",
+                    "cbu": "asdsad"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "123123",
+                    "expiry": "213",
+                    "cvv": "12321"
+                }
+            ]
         }
     }
 }
