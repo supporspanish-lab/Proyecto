@@ -3364,11 +3364,11 @@
                 const userForm = `
                     <div class="card profile-form-card">
                         <h2 class="profile-section-header">Mis Datos</h2>
-                        <div class="form-group"><label for="userId">Número de ID</label><input type="text" id="userId" name="userId" value="${userFormData.userId}" readonly /></div>
-                        <div class="form-group"><label for="name">Nombre y Apellido</label><input type="text" id="name" name="name" value="${userFormData.name}" data-form="user" /></div>
-                        <div class="form-group"><label for="cuil">Mi CUIL</label><input type="text" id="cuil" name="cuil" value="${userFormData.cuil}" data-form="user" /></div>
-                        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" value="${userFormData.email}" data-form="user" /></div>
-                        <div class="form-group no-border"><label for="phone">Teléfono</label><input type="tel" id="phone" name="phone" value="${userFormData.phone}" data-form="user" /></div>
+                        <div class="form-group"><label for="userId">Número de ID</label><input type="text" id="userId" name="userId" value="${userFormData.userId || ''}" readonly /></div>
+                        <div class="form-group"><label for="name">Nombre y Apellido</label><input type="text" id="name" name="name" value="${userFormData.name || ''}" readonly /></div>
+                        <div class="form-group"><label for="cuil">Mi CUIL</label><input type="text" id="cuil" name="cuil" value="${userFormData.cuil || ''}" readonly /></div>
+                        <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" value="${userFormData.email || ''}" readonly /></div>
+                        <div class="form-group no-border"><label for="phone">Teléfono</label><input type="tel" id="phone" name="phone" value="${userFormData.phone || ''}" readonly /></div>
                     </div>`;
                 
                 const recipientsForm = `
@@ -3447,7 +3447,7 @@
                         ${accountsForm}
                         ${cardsForm}
                         <button type="submit" class="save-profile-button">${icons.SaveIcon}<span>Guardar Cambios</span></button>
-                    </form>
+                    </form> 
                 `;
             }
 
@@ -3733,30 +3733,26 @@
                 
                                     if (foundAccount) {
                                         state.loggedInAccountId = foundAccountId; // Store the account ID
-                
-                                        const savedData = loadStateFromLocal();
-                
-                                        if (!savedData) {
-                                            // Update state with fetched balances
-                                            const balanceArs = parseFloat(foundAccount.balance_ars) || 0;
-                                            const balanceUsd = parseFloat(foundAccount.balance_usd) || 0;
-                
-                                            const [arsInt, arsCents] = balanceArs.toFixed(2).split('.');
-                                            const [usdInt, usdCents] = balanceUsd.toFixed(2).split('.');
-                
-                                            // Update the local state if accounts exist
-                                            if (state.accounts[0]) { // ARS account
-                                                state.accounts[0].balance = new Intl.NumberFormat('es-AR').format(arsInt);
-                                                state.accounts[0].cents = arsCents.padStart(2, '0');
-                                            }
-                                            if (state.accounts[1]) { // USD account
-                                                state.accounts[1].balance = new Intl.NumberFormat('es-AR').format(usdInt);
-                                                state.accounts[1].cents = usdCents.padStart(2, '0');
-                                            }
-                                            
-                                            saveStateToLocal(); // Persist the new balances
+
+                                        // Cargar datos del usuario, cuentas y tarjetas desde el backend
+                                        if (foundAccount.userData) {
+                                            state.userData = foundAccount.userData;
                                         }
-                
+                                        if (foundAccount.accountsData) {
+                                            state.accounts = foundAccount.accountsData.map(acc => {
+                                                const [balanceInt, balanceCents] = parseFloat(acc.balance || 0).toFixed(2).split('.');
+                                                return { ...acc, balance: new Intl.NumberFormat('es-AR').format(balanceInt), cents: balanceCents.padStart(2, '0') };
+                                            });
+                                        }
+                                        if (foundAccount.cardsData) {
+                                            state.cards = foundAccount.cardsData.map(card => ({
+                                                ...card,
+                                                number: '**** **** **** ' + card.fullNumber.slice(-4)
+                                            }));
+                                        }
+                                        
+                                        saveStateToLocal(); // Persistir el nuevo estado en local storage
+
                                         // Proceed with login animation
                                         state.isLoggedIn = true;
                                         state.isAppLoading = true;
