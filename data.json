@@ -46,7 +46,7 @@
             "password": "3636",
             "created_at": "2025-10-30T13:52:43-04:00",
             "transferRecipients": [],
-            "last_modified": "2025-10-30T14:01:53-04:00",
+            "last_modified": "2025-10-30T14:02:08-04:00",
             "userData": {
                 "userId": "6903a5eb5de2f",
                 "name": "Cecilia elizabeth Mamani",
@@ -57,7 +57,7 @@
             "accountsData": [
                 {
                     "type": "Caja de ahorro en pesos",
-                    "balance": 16987,
+                    "balance": 96987,
                     "cents": "00",
                     "currency": "$",
                     "alias": "ROMERO.DIETA.DELTA",
