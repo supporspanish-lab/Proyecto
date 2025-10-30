@@ -3806,7 +3806,7 @@
                         state.transferFlow = { 
                             aliasInput: '', 
                             isAliasLoading: false, 
-                            amountInput: '2.000', 
+                            amountInput: '0', 
                             step: 'amount', 
                             concept: 'Varios', 
                             motivo: '', 
@@ -3821,9 +3821,9 @@
                 back: () => {
                      if (state.currentPage === 'accountDetail') { state.currentPage = 'home'; state.selectedAccount = null; }
                      else if (['token', 'profile'].includes(state.currentPage)) { state.currentPage = 'more'; }
-                     else if (state.currentPage === 'aliasTransfer') { state.currentPage = 'transferencias'; }
-                     else if (state.currentPage === 'confirmTransfer') { state.currentPage = 'aliasTransfer'; }
-                     else if (state.currentPage === 'amountTransfer') { state.currentPage = 'confirmTransfer'; }
+                     else if (state.currentPage === 'aliasTransfer') { state.currentPage = 'transferencias'; state.transferFlow.step = 'amount'; }
+                     else if (state.currentPage === 'confirmTransfer') { state.currentPage = 'aliasTransfer'; state.transferFlow.step = 'amount'; }
+                     else if (state.currentPage === 'amountTransfer') { state.currentPage = 'confirmTransfer'; state.transferFlow.step = 'amount'; }
                      else if (state.currentPage === 'finalConfirmTransfer') { state.currentPage = 'amountTransfer'; }
                      else { state.currentPage = 'home'; }
                     render();
@@ -3902,6 +3902,7 @@
                         setTimeout(() => {
                             state.currentTransfer = { ...foundRecipient };
                             state.transferFlow.isAliasLoading = false;
+                            state.transferFlow.step = 'amount'; // Explicitly set step to 'amount'
                             state.currentPage = 'confirmTransfer';
                             render();
                         }, 1500);
@@ -3913,15 +3914,29 @@
                     }
                 },
                 handleAmountInput: (value) => {
-                    const numericValue = value.replace(/[^\d]/g, '');
-                    let formattedValue = '';
-                    if (numericValue !== '') {
-                        formattedValue = new Intl.NumberFormat('es-AR').format(parseInt(numericValue, 10));
+                    // Remove all non-numeric characters except for a single comma
+                    let cleanedValue = value.replace(/[^0-9,]/g, '');
+                    // Ensure only one comma is present
+                    const parts = cleanedValue.split(',');
+                    if (parts.length > 2) {
+                        cleanedValue = parts[0] + ',' + parts.slice(1).join('');
                     }
-                    state.transferFlow.amountInput = formattedValue;
-                    const amountInput = document.getElementById('amount-input');
-                    if (amountInput && amountInput.value !== formattedValue) {
-                        amountInput.value = formattedValue;
+
+                    // Convert to a number for internal storage, using dot as decimal separator
+                    const numericValueForState = parseFloat(cleanedValue.replace(',', '.'));
+                    
+                    // Store the raw cleaned value in state to preserve user input format (e.g., '123,' or '123,4')
+                    state.transferFlow.amountInput = cleanedValue;
+
+                    const amountInputEl = document.getElementById('amount-input');
+                    if (amountInputEl && amountInputEl.value !== cleanedValue) {
+                        amountInputEl.value = cleanedValue;
+                    }
+
+                    // Also update the continue button's disabled state based on a valid numeric input
+                    const continueButton = document.querySelector('.amount-transfer-continue-button');
+                    if (continueButton) {
+                        continueButton.disabled = isNaN(numericValueForState) || numericValueForState <= 0;
                     }
                 },
                 selectSourceAccount: (id) => { state.transferFlow.selectedAccounts = [id]; render(); },
@@ -4305,6 +4320,9 @@
 
                 const tarjetasCarousel = document.getElementById('tarjetas-carousel');
                 if (tarjetasCarousel) tarjetasCarousel.addEventListener('scroll', (e) => handlers.handleCarouselScroll(e, 'tarjetas'));
+
+                const amountInput = document.getElementById('amount-input');
+                if (amountInput) amountInput.addEventListener('input', e => handlers.handleAmountInput(e.target.value));
             }
 
             // --- INITIALIZATION --- 
