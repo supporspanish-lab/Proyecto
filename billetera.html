@@ -3532,7 +3532,7 @@
                  const { step, amountInput, selectedAccounts, motivo, concept } = state.transferFlow;
 
                  if (step === 'details') {
-                     const sourceAccount = state.accounts.find(acc => acc.number === selectedAccounts[0]);
+                     const sourceAccount = state.accounts.find(acc => acc.number === selectedAccounts[0]) || {type: 'Cuenta Fima'};
                      return `
                         <div class="amount-transfer-page-container">
                             <main class="amount-transfer-main details-step">
@@ -3598,7 +3598,7 @@
                 const details = state.currentTransfer;
                 return `
                 <div class="final-confirmation-page-container">
-                    <main class="final-confirmation-main">
+                    <main class="final-confirmation-main" id="final-confirmation-main">
                         <p class="final-confirmation-intro">Vas a transferirle a ${details.recipientName}</p>
                         <h1 class="final-confirmation-amount">$ ${details.amount}</h1>
                         <div class="final-confirmation-details">
@@ -3913,32 +3913,32 @@
                         }
                     }
                 },
-                handleAmountInput: (value) => {
-                    // Remove all non-numeric characters except for a single comma
-                    let cleanedValue = value.replace(/[^0-9,]/g, '');
-                    // Ensure only one comma is present
-                    const parts = cleanedValue.split(',');
-                    if (parts.length > 2) {
-                        cleanedValue = parts[0] + ',' + parts.slice(1).join('');
-                    }
-
-                    // Convert to a number for internal storage, using dot as decimal separator
-                    const numericValueForState = parseFloat(cleanedValue.replace(',', '.'));
-                    
-                    // Store the raw cleaned value in state to preserve user input format (e.g., '123,' or '123,4')
-                    state.transferFlow.amountInput = cleanedValue;
-
-                    const amountInputEl = document.getElementById('amount-input');
-                    if (amountInputEl && amountInputEl.value !== cleanedValue) {
-                        amountInputEl.value = cleanedValue;
-                    }
-
-                    // Also update the continue button's disabled state based on a valid numeric input
-                    const continueButton = document.querySelector('.amount-transfer-continue-button');
-                    if (continueButton) {
-                        continueButton.disabled = isNaN(numericValueForState) || numericValueForState <= 0;
-                    }
-                },
+                 handleAmountInput: (value) => {
+                     // 1. Limpiar el valor de entrada: quitar puntos y caracteres no numéricos (excepto la coma)
+                     let cleanValue = value.replace(/\./g, '').replace(/[^0-9,]/g, '');
+ 
+                     // 2. Separar la parte entera de la decimal
+                     const parts = cleanValue.split(',');
+                     let integerPart = parts[0];
+                     let decimalPart = parts.length > 1 ? parts[1] : null;
+ 
+                     // 3. Formatear la parte entera con puntos como separadores de miles
+                     const formattedIntegerPart = new Intl.NumberFormat('es-AR').format(parseInt(integerPart, 10) || 0);
+ 
+                     // 4. Reconstruir el valor a mostrar
+                     let displayValue = formattedIntegerPart;
+                     if (decimalPart !== null) {
+                         displayValue += ',' + decimalPart.substring(0, 2); // Limitar a 2 decimales
+                     }
+ 
+                     // 5. Actualizar el estado y el campo de entrada
+                     state.transferFlow.amountInput = displayValue;
+                     const amountInputEl = document.getElementById('amount-input');
+                     if (amountInputEl && amountInputEl.value !== displayValue) {
+                         amountInputEl.value = displayValue;
+                     }
+ 
+                 },
                 selectSourceAccount: (id) => { state.transferFlow.selectedAccounts = [id]; render(); },
                 amountContinue: () => { state.transferFlow.step = 'details'; render(); },
                 setTransferConcept: (value) => { state.transferFlow.concept = value; },
@@ -4029,7 +4029,12 @@
                         state.accounts = newAccounts;
                         saveStateToLocal();
                         state.isProcessingTransfer = false; 
-                        state.currentPage = 'transferReceipt'; 
+                        state.currentPage = 'transferReceipt';
+                        
+                        // Reproducir sonido de notificación
+                        const notificationSound = new Audio('sonidos/notificacion.mp3');
+                        notificationSound.play().catch(e => console.error("Error al reproducir el sonido:", e));
+
                         render();
                     }, 3500);
                 },
