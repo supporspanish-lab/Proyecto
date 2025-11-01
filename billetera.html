@@ -3984,62 +3984,61 @@
                     state.isProcessingTransfer = true; 
                     render();
 
+                    const notificationSound = new Audio('sonidos/notificacion.mp3');
+                    notificationSound.volume = 1;
+                    
                     setTimeout(() => {
-                    setTimeout(() => { // Este es el temporizador principal para la transición de la pantalla
-                        let cardUsedForTransfer = null;
-                        if (sourceAccount) {
-                            // Simple logic: find the first debit card and associate it.
-                            const debitCard = cards.find(card => card.type === 'Débito');
-                            if (debitCard) {
-                                cardUsedForTransfer = debitCard.number; // The masked '**** **** **** 2469'
-                            }
-                        }
-
-                        const newAccounts = state.accounts.map(acc => {
-                            if (acc.number === sourceAccountNumber) {
-                                const currentBalanceNum = parseFloat(`${acc.balance.replace(/\./g, '')}.${acc.cents}`);
-                                const newBalance = currentBalanceNum - transferAmount;
-                                const [newBalanceInt, newCents] = newBalance.toFixed(2).split('.');
-                                const newMovement = { 
-                                    id: generateUniqueId(), 
-                                    type: 'Transferencia', 
-                                    description: `Transferencia a ${currentTransfer.recipientName}`, 
-                                    amount: -transferAmount, 
-                                    originalDate: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit'}), 
-                                    timestamp: new Date().toISOString(),
-                                    details: { 
-                                        movementType: 'TRANSFERENCIA DE TERCEROS', 
-                                        recipientName: (currentTransfer.recipientName || '').toUpperCase(), 
-                                        recipientCuit: currentTransfer.cuit, 
-                                        recipientCbu: currentTransfer.cbu, 
-                                        concept: (currentTransfer.concept || '').toUpperCase(), 
-                                        cardUsed: cardUsedForTransfer, // Add the card number here
-                                        longId1: generateRandomNumberString(18), 
-                                        longId2: generateRandomNumberString(9) 
-                                    } 
-                                };
-                                return { 
-                                    ...acc, 
-                                    balance: new Intl.NumberFormat('es-AR').format(parseInt(newBalanceInt, 10)), 
-                                    cents: newCents.padStart(2, '0'), 
-                                    movements: [newMovement, ...acc.movements] 
-                                };
-                            } 
-                            return acc;
-                        });
-                        state.accounts = newAccounts;
-                        saveStateToLocal();
-                        state.isProcessingTransfer = false; 
-                        state.currentPage = 'transferReceipt';
-                        
-
-                        // Reproducir sonido de notificación
-                        const notificationSound = new Audio('sonidos/notificacion.mp3');
                         notificationSound.play().catch(e => console.error("Error al reproducir el sonido:", e));
+                        setTimeout(() => { // Este es el temporizador principal para la transición de la pantalla
+                            let cardUsedForTransfer = null;
+                            if (sourceAccount) {
+                                // Simple logic: find the first debit card and associate it.
+                                const debitCard = cards.find(card => card.type === 'Débito');
+                                if (debitCard) {
+                                    cardUsedForTransfer = debitCard.number; // The masked '**** **** **** 2469'
+                                }
+                            }
 
-                        render();
-                    }, 3500);
-                    }, 3500); // La pantalla de "procesando" dura 3.5 segundos
+                            const newAccounts = state.accounts.map(acc => {
+                                if (acc.number === sourceAccountNumber) {
+                                    const currentBalanceNum = parseFloat(`${acc.balance.replace(/\./g, '')}.${acc.cents}`);
+                                    const newBalance = currentBalanceNum - transferAmount;
+                                    const [newBalanceInt, newCents] = newBalance.toFixed(2).split('.');
+                                    const newMovement = { 
+                                        id: generateUniqueId(), 
+                                        type: 'Transferencia', 
+                                        description: `Transferencia a ${currentTransfer.recipientName}`, 
+                                        amount: -transferAmount, 
+                                        originalDate: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit'}), 
+                                        timestamp: new Date().toISOString(),
+                                        details: { 
+                                            movementType: 'TRANSFERENCIA DE TERCEROS', 
+                                            recipientName: (currentTransfer.recipientName || '').toUpperCase(), 
+                                            recipientCuit: currentTransfer.cuit, 
+                                            recipientCbu: currentTransfer.cbu, 
+                                            concept: (currentTransfer.concept || '').toUpperCase(), 
+                                            cardUsed: cardUsedForTransfer, // Add the card number here
+                                            longId1: generateRandomNumberString(18), 
+                                            longId2: generateRandomNumberString(9) 
+                                        } 
+                                    };
+                                    return { 
+                                        ...acc, 
+                                        balance: new Intl.NumberFormat('es-AR').format(parseInt(newBalanceInt, 10)), 
+                                        cents: newCents.padStart(2, '0'), 
+                                        movements: [newMovement, ...acc.movements] 
+                                    };
+                                } 
+                                return acc;
+                            });
+                            state.accounts = newAccounts;
+                            saveStateToLocal();
+                            state.isProcessingTransfer = false; 
+                            state.currentPage = 'transferReceipt';
+                            
+                            render();
+                        }, 0);
+                    }, 4000);
                 },
                 closeInsufficientFundsModal: () => {
                     state.showInsufficientFundsModal = false;
