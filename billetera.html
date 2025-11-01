@@ -3985,6 +3985,7 @@
                     render();
 
                     setTimeout(() => {
+                    setTimeout(() => { // Este es el temporizador principal para la transición de la pantalla
                         let cardUsedForTransfer = null;
                         if (sourceAccount) {
                             // Simple logic: find the first debit card and associate it.
@@ -4031,12 +4032,14 @@
                         state.isProcessingTransfer = false; 
                         state.currentPage = 'transferReceipt';
                         
+
                         // Reproducir sonido de notificación
                         const notificationSound = new Audio('sonidos/notificacion.mp3');
                         notificationSound.play().catch(e => console.error("Error al reproducir el sonido:", e));
 
                         render();
                     }, 3500);
+                    }, 3500); // La pantalla de "procesando" dura 3.5 segundos
                 },
                 closeInsufficientFundsModal: () => {
                     state.showInsufficientFundsModal = false;
