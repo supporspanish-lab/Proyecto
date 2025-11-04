@@ -1,0 +1,16 @@
+FROM alpine:latest
+WORKDIR /app
+
+# Copiar PocketBase y carpetas necesarias
+COPY pocketbase /app/pocketbase
+COPY pb_data /app/pb_data
+COPY pb_migrations /app/pb_migrations
+
+# Dar permisos de ejecución
+RUN chmod +x /app/pocketbase
+
+# Exponer puerto
+EXPOSE 8090
+
+# Ejecutar PocketBase
+CMD ["./pocketbase", "serve", "--http", "0.0.0.0:8090"]
