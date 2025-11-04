@@ -87,7 +87,7 @@
             "password": "2020",
             "created_at": "2025-11-04T14:21:40-05:00",
             "transferRecipients": [],
-            "last_modified": "2025-11-04T14:22:19-05:00",
+            "last_modified": "2025-11-04T14:22:43-05:00",
             "userData": {
                 "userId": "690a52442bb5a",
                 "name": "Fernandes Bazar Carlos",
@@ -98,7 +98,7 @@
             "accountsData": [
                 {
                     "type": "Caja de ahorro en pesos",
-                    "balance": 18098,
+                    "balance": 96098,
                     "cents": "00",
                     "currency": "$",
                     "alias": "ROMERO.DIETA.DELTA",
