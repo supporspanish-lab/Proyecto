@@ -1,4 +1,46 @@
 {
     "created_at": "2025-10-22T20:27:09-04:00",
-    "accounts": []
+    "accounts": {
+        "Leon": {
+            "password": "1234",
+            "created_at": "2025-11-12T19:12:28-05:00",
+            "transferRecipients": [],
+            "last_modified": "2025-11-12T19:12:28-05:00",
+            "userData": {
+                "userId": "6915226c280ea",
+                "name": "Jdzjj",
+                "cuil": "20-11387130-0",
+                "email": "supporspanish@gmail.com",
+                "phone": "341355534"
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 10000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "Lskzk",
+                    "cbu": "Sksn",
+                    "number": "Nº ",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 10000,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "Jssjj",
+                    "cbu": "Snsnns"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "5547300154231339",
+                    "expiry": "12\/31",
+                    "cvv": "000"
+                }
+            ]
+        }
+    }
 }
