@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
 
     <!-- PWA Enhancements -->
     <meta name="theme-color" content="#ffffff"/>
@@ -2730,7 +2731,70 @@
 
             // --- LOCAL STORAGE & DATA MANAGEMENT ---
             const LOCAL_STORAGE_KEY = 'galicaBilleteraState';
-            
+
+            // IndexedDB setup for more robust storage
+            const dbPromise = idb.openDB('BancoGaliciaDB', 1, {
+              upgrade(db) {
+                db.createObjectStore('state', { keyPath: 'key' });
+                db.createObjectStore('accounts', { keyPath: 'number' });
+              }
+            });
+
+            // Enhanced save function with timestamps
+            async function saveStateToLocal() {
+              try {
+                const db = await dbPromise;
+                const timestamp = Date.now();
+                await db.put('state', { key: 'appState', data: state, timestamp });
+                // Save accounts individually for better control
+                for (const account of state.accounts) {
+                  await db.put('accounts', { ...account, timestamp });
+                }
+              } catch (e) {
+                console.error('Error saving to IndexedDB:', e);
+                // Fallback to localStorage
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+              }
+            }
+
+            // Enhanced load function with cache validation
+            async function loadStateFromLocal() {
+              try {
+                const db = await dbPromise;
+                const stateData = await db.get('state', 'appState');
+                if (stateData && stateData.data) {
+                  Object.assign(state, stateData.data);
+                }
+                // Load accounts
+                const accounts = await db.getAll('accounts');
+                if (accounts.length > 0) {
+                  state.accounts = accounts.map(acc => {
+                    const { timestamp, ...accountData } = acc;
+                    return accountData;
+                  });
+                }
+              } catch (e) {
+                console.error('Error loading from IndexedDB:', e);
+                // Fallback to localStorage
+                const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (saved) {
+                  Object.assign(state, JSON.parse(saved));
+                }
+              }
+            }
+
+            // Load specific account data
+            async function loadAccountData(accountNumber) {
+              try {
+                const db = await dbPromise;
+                const account = await db.get('accounts', accountNumber);
+                return account ? { ...account, timestamp: undefined } : null;
+              } catch (e) {
+                console.error('Error loading account:', e);
+                return null;
+              }
+            }
+
             const generateUniqueId = () => Math.random().toString(36).substring(2, 10).toUpperCase();
             const generateRandomNumberString = (length) => {
                 let result = '';
@@ -3745,11 +3809,14 @@
                                                 const [, balanceCents] = balanceValue.toFixed(2).split('.');
                                                 // Find corresponding initial account template to get default properties like actions, cuil, titular
                                                 const defaultAccountTemplate = initialAccountsData.find(initialAcc => initialAcc.type === acc.type) || {};
+                                                // Preserve balance and movements from localStorage if available
+                                                const savedAcc = savedData?.accounts?.find(s => s.number === acc.number || s.number === `Nº ${acc.number}` || acc.number === s.number.replace('Nº ', ''));
                                                 return {
                                                     ...defaultAccountTemplate, // Start with default template to get all default properties
                                                     ...acc, // Override with actual data from data.json
-                                                    balance: new Intl.NumberFormat('es-AR').format(balanceValue),
-                                                    cents: balanceCents.padStart(2, '0'),
+                                                    balance: savedAcc?.balance || new Intl.NumberFormat('es-AR').format(balanceValue),
+                                                    cents: savedAcc?.cents || balanceCents.padStart(2, '0'),
+                                                    movements: savedAcc?.movements || acc.movements || defaultAccountTemplate.movements,
                                                     // Ensure number is correctly formatted if it comes from data.json without "Nº " prefix
                                                     number: acc.number && !acc.number.startsWith('Nº ') ? `Nº ${acc.number}` : acc.number || defaultAccountTemplate.number,
                                                     // Ensure cuil and titular are present, falling back to userData if needed
