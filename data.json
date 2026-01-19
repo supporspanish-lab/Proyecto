@@ -1,4 +1,46 @@
 {
     "created_at": "2026-01-12T03:32:44-05:00",
-    "accounts": []
+    "accounts": {
+        "Lucas juarez": {
+            "password": "4545",
+            "created_at": "2026-01-19T16:17:37-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-01-19T16:17:37-05:00",
+            "userData": {
+                "userId": "696e9f7184673",
+                "name": "Lucas juarez",
+                "cuil": "",
+                "email": "",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 1000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "",
+                    "cbu": "",
+                    "number": "Nº ",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 0,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "",
+                    "cbu": ""
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "",
+                    "expiry": "",
+                    "cvv": ""
+                }
+            ]
+        }
+    }
 }
