@@ -82,6 +82,47 @@
                     "cvv": ""
                 }
             ]
+        },
+        "LUCAS GARRIBIA": {
+            "password": "1111",
+            "created_at": "2026-01-21T14:18:35-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-01-21T14:18:35-05:00",
+            "userData": {
+                "userId": "6971268bf2501",
+                "name": "Lucas Ezequiel Garribia",
+                "cuil": "20-92132114-8",
+                "email": "",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 80000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "1988.leo",
+                    "cbu": "43300000800100740230012",
+                    "number": "Nº 80010074",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 0,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "",
+                    "cbu": ""
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "565535535353535353553",
+                    "expiry": "17122",
+                    "cvv": ""
+                }
+            ]
         }
     }
 }
