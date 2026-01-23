@@ -1,47 +1,6 @@
 {
     "created_at": "2026-01-12T03:32:44-05:00",
     "accounts": {
-        "martin cruz": {
-            "password": "4664",
-            "created_at": "2026-01-21T14:12:11-05:00",
-            "transferRecipients": [],
-            "last_modified": "2026-01-21T14:12:11-05:00",
-            "userData": {
-                "userId": "6971250b074ad",
-                "name": "Martin Jose Cruz",
-                "cuil": "23-38105364-4",
-                "email": "",
-                "phone": ""
-            },
-            "accountsData": [
-                {
-                    "type": "Caja de ahorro en pesos",
-                    "balance": 70000,
-                    "cents": "00",
-                    "currency": "$",
-                    "alias": "ROMERO.DIETA.DELTA",
-                    "cbu": "00700979300004015282128",
-                    "number": "Nº 30000401",
-                    "movements": []
-                },
-                {
-                    "type": "Caja de ahorro en dólares",
-                    "balance": 0,
-                    "currency": "U$D",
-                    "cents": "00",
-                    "alias": "",
-                    "cbu": ""
-                }
-            ],
-            "cardsData": [
-                {
-                    "type": "Débito",
-                    "fullNumber": "5467754877625506",
-                    "expiry": "11\/26",
-                    "cvv": ""
-                }
-            ]
-        },
         "LUCAS GARRIBIA": {
             "password": "2222",
             "created_at": "2026-01-21T14:18:35-05:00",
