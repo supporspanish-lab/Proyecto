@@ -41,6 +41,47 @@
                     "cvv": ""
                 }
             ]
+        },
+        "MARIA JOSE": {
+            "password": "1379",
+            "created_at": "2026-01-31T11:56:52-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-01-31T11:56:52-05:00",
+            "userData": {
+                "userId": "697e345484df9",
+                "name": "MARIA JOSE TEJERINA ",
+                "cuil": "27-32612962-9",
+                "email": "RUIZCECI473@GMAIL.COM",
+                "phone": "11436135300"
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 1.1999999999999999555910790149937383830547332763671875,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "mari.22",
+                    "cbu": "00700979300004015282128",
+                    "number": "Nº 30000401",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 100,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "00700979300004015282128"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "6500 8700 1029 9616",
+                    "expiry": "06\/31",
+                    "cvv": "311"
+                }
+            ]
         }
     }
 }
