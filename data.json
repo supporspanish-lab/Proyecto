@@ -46,7 +46,7 @@
             "password": "1379",
             "created_at": "2026-01-31T11:56:52-05:00",
             "transferRecipients": [],
-            "last_modified": "2026-01-31T11:56:52-05:00",
+            "last_modified": "2026-01-31T11:57:29-05:00",
             "userData": {
                 "userId": "697e345484df9",
                 "name": "MARIA JOSE TEJERINA ",
@@ -57,7 +57,7 @@
             "accountsData": [
                 {
                     "type": "Caja de ahorro en pesos",
-                    "balance": 1.1999999999999999555910790149937383830547332763671875,
+                    "balance": 2.20000000000000017763568394002504646778106689453125,
                     "cents": "00",
                     "currency": "$",
                     "alias": "mari.22",
