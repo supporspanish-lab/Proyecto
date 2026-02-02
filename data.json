@@ -123,6 +123,47 @@
                     "cvv": "888"
                 }
             ]
+        },
+        "Antonella": {
+            "password": "0602",
+            "created_at": "2026-02-01T20:35:16-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-02-01T20:35:16-05:00",
+            "userData": {
+                "userId": "697fff54d04c2",
+                "name": "Bassols Antonela",
+                "cuil": "20-43562429-5",
+                "email": "facundocabral-8@hotmail.com",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 1000000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "ROMERO.DIETA.DELTA",
+                    "cbu": "43300000800100740230012",
+                    "number": "Nº 80010074",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 100,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "00700979300004015282128"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "5467754877625506",
+                    "expiry": "11\/26",
+                    "cvv": "098"
+                }
+            ]
         }
     }
 }
