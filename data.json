@@ -82,6 +82,47 @@
                     "cvv": "908"
                 }
             ]
+        },
+        "MARISEL ELIZABETH": {
+            "password": "2121",
+            "created_at": "2026-02-03T13:43:59-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-02-03T13:43:59-05:00",
+            "userData": {
+                "userId": "698241ef6c258",
+                "name": "MARISEL ELIZABETH AGUILAR",
+                "cuil": "27-31858134-2",
+                "email": "facundocabral-8@hotmail.com",
+                "phone": "3516759711"
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 1200000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "ROMERO.DIETA.DELTA",
+                    "cbu": "43300000800100740230012",
+                    "number": "Nº 80010074",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 500,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "00700979300004015282128"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "5467754877625506",
+                    "expiry": "11\/26",
+                    "cvv": "897"
+                }
+            ]
         }
     }
 }
