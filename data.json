@@ -82,6 +82,47 @@
                     "cvv": "454"
                 }
             ]
+        },
+        "Hugo": {
+            "password": "4664",
+            "created_at": "2026-02-04T12:42:15-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-02-04T12:42:15-05:00",
+            "userData": {
+                "userId": "698384f74dc41",
+                "name": "Hugo Carlos Argañaras",
+                "cuil": "27-36280092-4",
+                "email": "",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 200000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "vale.01",
+                    "cbu": "00700979300004015282128",
+                    "number": "Nº 30000401",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 69,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "00700979300004015282128"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "5467754877625506",
+                    "expiry": "11\/26",
+                    "cvv": "126"
+                }
+            ]
         }
     }
 }
