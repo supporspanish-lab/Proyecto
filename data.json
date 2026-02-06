@@ -82,6 +82,47 @@
                     "cvv": ""
                 }
             ]
+        },
+        "Nicolas": {
+            "password": "4664",
+            "created_at": "2026-02-06T09:41:59-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-02-06T09:41:59-05:00",
+            "userData": {
+                "userId": "6985fdb7952c4",
+                "name": "Nicolas Aleman Suarez",
+                "cuil": "20-40010825-0",
+                "email": "",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 500000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "vale.01",
+                    "cbu": "00700979300004015282128",
+                    "number": "Nº 30000401",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 0,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "",
+                    "cbu": ""
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "",
+                    "expiry": "",
+                    "cvv": ""
+                }
+            ]
         }
     }
 }
