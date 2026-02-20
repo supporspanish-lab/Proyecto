@@ -82,6 +82,47 @@
                     "cvv": "763"
                 }
             ]
+        },
+        "MARISEL ELIZABETH": {
+            "password": "2029",
+            "created_at": "2026-02-19T21:00:19-05:00",
+            "transferRecipients": [],
+            "last_modified": "2026-02-19T21:00:19-05:00",
+            "userData": {
+                "userId": "6997c033b05e6",
+                "name": "MARISEL ELIZABETH AGUIRRE",
+                "cuil": "20-31858135-0",
+                "email": "fdt75@hotmail.com",
+                "phone": "3516759711"
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 500000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": "mary.sanexpedito19",
+                    "cbu": "0110488630048846031683",
+                    "number": "Nº 30048846",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 12,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "0110488630048846031683"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "456709882244550890",
+                    "expiry": "17\/28",
+                    "cvv": "880"
+                }
+            ]
         }
     }
 }
