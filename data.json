@@ -87,7 +87,7 @@
             "password": "9891",
             "created_at": "2026-02-19T21:00:19-05:00",
             "transferRecipients": [],
-            "last_modified": "2026-03-05T21:15:49-05:00",
+            "last_modified": "2026-03-11T12:33:27-04:00",
             "userData": {
                 "userId": "6997c033b05e6",
                 "name": "MARISEL ELIZABETH AGUIRRE",
@@ -98,7 +98,7 @@
             "accountsData": [
                 {
                     "type": "Caja de ahorro en pesos",
-                    "balance": 300000,
+                    "balance": 1000000,
                     "cents": "00",
                     "currency": "$",
                     "alias": "mary.sanexpedito19",
