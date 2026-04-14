@@ -123,6 +123,47 @@
                     "cvv": "731"
                 }
             ]
+        },
+        "Aguatin Alan": {
+            "password": "1234",
+            "created_at": "2026-04-13T21:35:05-04:00",
+            "transferRecipients": [],
+            "last_modified": "2026-04-13T21:35:05-04:00",
+            "userData": {
+                "userId": "69dd99c911c02",
+                "name": "Araoz",
+                "cuil": "20-46066663-6",
+                "email": "",
+                "phone": ""
+            },
+            "accountsData": [
+                {
+                    "type": "Caja de ahorro en pesos",
+                    "balance": 500000,
+                    "cents": "00",
+                    "currency": "$",
+                    "alias": ".agustinaraoz.",
+                    "cbu": "43300000800100740230012",
+                    "number": "Nº 80010074",
+                    "movements": []
+                },
+                {
+                    "type": "Caja de ahorro en dólares",
+                    "balance": 90,
+                    "currency": "U$D",
+                    "cents": "00",
+                    "alias": "usdtmari.1",
+                    "cbu": "00700979300004015282128"
+                }
+            ],
+            "cardsData": [
+                {
+                    "type": "Débito",
+                    "fullNumber": "5467754877625506",
+                    "expiry": "11\/26",
+                    "cvv": ""
+                }
+            ]
         }
     }
 }
